@@ -26,6 +26,10 @@
     padding: var(--space-12) var(--space-8);
   }
 
+  .hero__photo {
+    width: calc(var(--photo-size) * 1.5);
+  }
+
   .skill-groups,
   .cards {
     grid-template-columns: repeat(2, 1fr);

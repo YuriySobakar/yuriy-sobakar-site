@@ -148,3 +148,15 @@ test("schema errors and rule errors are not mixed: rules run only on a schema-va
       !error.problems.some((line) => line.includes("has no result")),
   );
 });
+
+test("photo is optional, but when present it needs src under /assets/, alt, width and height", () => {
+  const noAlt = validYaml.replace("headline: Developer\n", "headline: Developer\nphoto:\n  src: /assets/me.jpg\n  width: 300\n  height: 395\n");
+  assert.throws(
+    () => loadResume(noAlt),
+    (error) => error.problems.some((line) => line.includes('photo: required field "alt" is missing')),
+  );
+  const external = validYaml.replace("headline: Developer\n", 'headline: Developer\nphoto:\n  src: "https://cdn.example.com/me.jpg"\n  alt: Me\n  width: 300\n  height: 395\n');
+  assert.throws(() => loadResume(external), (error) => error.problems.some((line) => line.startsWith("resume.yaml › photo.src")));
+  const ok = validYaml.replace("headline: Developer\n", "headline: Developer\nphoto:\n  src: /assets/me.jpg\n  alt: Me\n  width: 300\n  height: 395\n");
+  assert.equal(loadResume(ok).photo.alt, "Me");
+});

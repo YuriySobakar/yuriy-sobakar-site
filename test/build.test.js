@@ -122,12 +122,27 @@ test("the page has exactly one header, main and footer; h2s follow the view mode
     assert.equal(count(factList[1], /<li[\s>]/g), resume.facts.length, "one <li> per fact");
     assert.equal(count(header, /data-contact="/g), resume.contacts.length, "one data-contact per contact in the hero");
     assert.ok(!/target=/.test(header), "contact links open in the same tab");
+    if (resume.photo) {
+      const img = header.match(/<img class="hero__photo"[^>]*>/);
+      assert.ok(img, "hero renders the portrait when resume.photo is set");
+      assert.match(img[0], new RegExp(`alt="${resume.photo.alt}"`), "portrait carries the alt text from the data");
+      assert.match(img[0], /width="\d+" height="\d+"/, "portrait has intrinsic width/height (no layout shift)");
+    }
   } finally {
     cleanup();
   }
 });
 
 // --- Fixture: full resume (SCR-01…SCR-06 default states, AC-01/03/06/08/11) ---
+
+test("without resume.photo the hero has no <img> (the photo is optional)", async () => {
+  const { html, cleanup } = await buildWith(fixture("resume.full.yaml"));
+  try {
+    assert.ok(!/<img/.test(between(html, "<header", "</header>")), "no portrait without photo data");
+  } finally {
+    cleanup();
+  }
+});
 
 test("full fixture: landmarks, hero, 4 sections, experience newest first with Present, verbatim result", async () => {
   const { html, cleanup } = await buildWith(fixture("resume.full.yaml"));

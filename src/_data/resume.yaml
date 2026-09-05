@@ -5,6 +5,11 @@
 
 name: Yuriy Sobakar
 headline: WordPress and PHP developer, growing into full-stack
+photo:
+  src: /assets/photo.jpg
+  alt: Portrait of Yuriy Sobakar
+  width: 300
+  height: 395
 facts:
   - 150+ WordPress sites launched for an iGaming SEO team
   - 580+ commits to a multi-site WordPress monorepo in 9 months

@@ -39,4 +39,5 @@
 
   /* Layout */
   --page-max-width: 48rem;
+  --photo-size: 6rem;      /* hero portrait width on mobile; layout.css widens it from 768 px */
 }
