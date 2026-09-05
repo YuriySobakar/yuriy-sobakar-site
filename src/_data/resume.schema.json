@@ -5,12 +5,13 @@
   "description": "Contract for src/_data/resume.yaml — the single source of every text shown on the site. A new field is added HERE first, then in the YAML.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["name", "headline", "contacts", "sections", "experience", "skills", "projects"],
+  "required": ["name", "headline", "facts", "contacts", "sections", "experience", "skills", "projects"],
   "properties": {
     "name": { "type": "string", "minLength": 1, "description": "Owner's full name; becomes the page <h1> and <title>." },
     "headline": { "type": "string", "minLength": 1, "maxLength": 120, "description": "Positioning: one sentence under the name — who the owner is and for whom." },
     "facts": {
       "type": "array",
+      "minItems": 1,
       "maxItems": 3,
       "items": { "type": "string", "minLength": 1, "maxLength": 60 },
       "description": "1–3 short verifiable statements shown on the first screen."
