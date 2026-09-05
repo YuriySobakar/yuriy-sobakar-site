@@ -10,6 +10,22 @@
   background: var(--color-bg);
 }
 
+/* Hero buttons on mobile: contacts two per row, centred; Print alone on a full-width third row.
+   From 768 px they flow inline again (base.css flex). */
+.hero__contacts {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.hero__contacts .button {
+  width: 100%;
+  justify-content: center;
+}
+
+.hero__print {
+  grid-column: 1 / -1;
+}
+
 /* Skill groups and project cards: one column on mobile, two from 768 px. */
 .skill-groups,
 .cards {
@@ -40,6 +56,14 @@
 
   .hero__photo {
     width: calc(var(--photo-size) * 1.6);
+  }
+
+  .hero__contacts {
+    display: flex;
+  }
+
+  .hero__contacts .button {
+    width: auto;
   }
 
   .skill-groups,

@@ -30,7 +30,7 @@
   --text-small: 0.875rem; /* 14 px — periods, captions, tags */
   --text-lg: 1.125rem;
   --text-xl: 1.5rem;
-  --text-2xl: 2.125rem;
+  --text-2xl: 1.75rem;    /* name on mobile — the intro block matches the portrait height; 2.125rem from 768 px */
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-bold: 700;
@@ -57,4 +57,10 @@
   --page-max-width: 52rem;
   --photo-size: 6.5rem;    /* hero portrait width on mobile; layout.css widens it from 768 px */
   --icon-size: 1.125rem;   /* inline icons in buttons */
+}
+
+@media (min-width: 768px) {
+  :root {
+    --text-2xl: 2.125rem;
+  }
 }
