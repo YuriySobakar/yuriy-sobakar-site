@@ -1,0 +1,15 @@
+# SDD per-developer settings and worktrees
+.claude/*.local.md
+.worktrees/
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Dependencies and build output
+node_modules/
+dist/
+build/
+.env
+.env.*
