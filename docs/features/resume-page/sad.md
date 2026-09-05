@@ -31,7 +31,9 @@ target_surfaces: [web-frontend]
 | site owner | Править resume data, публікує; хоче, щоб небезпечне не публікувалось | Yes (власник продукту) |
 | Tech Lead | Затвердження SAD і ADR | Yes |
 
-<!-- Decision overrides (¶4) — populated by the critic resolution loop, empty otherwise. -->
+**Decision overrides.**
+
+- Decision override: розмір фічі S (за `.size` і роадмапом, крок 4), хоча карта архітектури §Constraints каже «Розмір XS і профіль Pro» — rationale: XS у карті стосується проєкту загалом на момент брифа, до декомпозиції роадмапом на 7 кроків; орієнтир «3–5 задач» і правило «жодних нових контейнерів без ADR» цією фічею збережені (єдина нова зовнішня система — лічильник, зафіксований `adr/0003`). Карту оновить `survey` після `scaffold` (рядок у §11).
 
 ## 2. Constraints
 
@@ -283,7 +285,7 @@ ADR files live under `docs/features/resume-page/adr/NNNN-<title>.md`.
 
 ## 10. Quality requirements
 
-Each top-3 goal from §1 expanded into a full scenario:
+Три цілі якості з §1 (QG-1…QG-3), розкриті у сценарії, плюс QG-4 — сценарій для рядків NFR спеки §6 (доступність, адаптивність), які не увійшли в top-3, але мають числові цілі й потрібні `plan-tests`:
 
 **QG-1. Швидкість і вага на мобільному**
 - **When:** recruiter відкриває сторінку на телефоні шириною 360 px без кешу.
@@ -316,7 +318,8 @@ Each top-3 goal from §1 expanded into a full scenario:
 | Хибне спрацювання правила code-хосту на легітимному живому посиланні commercial project (сайт клієнта на GitHub Pages) | Low | `*.github.io` / `*.gitlab.io` / `*.pages.dev` у списку винятків; повідомлення про помилку називає домен, власник бачить причину одразу | Tech Lead |
 | Open architectural decision: публікувати телефон чи лишити пошту, Telegram, LinkedIn | Open question | Resolve before `sdd:tasks`; дефолт зараз — без телефону; схема дозволяє контакт типу phone, рендер не залежить від рішення | site owner |
 | Open architectural decision: фото на першому екрані | Open question | Resolve before `sdd:tasks`; дефолт зараз — без фото; у схемі v1 поля немає, додати пізніше = поле в схемі + рядок у `hero.njk` | site owner |
-| Мертві живі посилання проєктів помітить recruiter, а не збірка | Low | Перевірка посилань при публікації — лише попередження, не блокування (spec §8, дефолт); не входить у publish gate, бо потребує мережі в CI і робить збірку нестабільною; окрема необов'язкова задача або follow-up | Tech Lead |
+| Мертві живі посилання проєктів помітить recruiter, а не збірка | Low | **Вирішено на design** (закриває spec §8, owner Tech Lead): перевірка посилань — лише попередження, не блокування; поза publish gate, бо потребує мережі в CI і робить збірку нестабільною; необов'язкова задача або follow-up | Tech Lead |
+| Карта архітектури каже «Розмір XS», фіча має S; карта описує ще не матеріалізований скелет | Low | Override у §1 ¶4; після `/sdd:scaffold` оновити карту через `/sdd:survey` (нове `reflects_commit`, розміри кроків із роадмапу) | site owner |
 
 **Accepted debt (acceptable in v1, plan to fix later):**
 - Схема даних без версіонування: одна версія, один файл; при несумісній зміні полів правиться і схема, і YAML в одному PR.
