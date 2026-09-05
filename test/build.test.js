@@ -204,3 +204,39 @@ test("experience.njk has no hiding conditions and reads job.current, not job.end
   assert.match(source, /job\.current/);
   assert.ok(!/\|\s*sort/.test(source), "no sort filter in the template");
 });
+
+// --- SCR-04 skills (T7): groups in YAML order inside .skill-groups, empty group absent, no scales ---
+
+test("skill groups render in order inside .skill-groups, without the empty group or any scale", async () => {
+  const yaml = `${FIXTURE_HEAD}
+experience: []
+skills:
+  - group: Group Alpha
+    items: ["PHP", "WordPress"]
+  - group: Group Bravo
+    items: []
+  - group: Group Charlie
+    items: ["CSS"]
+projects: []
+`;
+  const { html, cleanup } = await buildWith(yaml);
+  try {
+    const start = html.indexOf('id="skills"');
+    const section = html.slice(start, html.indexOf("</section>", start));
+    assert.match(section, /<div class="skill-groups">/, "groups are wrapped in the .skill-groups grid");
+    const groups = [...section.matchAll(/<h3[^>]*>([^<]*)<\/h3>/g)].map((m) => m[1].trim());
+    assert.deepEqual(groups, ["Group Alpha", "Group Charlie"]);
+    assert.ok(!section.includes("Group Bravo"), "empty group is absent");
+    assert.equal(count(section, /class="tag"/g), 3, "one tag per skill");
+    assert.ok(!/<progress|<meter|\d+\s*%/.test(section), "no levels, percentages or scales");
+  } finally {
+    cleanup();
+  }
+});
+
+test("skills.njk has no hiding conditions", () => {
+  const source = readFileSync(path.join(root, "src", "_includes", "sections", "skills.njk"), "utf8");
+  assert.ok(!/\{%\s*if\s+resume\.skills/.test(source), "no section-level hiding condition");
+  assert.ok(!/\{%\s*if\s+group\.items/.test(source), "no group-level hiding condition");
+  assert.match(source, /class="skill-groups"/);
+});

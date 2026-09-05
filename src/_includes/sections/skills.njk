@@ -1,15 +1,17 @@
-{% if resume.skills and resume.skills.length %}
+{#- SCR-04 skills: groups in resume-data order, chips only — no levels, percentages or scales.
+    Empty groups (and an all-empty section) are already removed by the view model. -#}
 <section class="section" id="{{ section.id }}" aria-labelledby="{{ section.id }}-title">
   <h2 class="section__title" id="{{ section.id }}-title">{{ section.title }}</h2>
-  {% for group in resume.skills %}
-  {% if group.items and group.items.length %}
-  <div class="skill-group">
-    <h3 class="skill-group__title">{{ group.group }}</h3>
-    <ul class="tags">
-      {% for item in group.items %}<li class="tag">{{ item }}</li>{% endfor %}
-    </ul>
+  <div class="skill-groups">
+    {%- for group in resume.skills %}
+    <div class="skill-group">
+      <h3 class="skill-group__title">{{ group.group }}</h3>
+      <ul class="tags">
+        {%- for item in group.items %}
+        <li class="tag">{{ item }}</li>
+        {%- endfor %}
+      </ul>
+    </div>
+    {%- endfor %}
   </div>
-  {% endif %}
-  {% endfor %}
 </section>
-{% endif %}
