@@ -320,3 +320,70 @@ test("projects.njk hides nothing by confidential flag except the heading/chip va
   assert.ok(!/if\s+not\s+project\.confidential|confidential\s*==\s*false|not\s+project\.confidential/.test(source), "no 'hide when confidential' logic");
   assert.match(source, /rel="noopener noreferrer"/);
 });
+
+// --- SCR-06 contacts + click counter (T9, ADR 0003) ---
+
+const CONTACTS_YAML = `${FIXTURE_HEAD}
+experience: []
+skills: []
+projects: []
+`;
+
+test("footer contacts: one same-tab button per contact type with data-contact", async () => {
+  const { html, cleanup } = await buildWith(CONTACTS_YAML, { siteJson: { counter: { script: "", endpoint: "" } } });
+  try {
+    const footer = html.slice(html.indexOf("<footer"), html.indexOf("</footer>"));
+    const links = [...footer.matchAll(/<a [^>]*>/g)].map((m) => m[0]);
+    assert.equal(links.length, 3);
+    assert.deepEqual(
+      links.map((l) => l.match(/data-contact="([^"]+)"/)[1]),
+      ["email", "telegram", "linkedin"],
+    );
+    assert.match(links[0], /href="mailto:test@example\.com"/);
+    assert.match(links[1], /href="https:\/\/t\.me\/testperson"/);
+    assert.match(links[2], /href="https:\/\/www\.linkedin\.com\/in\/testperson\/"/);
+    for (const link of links) assert.ok(!/target=/.test(link), `${link} must open in the same tab`);
+    const source = readFileSync(path.join(root, "src", "_includes", "sections", "contacts.njk"), "utf8");
+    assert.ok(!/\{%\s*if\s+resume\.contacts/.test(source), "no hiding condition in contacts.njk");
+  } finally {
+    cleanup();
+  }
+});
+
+test("with a counter address the page has exactly one async script tag and one data-contact click handler", async () => {
+  const site = { counter: { script: "https://counter.example.com/count.js", endpoint: "https://test.counter.example.com/count" } };
+  const { html, cleanup } = await buildWith(CONTACTS_YAML, { siteJson: site });
+  try {
+    const scripts = [...html.matchAll(/<script\b[^>]*>[\s\S]*?<\/script>/g)].map((m) => m[0]);
+    assert.equal(scripts.length, 2, "exactly two <script> elements: the async tag and the inline handler");
+    const asyncTags = scripts.filter((s) => /<script[^>]*\basync\b/.test(s));
+    assert.equal(asyncTags.length, 1, "exactly one async script tag");
+    assert.match(asyncTags[0], /src="https:\/\/counter\.example\.com\/count\.js"/);
+    assert.match(asyncTags[0], /https:\/\/test\.counter\.example\.com\/count/, "endpoint is passed to the counter");
+    const inline = scripts.find((s) => !/\bsrc=/.test(s));
+    assert.ok(inline, "one inline handler");
+    assert.match(inline, /data-contact/);
+    assert.match(inline, /contact:/);
+    assert.ok(!/preventDefault/.test(inline), "the handler never blocks the navigation");
+    assert.ok(!/document\.cookie|localStorage/.test(inline), "no cookies or storage");
+  } finally {
+    cleanup();
+  }
+});
+
+test("without a counter address the page has no <script> at all", async () => {
+  for (const siteJson of [{ counter: { script: "", endpoint: "" } }, {}]) {
+    const { html, cleanup } = await buildWith(CONTACTS_YAML, { siteJson });
+    try {
+      assert.equal(count(html, /<script\b/g), 0, `no script for site.json ${JSON.stringify(siteJson)}`);
+    } finally {
+      cleanup();
+    }
+  }
+});
+
+test("src/_data/site.json exists with counter.script and counter.endpoint strings", () => {
+  const site = JSON.parse(readFileSync(path.join(root, "src", "_data", "site.json"), "utf8"));
+  assert.equal(typeof site.counter.script, "string");
+  assert.equal(typeof site.counter.endpoint, "string");
+});

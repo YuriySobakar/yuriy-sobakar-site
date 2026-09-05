@@ -14,5 +14,18 @@
   <div class="page">
     {{ content | safe }}
   </div>
+  {%- if site.counter.script %}
+  {#- Contact click counter (ADR 0003): the ONLY client-side JavaScript besides window.print().
+      One async tag + one delegated click handler; no cookies, no visitor ids, never blocks navigation.
+      Disabled (no <script> at all) when site.json leaves counter.script empty. -#}
+  <script async src="{{ site.counter.script }}" data-goatcounter="{{ site.counter.endpoint }}"></script>
+  <script>
+    document.addEventListener("click", function (event) {
+      var link = event.target.closest("a[data-contact]");
+      if (!link || !window.goatcounter || typeof window.goatcounter.count !== "function") return;
+      window.goatcounter.count({ path: "contact:" + link.getAttribute("data-contact"), event: true });
+    });
+  </script>
+  {%- endif %}
 </body>
 </html>

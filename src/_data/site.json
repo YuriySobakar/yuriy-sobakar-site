@@ -1,0 +1,7 @@
+{
+  "_comment": "Site-level settings, NOT resume content (that lives in resume.yaml). counter = cookie-less event counter per docs/features/resume-page/adr/0003 (GoatCounter: script https://gc.zgo.at/count.js, endpoint https://<code>.goatcounter.com/count). Empty strings = counter disabled, no <script> on the page.",
+  "counter": {
+    "script": "",
+    "endpoint": ""
+  }
+}

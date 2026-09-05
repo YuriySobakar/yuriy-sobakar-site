@@ -1,10 +1,10 @@
-{% if resume.contacts and resume.contacts.length %}
+{#- SCR-06 contacts (footer): one same-tab button per contact type; data-contact feeds the click
+    counter in layout.njk (ADR 0003). At least one contact is guaranteed by the schema. -#}
 <section class="section" id="{{ section.id }}" aria-labelledby="{{ section.id }}-title">
   <h2 class="section__title" id="{{ section.id }}-title">{{ section.title }}</h2>
   <ul class="contacts">
-    {% for contact in resume.contacts %}
+    {%- for contact in resume.contacts %}
     <li><a class="button" href="{{ contact.url }}" data-contact="{{ contact.type }}">{{ contact.label }}</a></li>
-    {% endfor %}
+    {%- endfor %}
   </ul>
 </section>
-{% endif %}
