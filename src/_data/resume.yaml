@@ -155,14 +155,15 @@ projects:
     links:
       live: "https://sundried-tomatoes.com"
 
-  - kind: commercial
-    name: Bahisbey
-    industry: iGaming
+  - kind: open-source
+    name: Bahisbey theme
+    industry: iGaming (former client; theme published with permission)
     role: Full-stack WordPress developer
     result: "Custom theme from scratch: Gulp + SCSS + BrowserSync workflow, Bootstrap grid, ACF-driven page templates, custom post types (casino, live posts), image optimisation in the build; 90+ PageSpeed Insights mobile; the base for a network of 150+ SEO sites"
     stack: [WordPress, PHP, SCSS, Gulp, Bootstrap, ACF]
     links:
       live: "https://bahisbey.com/"
+      code: "https://github.com/YuriySobakar/bahisbey-theme"
 
   - kind: pet
     name: SEO Beast
@@ -189,13 +190,13 @@ projects:
       live: "https://yuriy-sobakar.netlify.app/"
       code: "https://github.com/YuriySobakar/yuriy-sobakar-site"
 
-# Dates from the 2024 resume site. TODO owner: confirm whether the Mate Academy DevOps course is finished
-# (add `end`), and the month precision of the 2002–2006 degree (years only on the old site).
+# Dates from the 2024 resume site. TODO owner: month precision of the 2002–2006 degree (years only on the old site).
 education:
   - school: Mate Academy
-    program: DevOps Engineer course
+    program: DevOps Engineer course (basic knowledge)
     location: Ukraine
-    start: "2025-07"
+    start: "2025"
+    end: "2025"
   - school: Hillel IT School
     program: PHP Pro course
     location: Ukraine

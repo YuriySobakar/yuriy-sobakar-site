@@ -146,3 +146,11 @@ projects: []
   );
   assert.ok(loadResume(yamlWith('["one fact"]')));
 });
+
+test("an open-source project may publish its code and is not commercial for the code rules", () => {
+  const problems = checkRules({
+    experience: [],
+    projects: [{ kind: "open-source", name: "Theme", industry: "iGaming", role: "Dev", result: "Done", links: { live: "https://x.example.com", code: "https://github.com/x/theme" } }],
+  });
+  assert.deepEqual(problems, []);
+});

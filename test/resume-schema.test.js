@@ -175,3 +175,8 @@ test("a linked skill item needs both label and an https url", () => {
   const http = validYaml.replace("skills: []", 'skills:\n  - group: Languages\n    items:\n      - label: English\n        url: "http://cert.example.com/x"\n');
   assert.throws(() => loadResume(http), (error) => error.problems.some((line) => line.startsWith('resume.yaml › skills.0.items.0 "Languages"')));
 });
+
+test("education accepts year-only dates", () => {
+  const yearOnly = validYaml.replace("skills: []", 'education:\n  - school: Academy\n    program: Course\n    start: "2025"\n    end: "2025"\nskills: []');
+  assert.equal(loadResume(yearOnly).education[0].start, "2025");
+});

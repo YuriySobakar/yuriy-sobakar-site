@@ -97,8 +97,8 @@
         "school": { "type": "string", "minLength": 1 },
         "program": { "type": "string", "minLength": 1, "description": "Degree, course or certificate name" },
         "location": { "type": "string" },
-        "start": { "type": "string", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$", "description": "YYYY-MM" },
-        "end": { "type": "string", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$", "description": "YYYY-MM; omit while ongoing" }
+        "start": { "type": "string", "pattern": "^[0-9]{4}(-(0[1-9]|1[0-2]))?$", "description": "YYYY-MM, or YYYY when only the year matters" },
+        "end": { "type": "string", "pattern": "^[0-9]{4}(-(0[1-9]|1[0-2]))?$", "description": "YYYY-MM or YYYY; omit while ongoing; equal to start = shown once" }
       }
     },
     "skillGroup": {
@@ -132,7 +132,7 @@
       "additionalProperties": false,
       "required": ["kind", "role", "result"],
       "properties": {
-        "kind": { "type": "string", "enum": ["commercial", "pet"] },
+        "kind": { "type": "string", "enum": ["commercial", "pet", "open-source"], "description": "commercial: client work, code never linked; pet: own project with code; open-source: former client work whose code is published with permission" },
         "confidential": { "type": "boolean", "default": false },
         "name": { "type": "string", "minLength": 1 },
         "industry": { "type": "string", "minLength": 1 },

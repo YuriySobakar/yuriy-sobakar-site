@@ -1,5 +1,6 @@
 {#- Education: entries come from the view model sorted newest-first (same rule as experience); an open-ended
-    entry carries `current: true` ("Present" is template text). Reuses the timeline primitive. -#}
+    entry carries `current: true` ("Present" is template text). Reuses the timeline primitive.
+    Dates may be YYYY or YYYY-MM; when end equals start the period is printed once (a one-year course). -#}
 <section class="section" id="{{ section.id }}" aria-labelledby="{{ section.id }}-title">
   <h2 class="section__title" id="{{ section.id }}-title">{{ section.title }}</h2>
   <ol class="timeline">
@@ -7,7 +8,7 @@
     <li class="timeline-item">
       <h3 class="timeline-item__role">{{ item.program }}</h3>
       <p class="timeline-item__company">{{ item.school }}{% if item.location %} · {{ item.location }}{% endif %}</p>
-      <p class="timeline-item__meta">{{ item.start }} – {{ "Present" if item.current else item.end }}</p>
+      <p class="timeline-item__meta">{{ item.start }}{% if item.end != item.start %} – {{ "Present" if item.current else item.end }}{% endif %}</p>
     </li>
     {%- endfor %}
   </ol>
