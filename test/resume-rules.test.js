@@ -62,6 +62,16 @@ test("a pet project without industry is fine", () => {
   assert.deepEqual(checkRules(base({ projects: [pet] })), []);
 });
 
+test("confidential on a pet project is one violation — confidential is a commercial-only mark", () => {
+  const pet = { kind: "pet", confidential: true, name: "Toy", role: "Author", result: "Fun", links: { live: "https://toy.example.com" } };
+  const problems = checkRules(base({ projects: [pet] }));
+  assert.equal(problems.length, 1);
+  assert.match(problems[0], /^projects\.0 "Toy": confidential is only valid for a commercial project/);
+
+  // confidential: false on a pet project is not a violation
+  assert.deepEqual(checkRules(base({ projects: [{ ...pet, confidential: false }] })), []);
+});
+
 test("a commercial project with links.code is one violation with the rule in words", () => {
   const problems = checkRules(
     base({ projects: [commercial({ links: { live: "https://acme.example.com", code: "https://example.org/repo" } })] }),
