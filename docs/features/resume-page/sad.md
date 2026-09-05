@@ -4,302 +4,338 @@ owner: "Yuriy Sobakar"
 reviewers: ["Tech Lead"]
 updated_at: "2026-09-05"
 feature_size: "S"
-target_surfaces: []
+target_surfaces: [web-frontend]
 ---
 
 # Software Architecture Document — resume-page
 
-<!-- 12 Arc42 sections. Empty section → <!-- N/A: <one-line reason> -->. -->
-<!-- C4 Context (L1) lives inline in §3. C4 Container (L2) lives inline in §5. -->
-<!-- Numbers in §10 come VERBATIM from spec.md §6 NFR — no inventing, no rounding. -->
+> **Glossary:** [CONTEXT](../../../CONTEXT.md) (канонічні ролі й терміни; §12 нижче лише витяг).
+> **Upstream:** [spec.md](./spec.md) · [architecture-map.md](../../architecture-map.md) · фундаментні ADR `docs/adr/0001–0004` · ADR фічі — [adr/](./adr/).
 
 ## 1. Introduction and goals
 
-<!-- 🎯 Why: durable memory of «what + the three dominant qualities + who cares». A year from
-     now nobody recalls which three qualities were critical for this system.
-     📋 Write: 1 ¶ intent + 3 lines of top-3 quality goals + a stakeholders table.
-     ¶4 is the override slot — critic `Override` resolutions emit «Decision override: <headline>
-     — rationale: <reason>» bullets here so downstream skills see the deliberate choice. -->
-
-**Intent.** <One paragraph from spec §2 Goals — what we're building and for whom.>
+**Intent.** Адаптивна односторінкова сторінка-резюме, яка збирається зі статичного HTML з одного файлу resume data і працює як *безпечне подання даних*: recruiter з телефона за 30 секунд бачить ім'я, позиціювання, 1–3 факти і контакти в один дотик; hiring manager перевіряє commercial project за живими посиланнями і pet project за кодом; site owner оновлює все правкою одного файлу, а небезпечні стани (порожні обов'язкові поля, код commercial project, розкритий confidential project) зупиняють публікацію ще до того, як щось потрапить на живу сторінку (spec §2).
 
 **Top-3 quality goals (1-liners; full scenarios in §10):**
 
-1. <e.g. "Availability under partial failure of a downstream module">
-2. <e.g. "Read performance for the dashboard under data-scale growth">
-3. <e.g. "Recoverability with <30 min RTO">
+1. Швидкість і легкість на мобільному: PageSpeed Insights mobile Performance ≥ 95, ≤ 150 КБ переданих байтів першого відкриття.
+2. Безпека публікації: жодне порушення правил resume data не доходить до живої сторінки; відвідувач бачить або попередню, або нову повну версію.
+3. Оновлюваність: правка resume data стає живою сторінкою за ≤ 5 хвилин, без дотику до шаблонів чи стилів.
 
 **Stakeholders.**
 
 | Role | Interest | Sign-off owner? |
 |---|---|---|
-| <author role from glossary> | <feature usage> | No |
-| <consumer role from glossary> | <read usage> | No |
-| Tech Lead | SAD approval | Yes |
+| recruiter | Відкриває з телефона, сканує 30 с, пише в один дотик | No |
+| hiring manager | Читає стек, відкриває живі проєкти і код pet project | No |
+| site owner | Править resume data, публікує; хоче, щоб небезпечне не публікувалось | Yes (власник продукту) |
+| Tech Lead | Затвердження SAD і ADR | Yes |
 
 <!-- Decision overrides (¶4) — populated by the critic resolution loop, empty otherwise. -->
 
 ## 2. Constraints
 
-<!-- 🎯 Why: §4 strategy only works when §2 has fixed WHAT IS ALREADY FIXED — stack, versions,
-     deadline, regulatory. This is an input, not an output.
-     📋 Write: four blocks — Technical / Organisational / Conventions / Regulatory.
-     📌 Pin versions («<datastore> 18», not «<datastore>»); «Q3 deadline — hard», not «ideally».
-     Never N/A — every feature inherits at least Conventions + Technical. -->
-
 **Technical.**
-- <Language + version>
-- <Framework(s) + version>
-- <Datastore(s) + version>
-- <Architecture convention — e.g. the layering style from the project convention file>
+- Node.js 20+ (ESM), без TypeScript і транспіляції — карта архітектури §Stack.
+- Eleventy 3 (`@11ty/eleventy`) з шаблонами Nunjucks; вихід — статичний HTML у `_site/` — `docs/adr/0001`.
+- Один файл даних `src/_data/resume.yaml` + `src/_data/resume.schema.json`; YAML підключається через data extension — `docs/adr/0002`.
+- Чистий CSS з кастомними властивостями у `src/styles/tokens.css`; mobile-first; друковані стилі лише у `print.css` (сама друкована версія — крок 5 роадмапу, поза цією фічею) — `docs/adr/0003`.
+- Без клієнтського JavaScript, окрім `window.print()` (крок 5) **і одного скрипта лічильника подій за ADR фічі `adr/0003`** (свідомий виняток, ризик у §11).
+- Хостинг Netlify: збірка `npm run build`, публікація `_site`, гілка `main` = production; CI GitHub Actions: `npm test` → `npm run build` → `npm run lint`.
+- Тести: вбудований ранер Node (`node --test`), файли `test/*.test.js`; lint: `html-validate` по зібраному HTML.
 
 **Organisational.**
-- <Effort budget — e.g. 3 person-weeks>
-- <Deadline — e.g. 2026-Q3 hard>
-- <Team composition>
+- Розмір S, маршрут quick, профіль Pro (`interview_depth: easy`, один агент, Sonnet у ролях виконавців).
+- Одна людина виконує всі ролі; «Tech Lead» — роль у SDD-процесі, не окрема особа.
+- Дедлайн м'який: перший шип у межах воркшопу 2026-09-05 і найближчих днів.
+- Передумови з роадмапу: крок 1 (скелет, `/sdd:scaffold`) і крок 2 (реальний зміст `resume.yaml`) ще не виконані — ця фіча спирається на заплановану структуру карти, не на наявний код (ризик у §11).
 
 **Conventions.**
-- <Link to the project's convention file>
-- <Naming, ID strategy, error-handling pattern>
+- Карта архітектури §Conventions (після scaffold — також `CLAUDE.md`): весь текст із `resume.yaml`, нове поле = схема + YAML, один партіал на section, токени лише через кастомні властивості.
+- Гілки `feat/<slug>`, у `main` через pull request із зеленим CI і deploy preview Netlify; коміти `type: summary`.
+- Помилка даних зупиняє збірку з повідомленням про поле, а не публікує порожню секцію.
 
 **Regulatory / external.**
-- <e.g. data-retention / deletion behaviour per ADR-NNNN>
-- <e.g. applicable compliance controls, or N/A with a reason>
+- Дані — публічні дані самого власника (spec §6.1: класифікація public); чужих персональних даних немає.
+- Телефон за дефолтом не публікується (spec §8, рішення власника відкрите до `sdd:tasks`).
+- Лічильник кліків не ставить cookie і не ідентифікує відвідувача (spec §6.1), тож банер згоди не потрібен.
+- Код commercial project — комерційна таємниця: посилання на код заборонене правилом, а не позначкою (spec §1, Decision override).
 
 ## 3. Context and scope
 
-<!-- 🎯 Why: draws the SYSTEM BOUNDARY — who talks to it from outside, where the trust zone ends.
-     Without §3, §5 and §8 (authorization) blur — unclear what's «inside» vs «outside».
-     📋 Write: 2–3 sentences of business context + an external-systems table + a C4Context block.
-     📌 «External: none (deliberate, no third-party in v1)» is itself a decision worth stating.
-     Trust boundary — the line past which you don't trust data without checking it.
-     Never N/A — greenfield still draws the planned actors + external systems. -->
+Сайт-резюме — статична сторінка, яку читають recruiter і hiring manager, а публікує site owner, комітячи resume data в репозиторій на GitHub. Netlify збирає сайт на кожен push у `main` і замінює живу версію лише після успішної збірки; невдала збірка залишає попередню версію. Контактні посилання ведуть у зовнішні застосунки (пошта, Telegram, LinkedIn), а кліки по них рахує сторонній лічильник подій.
 
-<Business context in 2–3 sentences. What the system does for whom.>
-
-<!-- brownfield: <one-line scan summary> (or «N/A — greenfield repo» if no source existed) -->
+<!-- brownfield: N/A — greenfield repo. У репозиторії лише docs/ і CONTEXT.md; docs/architecture-map.md (mode: greenfield-bootstrap) описує скелет, який матеріалізує /sdd:scaffold. -->
 
 **External systems (in / out):**
 
 | Actor or system | Type | Interaction |
 |---|---|---|
-| <author role> | Person | <what they do> |
-| <external service> | System (internal/external) | <interaction> |
-| <identity provider> | System (external) | <provides auth tokens> |
+| recruiter | Person | Відкриває сторінку з телефона, читає, торкається контакту |
+| hiring manager | Person | Читає стек, відкриває живі посилання проєктів і код pet project |
+| site owner | Person | Править resume data, відкриває PR, зливає в `main` |
+| GitHub + Actions | System (external) | Зберігає код; CI запускає `npm test`, `npm run build`, `npm run lint` на PR; показує помилку публікації у перевірці PR |
+| Netlify | System (external) | Збирає `npm run build` на push у `main`, публікує `_site`, тримає попередній деплой при невдалій збірці; deploy preview для PR |
+| Пошта / Telegram / LinkedIn | System (external) | Застосунки-адресати контактних посилань (`mailto:`, `https://t.me/…`, профіль LinkedIn) |
+| Лічильник подій | System (external) | Приймає події кліків по контактах без cookie (`adr/0003`) |
+| PageSpeed Insights / Lighthouse | System (external, вимір) | Перевірка NFR при кожному релізі; у діаграму не входить |
 
-**C4 Context (L1):** <!-- syntax → references/c4-mermaid-syntax.md. Real names, no <placeholder> stubs. -->
+**C4 Context (L1):**
 
 ```mermaid
 C4Context
-    title <feature> — System Context
+    title resume-page — System Context
 
-    Person(actor, "<Actor role>", "<intent>")
-    System(app, "<Our system>", "<one-sentence description>")
-    System_Ext(ext, "<External system>", "<one-sentence description>")
+    Person(recruiter, "Recruiter", "Відкриває з телефона, сканує 30 с, пише власнику")
+    Person(hiring, "Hiring manager", "Перевіряє стек, живі проєкти і код pet project")
+    Person(owner, "Site owner", "Править resume data, публікує через git")
 
-    Rel(actor, app, "<interaction>", "<protocol>")
-    Rel(app, ext, "<interaction>", "<protocol>")
+    System(site, "Сайт-резюме", "Статична сторінка, зібрана з resume data з перевіркою публікації")
+
+    System_Ext(github, "GitHub + Actions", "Репозиторій, pull request, CI test + build + lint")
+    System_Ext(netlify, "Netlify", "Збирає на push у main, публікує _site, тримає попередню версію при невдачі")
+    System_Ext(contacts, "Пошта / Telegram / LinkedIn", "Застосунки, які відкриваються з контактних посилань")
+    System_Ext(counter, "Лічильник подій", "Приймає події кліків по контактах без cookie")
+
+    Rel(owner, github, "Комітить resume data, відкриває PR", "git")
+    Rel(github, netlify, "Тригерить збірку main", "webhook")
+    Rel(netlify, site, "Збирає і публікує")
+    Rel(recruiter, site, "Читає", "HTTPS")
+    Rel(hiring, site, "Читає, відкриває посилання", "HTTPS")
+    Rel(recruiter, contacts, "Переходить за контактом", "mailto / https")
+    Rel(site, counter, "Надсилає подію кліку", "HTTPS")
 ```
+
+Контекст: три людини (recruiter, hiring manager, site owner) навколо однієї системи «Сайт-резюме»; власник публікує через GitHub, GitHub тригерить Netlify, Netlify збирає і віддає сторінку читачам; контакти ведуть у зовнішні застосунки, кліки летять у лічильник.
 
 ## 4. Solution strategy
 
-<!-- 🎯 Why: the 3–4 STRATEGIC PILLARS every ADR grows from. Without §4 each ADR looks random —
-     there's no umbrella. ⭐ The densest section — the blast-radius gate fires almost always here
-     (decisions are irreversible + multi-module).
-     📋 Write: 3–4 choices; each a heading + 2–3 sentences of rationale.
-     📌 «Store content as a table of typed blocks» is a pillar — ADR-0001 grows from it. -->
+**Target surface(s).** `target_surfaces: [web-frontend]` — єдина поверхня. Фіча вводить один контейнер C4: статичну веб-сторінку в `_site/`. Серверного коду немає (Netlify — статичний хостинг, карта §Constraints), тому `backend-service` відсутній; логіка перевірки й підготовки даних виконується на етапі збірки і є частиною цієї ж поверхні, а не окремим `cli`/`worker`. Одна поверхня, і вона вже задана фундаментом (`docs/adr/0001`: статичний HTML з Eleventy) — blast-radius gate не спрацьовує, окремий ADR не потрібен.
+
+**UI-architecture (web-frontend).** Server-rendered на етапі збірки (статичний пре-рендер, SSG), нуль клієнтського JavaScript окрім винятків, зафіксованих ADR. Успадковано з `docs/adr/0001`; стан і роутинг відсутні (одна сторінка без взаємодії, spec §3: ніщо не приховане за наведенням, розгортанням чи вкладками). UI повторно використовує фундамент із карти §Frontend: партіали секцій, токени `tokens.css`, примітиви `section` / `tag` / `card` / `timeline-item`.
 
 **Top strategic choices (the seeds for ADRs):**
 
-1. **<e.g. Module isolation through events>** — <2–3 sentences citing quality goals + constraints>.
-2. **<e.g. Single-store persistence>** — <2–3 sentences>.
-3. **<e.g. Server-rendered read side>** — <2–3 sentences>.
+1. **Publish gate у збірці: JSON Schema для форми + модуль правил для перехресних інваріантів** (`adr/0001`). Схема тримає обов'язкові поля, типи, 1–3 факти; `lib/resume/rules.js` перевіряє посилання commercial project на code-хост, результат у записі досвіду, галузь у commercial project і формулює помилку словами з назвою запису. Будь-яке порушення зупиняє `npm run build` і `npm test`, тож Netlify не замінює живу версію, а site owner бачить пояснення у перевірці PR (AC-03b, AC-05, AC-07, AC-09; якість 2).
+2. **Шаблони отримують безпечне подання даних, а не сирий YAML** (`adr/0002`). Data extension повертає view model: у confidential project назва і посилання відсутні як поля, досвід відсортований за датою початку від найновішого, порожні section і групи прибрані, дати відформатовані. Партіали лише виводять; секрет фізично не потрапляє в шаблонний контекст (AC-03, AC-04, AC-06, AC-08).
+3. **Публікація = злиття в `main` через PR із зеленим CI; атомарність дає Netlify.** Той самий конвеєр `test → build → lint` виконується локально, у CI і на Netlify; невдала збірка не створює деплою, тож жива сторінка або попередня, або нова повна (AC-09, NFR «Атомарність»). Успадковано з конвенцій фундаменту — inline, без ADR.
+4. **Вимірюваність через легкий лічильник подій без cookie** (`adr/0003`). Один асинхронний скрипт і один обробник кліків у `layout.njk`; свідомий виняток із правила «без клієнтського JS», обмежений рівно цим скриптом (spec §7 KPI, §6.1).
+5. **Одна прокручувана сторінка на токенах, нічого за взаємодією.** Mobile-first розкладка на `tokens.css`; порядок і заголовки section з resume data; жоден зміст не прихований за наведенням, вкладками чи каруселлю, щоб друковане подання (крок 5) отримало все без переверстки (spec §3). Конвенція фундаменту — inline.
 
 Each tactical decision in later sections should trace to one of these seeds. Tactical decisions that *contradict* a strategic choice are red flags — surface them in §11.
 
 ## 5. Building block view
 
-<!-- 🎯 Why: INTERNAL DECOMPOSITION — modules, containers, datastores. The static topology: who
-     may talk to whom. Without §5, §6 (the flows) has no vocabulary of participants.
-     📋 Write: 1 ¶ on the style (layered / hexagonal / clean / event-driven) + a folder tree + a
-     C4Container block.
-     📌 Draw ONE Container per declared `target_surface` (frontmatter): a fullstack
-     [backend-service, web-frontend] = a backend-API container + a web/SPA container; a
-     [backend-service, mobile-app] = the API + the mobile app. The Container(web, …) line below is
-     just one surface's container — swap/add per what was declared in §4. → _shared/surfaces.md
-     📌 e.g. «web app, content API, media worker, datastore, object store, CDN». -->
-
-<One paragraph: layered / hexagonal / clean / event-driven, and why.>
+Стиль — лінійний конвеєр збірки всередині одного deployable: **resume data → publish gate → view model → шаблони → статичний HTML**. Шар даних (`lib/resume/`) не знає про Nunjucks, шаблони не знають про правила; єдина точка зшивання — data extension в `eleventy.config.js`. Такий поділ обрано, бо обидві ADR-опори (перевірка і безпечне подання) потребують коду, який тестується без збірки сайту, а партіали мають лишатися простими для правки вигляду.
 
 **Internal decomposition:**
 
 ```
-<e.g. modules/<feature>/>
-├── domain/       <entities + sentinel errors>
-├── app/          <use cases / services>
-├── infra/        <repository + integration impl>
-├── ports/        <handlers, DTOs, error mapping>
-└── wiring        <self-wiring entry point>
+src/_data/
+├── resume.yaml                 resume data — весь зміст (наповнення: крок 2 роадмапу)
+├── resume.schema.json          JSON Schema: форма даних (обов'язкові поля, типи, 1–3 факти)
+└── site.json                   службові налаштування сайту, не зміст (адреса лічильника)
+lib/resume/
+├── load.js                     читає YAML → схема → правила → view model; кидає ResumeValidationError
+├── rules.js                    перехресні інваріанти: code-хост у commercial, результат у досвіді, галузь
+├── code-hosts.js               домени сервісів хостингу коду (AC-05)
+└── view-model.js               сортування досвіду, прибирання порожніх section/груп, стрип confidential, дати
+eleventy.config.js              data extension yaml → lib/resume/load.js; у шаблонах доступно як `resume`
+src/index.njk                   сторінка; порядок section — з view model
+src/_includes/
+├── layout.njk                  <head>, landmarks, підключення стилів, тег лічильника + обробник кліків
+└── sections/
+    ├── hero.njk                ім'я, позиціювання, факти, контакти
+    ├── experience.njk          записи досвіду (роль, компанія, період, результати)
+    ├── skills.njk              групи навичок
+    ├── projects.njk            одна картка на проєкт; поля вже підготовлені view model
+    └── contacts.njk            контакти з data-атрибутом типу для лічильника
+src/styles/
+├── tokens.css                  палітра, відступи, типографіка (розміри тексту 16/14 px тут)
+├── base.css                    примітиви: section, tag, card, timeline-item, button
+└── layout.css                  mobile-first сітка, брейкпоінти 360 / 768 / 1280
+test/
+├── resume-rules.test.js        юніт: кожен інваріант → помилка з назвою запису і правилом
+├── view-model.test.js          юніт: порядок досвіду, порожнє прибрано, confidential без назви і посилань
+└── build.test.js               збірка у tmp: секції на місці, назва confidential відсутня в HTML
 ```
 
-**C4 Container (L2):** <!-- syntax → references/c4-mermaid-syntax.md. Real names, no <placeholder> stubs. ONE Container per declared target_surface (frontmatter); the web container below is one example surface. -->
+**C4 Container (L2):**
 
 ```mermaid
 C4Container
-    title <feature> — Containers
+    title resume-page — Containers
 
-    Person(actor, "<Actor>")
+    Person(owner, "Site owner")
+    Person(reader, "Recruiter / Hiring manager")
 
-    Container_Boundary(app, "<Our system>") {
-        Container(web, "<Web/UI>", "<technology>", "<purpose>")
-        Container(api, "<API/handler>", "<technology>", "<purpose>")
-        ContainerDb(db, "<Datastore>", "<technology>", "<purpose>")
+    Container_Boundary(repo, "yuriy-sobakar-site — збірка Eleventy") {
+        Container(data, "Resume data", "resume.yaml + resume.schema.json", "Єдине джерело змісту і контракт його форми")
+        Container(gate, "Publish gate + view model", "Node ESM, lib/resume/", "Схема, правила, безпечне подання. Помилка зупиняє збірку")
+        Container(templates, "Templates", "Nunjucks partials", "Виводять view model, без логіки приховування")
+        Container(styles, "Styles", "Vanilla CSS, tokens", "Mobile-first розкладка на токенах")
+        Container(tests, "Tests + lint", "node --test, html-validate", "Юніт правил і подання, smoke збірки, валідний HTML")
     }
 
-    System_Ext(ext, "<External>", "<purpose>")
+    Container(web, "Resume page", "Static HTML + CSS in _site/", "web-frontend: одна прокручувана сторінка")
 
-    Rel(actor, web, "<interaction>", "<protocol>")
-    Rel(web, api, "<calls>")
-    Rel(api, db, "<reads/writes>", "<driver>")
-    Rel(api, ext, "<emits>", "<protocol>")
+    System_Ext(github, "GitHub + Actions", "PR, CI test + build + lint")
+    System_Ext(netlify, "Netlify", "Збірка на push у main, хостинг, попередня версія при невдачі")
+    System_Ext(counter, "Лічильник подій", "Події кліків по контактах")
+
+    Rel(owner, data, "Править", "git")
+    Rel(gate, data, "Читає і перевіряє")
+    Rel(templates, gate, "Отримує view model")
+    Rel(templates, web, "Рендерить")
+    Rel(styles, web, "Копіюється passthrough")
+    Rel(tests, gate, "Юніт-тести правил і подання")
+    Rel(tests, web, "Перевіряє зібраний HTML")
+    Rel(github, tests, "Запускає в CI")
+    Rel(netlify, web, "Збирає і публікує", "HTTPS")
+    Rel(reader, web, "Читає", "HTTPS")
+    Rel(web, counter, "Надсилає подію кліку", "HTTPS, async script")
 ```
+
+Контейнери: усередині збірки — resume data, publish gate + view model, шаблони, стилі, тести; результат — один контейнер поверхні `web-frontend` (статична сторінка), який Netlify збирає і публікує, GitHub ганяє тести в CI, а сторінка надсилає події кліків у лічильник.
 
 ## 6. Runtime view
 
-<!-- 🎯 Why: the RUNTIME FLOW of 1–2 critical scenarios — who talks to whom, when, in what order.
-     Without §6, §5 is just boxes with no life.
-     📋 Write: a Mermaid sequenceDiagram. Participants are names from §5 (don't invent new ones).
-     Messages are semantic («saves a draft»), NO HTTP verbs / paths / status codes — endpoint-level
-     sequences arrive at the `api` stage.
-     📌 e.g. «author → web: composes draft → web → content API: save». Seed the primary flow(s) here;
-     the `sequences` stage then covers every §5 AC (no cap). Never N/A for M+; XS/S keeps ≥1 happy-path flow. -->
-
-**Critical flow 1: <flow name>**
+**Critical flow 1: публікація правки resume data (happy path + відхилення)**
 
 ```mermaid
 sequenceDiagram
-    actor Actor
-    participant Web
-    participant Service
-    participant Store
-    Actor->>Web: <action>
-    Web->>Service: <call>
-    Service->>Store: <write>
-    Store-->>Service: ok
-    Service-->>Web: result
-    Web-->>Actor: confirmation
+    actor Owner as Site owner
+    participant Git as GitHub + Actions
+    participant Build as Eleventy build
+    participant Gate as Publish gate + view model
+    participant Tpl as Templates
+    participant Netlify
+    actor Reader as Recruiter
+
+    Owner->>Git: комітить resume data, відкриває PR
+    Git->>Build: запускає npm test і npm run build
+    Build->>Gate: передає resume.yaml
+    Gate->>Gate: схема, потім правила
+    alt дані порушують правило
+        Gate-->>Build: помилка з назвою запису і правилом
+        Build-->>Git: збірка впала, CI червоний
+        Git-->>Owner: пояснення у перевірці PR
+        Note over Netlify: жива сторінка не змінюється
+    else дані валідні
+        Gate-->>Build: view model (відсортовано, порожнє прибрано, confidential без назви й посилань)
+        Build->>Tpl: рендерить секції з view model
+        Tpl-->>Build: статичний HTML
+        Build-->>Git: CI зелений, deploy preview
+        Owner->>Git: зливає PR у main
+        Git->>Netlify: тригерить збірку main
+        Netlify->>Netlify: та сама збірка, атомарна заміна деплою
+        Reader->>Netlify: відкриває сторінку
+        Netlify-->>Reader: нова повна версія
+    end
 ```
 
-**Critical flow 2: <e.g. async event propagation>** — <if applicable, otherwise N/A>.
+Потік: власник комітить дані і відкриває PR; CI запускає збірку; publish gate ганяє схему, потім правила. Якщо є порушення — збірка падає, власник бачить назву запису і правило у перевірці PR, жива сторінка не змінюється. Якщо все валідно — шаблони рендерять view model, CI зелений, власник зливає в `main`, Netlify повторює ту саму збірку і атомарно замінює деплой, читач бачить нову повну версію.
+
+**Critical flow 2:** покриття решти AC (перший екран, клік по контакту з подією лічильника, confidential у view-source) — стадія `sequences`, або N/A на маршруті quick, якщо потік 1 плюс гілки покриває всі AC (див. хендоф).
 
 ## 7. Deployment view
 
-<!-- 🎯 Why: the TOPOLOGY DevOps must know without reading the deploy charts — how many replicas,
-     where the background worker lives, AT WHAT NUMBERS we scale.
-     📋 Write: 2–3 sentences on topology + monitoring + concrete threshold numbers.
-     📌 e.g. «500 authors → partition by quarter» (not «we'll think about scale later»).
-     🎯 N/A allowed for XS/S that reuses an existing deployment unit with no change.
-     Deployment-diagram scaffold → templates/deployment.md. -->
-
-<Topology in 2–3 sentences. Where it runs, replicas, scaling thresholds.>
+Фіча не змінює одиницю деплою фундаменту: Netlify збирає `npm run build` на push у `main` і публікує `_site/` як статичні файли з CDN; реплік і масштабування немає. Ключова властивість для AC-09 — деплой атомарний: Netlify створює новий деплой лише з успішної збірки і перемикає на нього одразу, невдала збірка залишає попередній деплой активним. Pull request отримує deploy preview на окремій адресі, тож перевірку на трьох ширинах можна зробити до злиття.
 
 **Monitoring:**
-- <Metrics — e.g. `<metric_name>`>
-- <Alerts — e.g. «worker lag > 10 min → page on-call»>
-- <Tracing — e.g. spans on the request boundary>
+- Статус збірки Netlify (сповіщення про невдалий деплой на пошту власника) і статус CI на PR — єдині сигнали про відхилену публікацію.
+- PageSpeed Insights mobile і Lighthouse Accessibility — вручну при кожному релізі (spec §6); значення записуються у changelog релізу.
+- Дашборд лічильника подій — кліки по контактах за типом (spec §7 KPI).
 
 **Scaling thresholds:**
-- <e.g. comfortable in one table up to N rows/year>
-- <e.g. partition by quarter above N rows/year>
-
-<!-- For XS/S with no deployment change: <!-- N/A: reuses existing deployment unit, no infra change --> -->
+- N/A — статичний CDN-хостинг; єдиний поріг — вага сторінки ≤ 150 КБ, перевіряється мережевою панеллю без кешу при кожному релізі.
 
 ## 8. Crosscutting concepts
 
-<!-- 🎯 Why: CROSS-CUTTING PATTERNS spanning several modules: logging, errors, authorization, ID
-     strategy, events, caching. ⭐ The second-densest section. A pattern inside one module is NOT
-     here; a project-wide convention belongs in the convention file.
-     📋 Write: a table — concept / convention / where defined. One row per concept.
-     📌 e.g. «sortable time-based IDs generated in the app layer» as a default from the convention file. -->
-
 | Concept | Convention | Where defined |
 |---|---|---|
-| Logging | <e.g. structured, fields `module=<name>`> | <convention file §X or here> |
-| Authentication | <e.g. token-based via middleware> | <convention file §X> |
-| Error handling | <e.g. domain sentinel → ports error mapping → JSON> | <convention file §X> |
-| ID strategy | <e.g. sortable time-based ID in the app layer> | <convention file §X> |
-| Internationalisation | <e.g. N/A, single language> | — |
-| Observability | <e.g. tracing on the request boundary> | — |
-| Events | <module-specific patterns, if any> | <here> |
+| Помилки даних | `ResumeValidationError` збирає **всі** порушення за один прохід; кожне — рядок `resume.yaml › <шлях до поля>: <правило словами>` (напр. `projects[2] "Acme": код commercial project не публікується`); збірка завершується ненульовим кодом | `lib/resume/load.js`, `rules.js`; цей SAD §4 опора 1 |
+| Логування | Лише stderr збірки; рантайм-логів немає (статика) | — |
+| Автентифікація / авторизація | N/A — сторінка лише для читання; право публікувати = право писати в репозиторій і зливати в `main` | карта §Conventions (PR у `main`) |
+| Екранування (XSS) | Nunjucks `autoescape: true`; фільтр `safe` заборонений для будь-якого поля з resume data; текст із даних ніколи не стає розміткою | `eleventy.config.js`; тест `build.test.js` шукає `| safe` у `sections/*.njk` і падає, якщо знайде |
+| Confidential project | View model видаляє назву клієнта і **всі** посилання; лишає галузь, роль, результат (за глосарієм); стек також прибирається | `lib/resume/view-model.js`; CONTEXT.md |
+| Заборона коду commercial project | Будь-яке посилання commercial project, чий хост збігається з доменом code-хостингу або його піддоменом — порушення. Список: `github.com`, `gitlab.com`, `bitbucket.org`, `codeberg.org`, `git.sr.ht`, `gitee.com`, `dev.azure.com`. Сторінки хостингу `*.github.io`, `*.gitlab.io`, `*.pages.dev` — не код, дозволені як живе посилання | `lib/resume/code-hosts.js` |
+| Порожні section і групи | Section без записів або група без записів прибирається з view model; section, у якій усі групи порожні, теж | `lib/resume/view-model.js` |
+| Дати | У YAML `start`/`end` у форматі `YYYY-MM`; `end` відсутній = поточна робота, підпис у шаблоні (мова сайту англійська: «Present»); сортування досвіду за `start` спадно | `view-model.js`; `experience.njk` |
+| Посилання | Зовнішні посилання проєктів — `target="_blank" rel="noopener noreferrer"`; контакти — `mailto:`, `https://t.me/<user>`, повний URL LinkedIn, без нової вкладки; телефон — не публікується за дефолтом | `projects.njk`, `contacts.njk` |
+| Лічильник кліків | Один асинхронний тег скрипта + один обробник у `layout.njk`; подія `contact:<type>` з `data-contact` на посиланні; адреса лічильника у `src/_data/site.json`, не в resume data | `layout.njk`, `contacts.njk`; `adr/0003` |
+| Продуктивність | Бюджет ≤ 150 КБ; системний стек шрифтів за дефолтом (поки візуальна концепція з роадмапу не скаже інакше); зображень у v1 немає; CSS — три файли без inline | `tokens.css`; spec §6 |
+| Доступність | Landmarks `header / main / footer`, `h1` = ім'я, `h2` = заголовки section; контраст токенів ≥ 4.5:1; розміри тексту в токенах: основний 16 px, допоміжний 14 px; іконки контактів мають текстовий підпис або `aria-label` | `tokens.css`, `base.css`, партіали |
+| Інтернаціоналізація | N/A — сайт англійською, одна локаль; службові підписи інтерфейсу — частина шаблону (spec §3) | — |
+| ID / міграції | N/A — бази даних немає; порядок і належність задаються позицією в YAML | карта §Conventions |
 
 ## 9. Architecture decisions
 
-<!-- 🎯 Why: the REVERSE INDEX onto the adr/ folder. `ls adr/` gives the files; §9 gives the
-     semantics — why they exist, which SAD section they attach to, what status.
-     📋 Write: a 4-column table, one row per ADR. Mixed status is fine.
-     📌 e.g. «0001 | Store content as a table of typed blocks | Accepted | §4». -->
-
 | # | Title | Status | Section |
 |---|---|---|---|
-| <NNNN> | <imperative — e.g. "Use a sliding-window counter for rate limiting"> | Accepted | §<N> |
-| <NNNN> | <imperative — e.g. "Co-locate the worker in the API process"> | Accepted | §<N> |
+| 0001 | Перевіряти публікацію під час збірки: JSON Schema для форми плюс модуль правил для перехресних інваріантів | Accepted | §4 |
+| 0002 | Віддавати шаблонам безпечне подання даних (view model), а не сирий resume data | Accepted | §4 |
+| 0003 | Рахувати кліки по контактах легким стороннім лічильником подій без cookie, як виняток із правила «без клієнтського JavaScript» | Accepted | §4 |
 
-ADR files live under `docs/features/<slug>/adr/NNNN-<title>.md`.
+ADR files live under `docs/features/resume-page/adr/NNNN-<title>.md`.
+
+Успадковані рішення фундаменту (не дублюються тут): `docs/adr/0001` Eleventy + статичний HTML · `docs/adr/0002` один YAML + JSON Schema · `docs/adr/0003` чистий CSS + окремий `print.css` · `docs/adr/0004` PDF через друк браузера.
 
 ## 10. Quality requirements
 
-<!-- 🎯 Why: the QUALITY TREE — take a goal from §1 and break it into concrete leaves: tests,
-     metrics, configs, drills. ⭐ Without §10, §1 is a manifesto. With §10 each declaration maps
-     to something PROVABLE.
-     📋 Write: per §1 goal — When / Then / How-verify. Numbers from spec §6 NFR VERBATIM (don't
-     round ≤250ms to ≤300ms — that's a critic F6 hit).
-     📌 e.g. «p95 ≤ 500 ms on a block update, verified by a 100 req/s load test». -->
-
 Each top-3 goal from §1 expanded into a full scenario:
 
-**QG-1. <quality attribute>**
-- **When:** <trigger condition>
-- **Then:** <expected behaviour with numbers from spec §6 NFR>
-- **How verify:** <test / chaos drill / load test / metric>
+**QG-1. Швидкість і вага на мобільному**
+- **When:** recruiter відкриває сторінку на телефоні шириною 360 px без кешу.
+- **Then:** PageSpeed Insights mobile Performance ≥ 95; ≤ 150 КБ стиснутих переданих байтів за всі ресурси першого відкриття (HTML, стилі, скрипти, шрифти, зображення, лічильник).
+- **How verify:** PageSpeed Insights при кожному релізі; колонка «Transferred» мережевої панелі браузера з вимкненим кешем при кожному релізі (spec §6).
 
-**QG-2. <quality attribute>**
-- **When:** <trigger>
-- **Then:** <expected>
-- **How verify:** <how>
+**QG-2. Безпека публікації**
+- **When:** site owner публікує resume data, що порушує будь-яке правило (порожнє обов'язкове поле, фактів 0 або > 3, запис досвіду без ролі / компанії / дати початку / результату, commercial project без галузі або з посиланням на code-хост).
+- **Then:** збірка зупиняється і повідомляє назву запису, поле і правило там, де запущено публікацію (консоль або перевірка PR); відвідувач у будь-який момент бачить або попередню, або нову повну версію — 0 порожніх чи часткових станів.
+- **How verify:** юніт-тести `resume-rules.test.js` на кожен інваріант; навмисна невдала публікація перед запуском (spec §6): PR із порушенням → CI червоний, Netlify не створює деплой, жива сторінка не змінилась.
 
-**QG-3. <quality attribute>**
-- **When:** <trigger>
-- **Then:** <expected>
-- **How verify:** <how>
+**QG-3. Оновлюваність**
+- **When:** site owner змінює будь-який зміст (наприклад, результат у записі досвіду) лише у resume data і публікує.
+- **Then:** новий текст з'являється на живій сторінці дослівно за ≤ 5 хвилин від збереження resume data; жоден інший файл проєкту не змінювався.
+- **How verify:** замір часу на перших трьох правках (spec §6); `git diff --stat` коміту правки показує лише `src/_data/resume.yaml`.
+
+**QG-4. Доступність і адаптивність**
+- **When:** сторінка відкрита на ширинах 360, 768 і 1280 px.
+- **Then:** Lighthouse Accessibility ≥ 95; контраст тексту ≥ 4.5:1; основний текст ≥ 16 CSS-px, допоміжний ≥ 14 CSS-px; без горизонтальної прокрутки на жодній ширині.
+- **How verify:** Lighthouse при кожному релізі; ручна перевірка трьох ширин на deploy preview перед злиттям; перевірка стилів перед публікацією (spec §6).
 
 ## 11. Risks and technical debt
 
-<!-- 🎯 Why: ⭐ collects EVERYTHING that can break — not only the technical. Without §11 risks get
-     discussed at standups and lost; debt lives only in the head of whoever accepted it.
-     📋 Write: a risk/debt table — severity — mitigation — owner. Accepted debt in its own block.
-     📌 The first risk is often a product risk, not a technical one. That's normal. -->
-
-<!-- Severity literals: Low / Medium / High for regular risks; "Open question" for rows created by
-     a Save-as-OQ resolution during the Socratic walk (see references/socratic.md). -->
-
 | Risk / debt | Severity | Mitigation | Owner |
 |---|---|---|---|
-| <e.g. Worker lag may reach hours during a downstream outage> | Medium | <alert >10 min, on-call playbook, retry backoff> | <DevOps> |
-| <e.g. No event-schema versioning in v1> | Medium | <ADR-NNNN planned for v2, tolerate unknown fields> | <Backend> |
-| Open architectural decision: <decision-headline> | Open question | Resolve before <stage trigger or YYYY-MM-DD>; <inline rationale from the Save-as-OQ> | <owner> |
+| Скелет (крок 1) і зміст (крок 2) роадмапу ще не існують; §5 спирається на заплановану структуру карти | Medium | `/sdd:tasks resume-page` виконувати після `/sdd:scaffold`; якщо scaffold змінить шляхи — оновити карту через `survey` і §5 | site owner |
+| Сторонній лічильник: залежність від сервісу і другий скрипт на сторінці всупереч конвенції «без JS» | Low | `adr/0003`; тег асинхронний; PageSpeed Insights при кожному релізі; вимкнути = видалити один тег | Tech Lead |
+| Список code-хостів неповний (самохостований Gitea, корпоративний GitLab на власному домені) | Low | Список в одному файлі з тестом на кожен домен; доповнюється без зміни схеми; commercial project із самохостованим кодом і так не має причини мати таке посилання | Tech Lead |
+| Вимкнений autoescape або `safe` на полі з даних → розмітка з YAML виконається | Low | `autoescape: true` у конфігу; тест збірки падає на `| safe` у партіалах секцій | Tech Lead |
+| Хибне спрацювання правила code-хосту на легітимному живому посиланні commercial project (сайт клієнта на GitHub Pages) | Low | `*.github.io` / `*.gitlab.io` / `*.pages.dev` у списку винятків; повідомлення про помилку називає домен, власник бачить причину одразу | Tech Lead |
+| Open architectural decision: публікувати телефон чи лишити пошту, Telegram, LinkedIn | Open question | Resolve before `sdd:tasks`; дефолт зараз — без телефону; схема дозволяє контакт типу phone, рендер не залежить від рішення | site owner |
+| Open architectural decision: фото на першому екрані | Open question | Resolve before `sdd:tasks`; дефолт зараз — без фото; у схемі v1 поля немає, додати пізніше = поле в схемі + рядок у `hero.njk` | site owner |
+| Мертві живі посилання проєктів помітить recruiter, а не збірка | Low | Перевірка посилань при публікації — лише попередження, не блокування (spec §8, дефолт); не входить у publish gate, бо потребує мережі в CI і робить збірку нестабільною; окрема необов'язкова задача або follow-up | Tech Lead |
 
 **Accepted debt (acceptable in v1, plan to fix later):**
-- <e.g. the entity is immutable / unversioned — OK for v1, may need audit versioning in v2>
+- Схема даних без версіонування: одна версія, один файл; при несумісній зміні полів правиться і схема, і YAML в одному PR.
+- Пояснення помилки публікації лише в консолі збірки та перевірці PR, без окремого інтерфейсу — власник сам розробник, цього достатньо.
+- Перевірка мертвих посилань відкладена (рядок вище).
 
 ## 12. Glossary
 
-<!-- 🎯 Why: ⭐ the DOMAIN GLOSSARY that ends arguments a year later («checkpoint — weekly or
-     biweekly? quarter — calendar or fiscal?»).
-     📋 Write: a term / meaning table. Business + technical terms mixed.
-     📌 e.g. «Lesson | a unit inside a course made of blocks (text, video)». -->
-
 | Term | Meaning |
 |---|---|
-| <e.g. domain object A> | <its meaning in this domain> |
-| <e.g. domain object B> | <its meaning> |
-| <e.g. domain invariant name> | <the rule, in plain language> |
+| resume data | Єдиний файл-джерело всього тексту сайту (`src/_data/resume.yaml`): ім'я, позиціювання, факти, досвід, навички, проєкти, контакти. NOT сторінка (CONTEXT.md) |
+| section | Блок сторінки: hero, experience, skills, projects, contacts; порядок і заголовки з resume data (CONTEXT.md) |
+| commercial project | Проєкт на роботі чи для клієнта: назва, галузь, живе посилання, стек, роль, результат; ніколи не посилання на код (CONTEXT.md) |
+| confidential project | Commercial project з позначкою власника: без назви клієнта і посилань, видно лише галузь, роль, результат (CONTEXT.md) |
+| pet project | Власний або фріланс-проєкт: назва, живий сайт і посилання на код (CONTEXT.md) |
+| факт | Коротке перевірюване твердження до 60 знаків; на hero їх 1–3 (CONTEXT.md) |
+| позиціювання | Одне речення до 120 знаків під ім'ям: хто власник і для кого (CONTEXT.md) |
+| recruiter · hiring manager · site owner | Ролі читачів і власника за CONTEXT.md |
+| publish gate | Перевірка resume data під час збірки (схема + правила), яка зупиняє публікацію з поясненням; `adr/0001`. *Немає в CONTEXT.md — кандидат для `/sdd:glossary`* |
+| view model (безпечне подання даних) | Підготовлена для шаблонів модель: без секретів confidential project, відсортована, без порожнього; `adr/0002`. *Кандидат для `/sdd:glossary`* |
+| публікація | Злиття PR у `main` із зеленим CI, після якого Netlify збирає і атомарно замінює живу сторінку. *Кандидат для `/sdd:glossary`* |
+| code-хост | Сервіс хостингу коду (GitHub, GitLab, Bitbucket тощо); посилання commercial project на нього — порушення publish gate. *Кандидат для `/sdd:glossary`* |
