@@ -1,0 +1,25 @@
+# Test fixture — valid data where experience and projects are empty and every skill group is empty:
+# the view model must drop those sections entirely (AC-08), leaving only Contacts.
+name: Test Person
+headline: Test headline
+facts: ["Fact one"]
+contacts:
+  - type: email
+    label: Email
+    url: "mailto:test@example.com"
+sections:
+  - id: experience
+    title: Experience
+  - id: skills
+    title: Skills
+  - id: projects
+    title: Projects
+  - id: contacts
+    title: Contacts
+experience: []
+skills:
+  - group: Group Alpha
+    items: []
+  - group: Group Bravo
+    items: []
+projects: []

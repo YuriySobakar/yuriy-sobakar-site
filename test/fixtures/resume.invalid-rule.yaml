@@ -1,0 +1,25 @@
+# Test fixture — schema-valid, but a commercial project carries links.code: the publish gate must
+# stop the build with ResumeValidationError naming the project (AC-05) and write no index.html (AC-09).
+name: Test Person
+headline: Test headline
+facts: ["Fact one"]
+contacts:
+  - type: email
+    label: Email
+    url: "mailto:test@example.com"
+sections:
+  - id: projects
+    title: Projects
+  - id: contacts
+    title: Contacts
+experience: []
+skills: []
+projects:
+  - kind: commercial
+    name: Acme Storefront
+    industry: Retail
+    role: Full-stack developer
+    result: Commercial result marker
+    links:
+      live: "https://acme-storefront.example.com"
+      code: "https://github.com/acme/storefront"

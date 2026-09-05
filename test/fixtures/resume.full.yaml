@@ -1,0 +1,78 @@
+# Test fixture — valid resume data exercising every screen state (screens.md SCR-01…SCR-06).
+# Names, URLs and markers are deliberately unique so the build test can search the whole HTML for them.
+name: Test Person
+headline: Test headline
+facts: ["Fact one", "Fact two", "Fact three"]
+
+contacts:
+  - type: email
+    label: Email
+    url: "mailto:test@example.com"
+  - type: telegram
+    label: Telegram
+    url: "https://t.me/testperson"
+  - type: linkedin
+    label: LinkedIn
+    url: "https://www.linkedin.com/in/testperson/"
+
+sections:
+  - id: experience
+    title: Experience
+  - id: skills
+    title: Skills
+  - id: projects
+    title: Projects
+  - id: contacts
+    title: Contacts
+
+# Shuffled on purpose: the view model sorts by start descending.
+experience:
+  - role: Mid Developer
+    company: Beta Corp
+    start: "2023-01"
+    end: "2025-02"
+    results: ["Unique verbatim result marker 8f3a"]
+  - role: Lead Developer
+    company: Gamma LLC
+    start: "2025-03"
+    results: ["Result lead", "Second result lead"]
+  - role: Junior Developer
+    company: Alpha Inc
+    start: "2019-06"
+    end: "2022-12"
+    results: ["Result junior"]
+
+skills:
+  - group: Group Alpha
+    items: ["PHP", "WordPress"]
+  - group: Group Bravo
+    items: []
+  - group: Group Charlie
+    items: ["CSS"]
+
+projects:
+  - kind: commercial
+    name: Acme Storefront
+    industry: Retail
+    role: Full-stack developer
+    result: Commercial result marker
+    stack: ["WordPress", "PHP"]
+    links:
+      live: "https://acme-storefront.example.com"
+  - kind: pet
+    name: Toy Tracker
+    role: Author
+    result: Pet result marker
+    stack: ["Eleventy"]
+    links:
+      live: "https://toy-tracker.example.com"
+      code: "https://github.com/testperson/toy-tracker"
+  - kind: commercial
+    confidential: true
+    name: SecretClientCo
+    industry: Healthcare
+    role: WordPress developer
+    result: Confidential result marker
+    stack: ["SecretStackTech"]
+    links:
+      live: "https://secretclientco.example.com"
