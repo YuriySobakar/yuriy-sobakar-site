@@ -1,0 +1,5 @@
+{#- One contact as a same-tab button with its icon; `contact` comes from the including loop.
+    data-contact feeds the click counter in layout.njk (ADR 0003); data-print is the address print.css writes after the label
+    (URL without mailto: / tel: / https://). Icons live in _includes/icons/<type>.njk —
+    one file per value of the schema's contact.type enum. -#}
+<a class="button" href="{{ contact.url }}" data-contact="{{ contact.type }}" data-print="{{ contact.url | replace('mailto:', '') | replace('tel:', '') | replace('https://', '') }}">{% include "icons/" ~ contact.type ~ ".njk" %}<span>{{ contact.label }}</span></a>

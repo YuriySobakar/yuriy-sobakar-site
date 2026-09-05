@@ -1,18 +1,26 @@
 {#- SCR-03 experience: entries come from the view model already sorted newest-first; an open-ended
-    entry carries `current: true` (label "Present" is template text). Rules guarantee ≥1 result. -#}
+    entry carries `current: true` (label "Present" is template text). Rules guarantee ≥1 result.
+    `location` and `stack` are optional fields — presence checks, not secrecy. -#}
 <section class="section" id="{{ section.id }}" aria-labelledby="{{ section.id }}-title">
   <h2 class="section__title" id="{{ section.id }}-title">{{ section.title }}</h2>
   <ol class="timeline">
     {%- for job in resume.experience %}
     <li class="timeline-item">
       <h3 class="timeline-item__role">{{ job.role }}</h3>
-      <p class="timeline-item__company">{{ job.company }}</p>
+      <p class="timeline-item__company">{{ job.company }}{% if job.location %} · {{ job.location }}{% endif %}</p>
       <p class="timeline-item__meta">{{ job.start }} – {{ "Present" if job.current else job.end }}</p>
       <ul class="timeline-item__results">
         {%- for result in job.results %}
         <li>{{ result }}</li>
         {%- endfor %}
       </ul>
+      {%- if job.stack %}
+      <ul class="tags timeline-item__stack">
+        {%- for item in job.stack %}
+        <li class="tag">{{ item }}</li>
+        {%- endfor %}
+      </ul>
+      {%- endif %}
     </li>
     {%- endfor %}
   </ol>

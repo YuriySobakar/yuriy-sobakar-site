@@ -61,7 +61,12 @@ test("skills keep their order and drop empty groups", () => {
     vm.skills.map((g) => g.group),
     ["Backend", "Frontend"],
   );
-  assert.deepEqual(vm.skills[1].items, ["CSS", "JS"]);
+  assert.deepEqual(vm.skills[1].items, [{ label: "CSS" }, { label: "JS" }], "string items become {label}");
+});
+
+test("a skill item with a url keeps label and url (a linked chip, e.g. a certificate)", () => {
+  const vm = buildViewModel(data({ skills: [{ group: "Languages", items: [{ label: "English — B2", url: "https://cert.example.com/x" }, "Ukrainian"] }] }));
+  assert.deepEqual(vm.skills[0].items, [{ label: "English — B2", url: "https://cert.example.com/x" }, { label: "Ukrainian" }]);
 });
 
 test("a confidential project loses name, links and stack but keeps industry, role, result", () => {
@@ -135,4 +140,23 @@ test("the input object is not mutated", () => {
   const snapshot = structuredClone(input);
   buildViewModel(input);
   assert.deepEqual(input, snapshot);
+});
+
+test("education is sorted by start descending, open-ended entries are current, and its section shows only when present", () => {
+  const withEdu = data({
+    sections: [...sections, { id: "education", title: "Education" }],
+    education: [
+      { school: "B", program: "Second", start: "2024-10", end: "2025-03" },
+      { school: "C", program: "Third", start: "2025-07" },
+      { school: "A", program: "First", start: "2002-09", end: "2006-06" },
+    ],
+  });
+  const vm = buildViewModel(withEdu);
+  assert.deepEqual(vm.education.map((e) => e.program), ["Third", "Second", "First"]);
+  assert.equal(vm.education[0].current, true);
+  assert.equal(vm.education[1].current, undefined);
+  assert.ok(vm.sections.some((s) => s.id === "education"), "education section is visible with entries");
+
+  const withoutEdu = buildViewModel(data({ sections: [...sections, { id: "education", title: "Education" }] }));
+  assert.ok(!withoutEdu.sections.some((s) => s.id === "education"), "education section disappears without entries");
 });

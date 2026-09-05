@@ -160,3 +160,18 @@ test("photo is optional, but when present it needs src under /assets/, alt, widt
   const ok = validYaml.replace("headline: Developer\n", "headline: Developer\nphoto:\n  src: /assets/me.jpg\n  alt: Me\n  width: 300\n  height: 395\n");
   assert.equal(loadResume(ok).photo.alt, "Me");
 });
+
+test("an education entry without a program is rejected and named by its school", () => {
+  const noProgram = validYaml.replace("skills: []", 'education:\n  - school: Hillel\n    start: "2024-10"\nskills: []');
+  assert.throws(
+    () => loadResume(noProgram),
+    (error) => error.problems.some((line) => line.includes('education.0 "Hillel": required field "program" is missing')),
+  );
+});
+
+test("a linked skill item needs both label and an https url", () => {
+  const noUrl = validYaml.replace("skills: []", "skills:\n  - group: Languages\n    items:\n      - label: English\n");
+  assert.throws(() => loadResume(noUrl), (error) => error.problems.some((line) => line.startsWith('resume.yaml › skills.0.items.0 "Languages"')));
+  const http = validYaml.replace("skills: []", 'skills:\n  - group: Languages\n    items:\n      - label: English\n        url: "http://cert.example.com/x"\n');
+  assert.throws(() => loadResume(http), (error) => error.problems.some((line) => line.startsWith('resume.yaml › skills.0.items.0 "Languages"')));
+});

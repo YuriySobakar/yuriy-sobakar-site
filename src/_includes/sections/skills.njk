@@ -1,4 +1,5 @@
 {#- SCR-04 skills: groups in resume-data order, chips only — no levels, percentages or scales.
+    An item with `url` (view model: {label, url}) is a chip that links to the proof, e.g. a certificate.
     Empty groups (and an all-empty section) are already removed by the view model. -#}
 <section class="section" id="{{ section.id }}" aria-labelledby="{{ section.id }}-title">
   <h2 class="section__title" id="{{ section.id }}-title">{{ section.title }}</h2>
@@ -8,7 +9,11 @@
       <h3 class="skill-group__title">{{ group.group }}</h3>
       <ul class="tags">
         {%- for item in group.items %}
-        <li class="tag">{{ item }}</li>
+        {%- if item.url %}
+        <li><a class="tag tag--link" href="{{ item.url }}" target="_blank" rel="noopener noreferrer">{{ item.label }}</a></li>
+        {%- else %}
+        <li class="tag">{{ item.label }}</li>
+        {%- endif %}
         {%- endfor %}
       </ul>
     </div>

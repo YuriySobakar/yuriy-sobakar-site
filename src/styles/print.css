@@ -1,12 +1,30 @@
 /* Print view — everything printable lives ONLY here (linked with media="print").
-   The full printed resume (roadmap step 5) extends this file; the skeleton just keeps print sane:
-   no dark fills, no effects that do not survive paper. */
+   Roadmap step 5 / ADR 0004: the same page prints as a strict resume; "Download PDF" is the browser's
+   own print dialog (window.print()). No dark fills, no effects that do not survive paper. */
 @page {
-  margin: 15mm;
+  size: A4;
+  margin: 12mm 14mm;
 }
 
 @media print {
+  /* Tighter scale for paper: the same tokens, smaller values */
+  :root {
+    --text-base: 9.5pt;
+    --text-small: 8.5pt;
+    --text-lg: 10.5pt;
+    --text-xl: 12pt;
+    --text-2xl: 18pt;
+    --space-8: 0.6rem;
+    --space-6: 0.45rem;
+    --space-4: 0.35rem;
+    --space-3: 0.25rem;
+    --space-2: 0.2rem;
+    --leading-body: 1.3;
+  }
+
+  html,
   body {
+    padding: 0;
     color: #000;
     background: #fff;
   }
@@ -14,22 +32,166 @@
   .page {
     max-width: none;
     padding: 0;
+    border-radius: 0;
+    box-shadow: none;
   }
 
-  .button,
-  .tag,
-  .card {
-    color: inherit;
+  /* Hero: plain header with a rule, small portrait, contacts as text with their addresses */
+  .hero {
+    padding: 0 0 var(--space-4);
     background: transparent;
-    border-color: #999;
+    border-radius: 0;
+    border-bottom: 1px solid #999;
+  }
+
+  .hero__photo {
+    width: 26mm;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .hero__headline,
+  .timeline-item__company,
+  .card__role,
+  h1,
+  h2,
+  h3 {
+    color: #000;
+  }
+
+  .section__title::after {
+    background: #000;
+  }
+
+  .icon {
+    display: none;
+  }
+
+  .button {
+    display: inline;
+    padding: 0;
+    color: #000;
+    background: transparent;
+    border: 0;
+    font-weight: var(--weight-regular);
+    text-decoration: none;
+  }
+
+  /* After .button so the ghost "Download PDF" button really disappears on paper */
+  .no-print,
+  .button.no-print {
+    display: none;
+  }
+
+  /* Stacks repeat the Skills section — drop them on paper to save space */
+  .timeline-item__stack,
+  .card__stack {
+    display: none;
+  }
+
+  /* Education: compact two-column list without the rail */
+  #education .timeline {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-2) var(--space-6);
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  #education .timeline-item {
+    padding-bottom: 0;
+  }
+
+  #education .timeline-item::before {
+    display: none;
+  }
+
+  .hero__contacts a[data-contact]::after {
+    content: ": " attr(data-print);
+    font-size: var(--text-small);
+  }
+
+  .card__links a::after {
+    content: ": " attr(href);
+    font-size: var(--text-small);
+  }
+
+  .hero__contacts,
+  .contacts {
+    display: grid;
+    gap: var(--space-1);
+  }
+
+  /* The footer repeats the hero contacts — drop it on paper */
+  footer {
+    display: none;
+  }
+
+  .tag--link::after {
+    content: " (" attr(href) ")";
+  }
+
+  .tag {
+    padding: 0 var(--space-2);
+    background: transparent;
+    border: 1px solid #999;
+  }
+
+  .card {
+    border: 1px solid #999;
+    border-top-width: 1px;
+    border-radius: 0;
+  }
+
+  .skill-groups,
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  .section {
+    padding: var(--space-4) 0;
+    border-top: 1px solid #ccc;
+  }
+
+  /* Page breaks: a long entry MAY break across pages (no half-empty pages), but a heading never
+     stays alone at the bottom — it sticks to the lines that follow it. Cards and skill groups are short
+     enough to keep whole. */
+  h2,
+  h3,
+  .timeline-item__company,
+  .timeline-item__meta {
+    break-after: avoid;
+  }
+
+  .timeline-item__results li,
+  .card p {
+    orphans: 2;
+    widows: 2;
+  }
+
+  .skill-group,
+  .card {
+    break-inside: avoid;
+  }
+
+  /* No rail or dots on paper — the rail would run to the bottom of every page */
+  .timeline {
+    padding-left: 0;
+    border-left: 0;
+  }
+
+  .timeline-item::before {
+    display: none;
+  }
+
+  .timeline-item {
+    padding-bottom: var(--space-4);
   }
 
   a {
     color: inherit;
     text-decoration: none;
-  }
-
-  .section {
-    break-inside: avoid;
   }
 }

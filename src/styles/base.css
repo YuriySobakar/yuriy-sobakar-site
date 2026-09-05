@@ -1,5 +1,13 @@
-/* Base styles + shared primitives: section, tag, card, timeline-item, button, fact-list.
+/* Base styles + shared primitives: section, tag, card, timeline-item, button, fact-list, icon.
    A new section is composed from these classes; values come from tokens.css only. */
+@font-face {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("/assets/fonts/montserrat-latin.woff2") format("woff2");
+}
+
 *,
 *::before,
 *::after {
@@ -14,15 +22,17 @@ body {
   margin: 0;
   font-family: var(--font-sans);
   font-size: var(--text-base);
+  font-weight: var(--weight-regular);
   line-height: var(--leading-body);
   color: var(--color-text);
-  background: var(--color-bg);
+  background: var(--color-page);
 }
 
 h1,
 h2,
 h3 {
   line-height: var(--leading-tight);
+  font-weight: var(--weight-bold);
   margin: 0 0 var(--space-3);
 }
 
@@ -50,7 +60,7 @@ ol {
 }
 
 a {
-  color: var(--color-accent);
+  color: var(--color-accent-strong);
 }
 
 /* Primitives */
@@ -63,6 +73,21 @@ a {
   border-top: 0;
 }
 
+/* Section title with a short accent rule under it (the 2024 site's heading rhythm) */
+.section__title {
+  margin-bottom: var(--space-6);
+}
+
+.section__title::after {
+  content: "";
+  display: block;
+  width: var(--space-12);
+  height: var(--line-width);
+  margin-top: var(--space-2);
+  background: var(--color-accent-soft);
+  border-radius: var(--radius-pill);
+}
+
 .tags,
 .hero__contacts,
 .contacts,
@@ -70,6 +95,13 @@ a {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
+}
+
+/* Hero — the light-blue band of the 2024 sidebar, now the first screen */
+.hero {
+  padding: var(--space-6) var(--space-4);
+  background: var(--color-band);
+  border-radius: var(--radius-md);
 }
 
 /* hero__top — portrait beside name + headline; the photo is a fixed-width column so the intro wraps
@@ -86,12 +118,20 @@ a {
   flex-shrink: 0;
   width: var(--photo-size);
   height: auto;
-  border-radius: var(--radius-md);
+  aspect-ratio: 1;
   object-fit: cover;
+  object-position: 50% 20%;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sheet);
 }
 
 .hero__intro > :last-child {
   margin-bottom: 0;
+}
+
+.hero__headline {
+  font-weight: var(--weight-medium);
+  color: var(--color-accent-strong);
 }
 
 /* fact-list — 1–3 short verifiable statements on the hero (screens.md §New components).
@@ -110,16 +150,36 @@ a {
   display: inline-block;
   padding: var(--space-1) var(--space-3);
   font-size: var(--text-small);
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  font-weight: var(--weight-medium);
+  color: var(--color-text);
+  background: var(--color-band);
   border-radius: var(--radius-pill);
 }
 
+.tag--link {
+  color: var(--color-accent-strong);
+  text-decoration: underline;
+}
+
+.tag--link:hover,
+.tag--link:focus-visible {
+  color: var(--color-accent-text);
+  background: var(--color-accent);
+}
+
 .card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
   padding: var(--space-4);
-  background: var(--color-surface);
+  background: var(--color-bg);
   border: 1px solid var(--color-border);
+  border-top: calc(var(--line-width) + 1px) solid var(--color-accent-soft);
   border-radius: var(--radius-md);
+}
+
+.card > p {
+  margin: 0;
 }
 
 .card__title {
@@ -127,10 +187,17 @@ a {
   flex-wrap: wrap;
   align-items: center;
   gap: var(--space-2);
+  margin-bottom: 0;
+}
+
+.card__role {
+  font-weight: var(--weight-medium);
+  color: var(--color-accent-strong);
 }
 
 .card__links {
-  margin: 0;
+  margin-top: auto;
+  padding-top: var(--space-2);
 }
 
 .card__meta,
@@ -139,24 +206,95 @@ a {
   color: var(--color-text-muted);
 }
 
+/* Timeline — experience and education entries on a rail with a dot per entry */
+.timeline {
+  position: relative;
+  padding-left: var(--space-6);
+  border-left: var(--line-width) solid var(--color-band);
+}
+
 .timeline-item {
-  padding: var(--space-4) 0;
+  position: relative;
+  padding-bottom: var(--space-6);
 }
 
-.timeline-item + .timeline-item {
-  border-top: 1px solid var(--color-border);
+.timeline-item:last-child {
+  padding-bottom: 0;
 }
 
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  top: var(--space-1);
+  left: calc(-1 * var(--space-6) - var(--dot-size) / 2 - var(--line-width) / 2);
+  width: var(--dot-size);
+  height: var(--dot-size);
+  background: var(--color-accent);
+  border: var(--line-width) solid var(--color-bg);
+  border-radius: 50%;
+}
+
+.timeline-item__role {
+  margin-bottom: var(--space-1);
+}
+
+.timeline-item__company {
+  margin-bottom: var(--space-1);
+  font-weight: var(--weight-medium);
+  color: var(--color-accent-strong);
+}
+
+.timeline-item__results {
+  display: grid;
+  gap: var(--space-1);
+  padding-left: var(--space-4);
+  list-style: disc;
+}
+
+.timeline-item__stack {
+  margin-top: var(--space-3);
+}
+
+.skill-group__title {
+  margin-bottom: var(--space-2);
+}
+
+/* Buttons — filled (contacts, links) and ghost (Download PDF) */
 .button {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   padding: var(--space-2) var(--space-4);
+  font: inherit;
+  font-weight: var(--weight-medium);
+  line-height: var(--leading-tight);
   color: var(--color-accent-text);
   background: var(--color-accent);
+  border: 1px solid var(--color-accent);
   border-radius: var(--radius-sm);
   text-decoration: none;
+  cursor: pointer;
 }
 
 .button:hover,
 .button:focus-visible {
+  background: var(--color-accent-strong);
+  border-color: var(--color-accent-strong);
   text-decoration: underline;
+}
+
+.button--ghost {
+  color: var(--color-accent-strong);
+  background: var(--color-bg);
+}
+
+.button--ghost:hover,
+.button--ghost:focus-visible {
+  color: var(--color-accent-text);
+}
+
+.icon {
+  width: var(--icon-size);
+  height: var(--icon-size);
+  flex-shrink: 0;
 }

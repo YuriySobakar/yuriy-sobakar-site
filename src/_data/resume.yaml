@@ -37,13 +37,15 @@ sections:
     title: Skills
   - id: projects
     title: Projects
+  - id: education
+    title: Education
   - id: contacts
     title: Contacts
 
 experience:
   - role: WordPress Developer
     company: MyOr Care
-    location: Remote
+    location: Austin, USA · Remote
     start: "2025-12"
     results:
       - Develop the shared MyOr parent theme and its child themes for several nutrition-clinic marketing sites (Thrive, McDaniel Nutrition, Nutrition Works!, Nutrition for Living)
@@ -102,33 +104,45 @@ skills:
   - group: AI-assisted development
     items: [Claude Code, GitHub Copilot, spec-driven development]
   - group: Languages
-    items: [English — B2 (EF SET certificate), Ukrainian — native]
+    items:
+      - label: English — B2 (EF SET certificate)
+        url: "https://cert.efset.org/85ucoS"
+      - Ukrainian — native
 
 projects:
+  - kind: commercial
+    name: MyOr Care
+    industry: Healthcare / nutrition counseling network
+    role: WordPress developer (parent theme)
+    result: "The company site and the MyOr parent theme behind every MyOr brand: config-driven layouts (header walker with mobile collapse, hero numbers, reviews, FAQ, locations, modal and HubSpot form styling via *_conf filters), blog CPT with category lobby and featured posts, Google Reviews sync plugin (OAuth, daily cron, WP-CLI command, PHPUnit), Playwright specs in CI"
+    stack: [PHP 8, WordPress, ACF Pro, SCSS, Bootstrap, Composer, PHPUnit, Playwright, GitHub Actions]
+    links:
+      live: "https://myorcare.com"
+
+  - kind: commercial
+    name: MyOr Thrive
+    industry: Healthcare / nutrition therapy (US + Australia)
+    role: WordPress developer
+    result: "Dietitian directory: filter comboboxes with keyboard navigation, specialty chips, saved favourites in localStorage, pagination and Load more, JSON-driven cards with clinic names; blog lobby with pretty URLs and paginated filtered archives; service sections aligned to Figma"
+    stack: [PHP 8, WordPress, ACF Pro, JavaScript, SCSS]
+    links:
+      live: "https://myorthrive.com"
+
   - kind: commercial
     name: McDaniel Nutrition
     industry: Healthcare / nutrition clinic
     role: WordPress developer
-    result: Child theme on the MyOr parent — header, Figma-based service sections, FAQ, reviews, appointment forms and popup
-    stack: [PHP, WordPress, ACF Pro, SCSS]
+    result: "Brand child theme configured through the parent's filters instead of copied templates: palette tokens, header walker, hero numbers, Figma-based service sections, FAQ, reviews slider, appointment options, forms popup with thank-you modal, featured posts and blog cards"
+    stack: [PHP 8, WordPress, ACF Pro, SCSS, Figma]
     links:
       live: "https://mcdanielnutrition.com"
-
-  - kind: commercial
-    name: MyOr Thrive
-    industry: Healthcare / nutrition therapy
-    role: WordPress developer
-    result: Dietitian directory with specialty filters, blog lobby and reusable featured-posts layouts on the Thrive child theme
-    stack: [PHP, WordPress, ACF Pro, SCSS]
-    links:
-      live: "https://myorthrive.com"
 
   - kind: commercial
     name: Nutrition for Living
     industry: Healthcare / nutrition clinic
     role: WordPress developer
-    result: GeneratePress child theme for the clinic marketing site
-    stack: [PHP, WordPress, GeneratePress]
+    result: "GeneratePress child theme: header and footer navigation with three-level submenus and a dynamic parent-header shortcode, HubSpot form popup with spam protection and focus management, Customizer colour variables, unified paddings and breakpoints"
+    stack: [PHP, WordPress, GeneratePress, HubSpot, JavaScript]
     links:
       live: "https://nutritionforliving.org"
 
@@ -145,23 +159,23 @@ projects:
     name: Bahisbey
     industry: iGaming
     role: Full-stack WordPress developer
-    result: Custom high-performance WordPress theme; 90+ PageSpeed Insights mobile score
-    stack: [WordPress, PHP, JavaScript]
+    result: "Custom theme from scratch: Gulp + SCSS + BrowserSync workflow, Bootstrap grid, ACF-driven page templates, custom post types (casino, live posts), image optimisation in the build; 90+ PageSpeed Insights mobile; the base for a network of 150+ SEO sites"
+    stack: [WordPress, PHP, SCSS, Gulp, Bootstrap, ACF]
     links:
       live: "https://bahisbey.com/"
 
   - kind: pet
     name: SEO Beast
     role: Author
-    result: AI-powered content automation — bulk-generates articles with images and mass-publishes to WordPress with SEO meta
-    stack: [TypeScript, React, Node.js, WordPress REST API]
+    result: "Bulk article generation from a title + keyword list via the OpenAI API with a five-stage prompt system (skeleton, sections, tables, FAQ, meta), featured images from a categorised library, Yoast / Rank Math meta and WXR export for mass WordPress import — about $0.13 per article"
+    stack: [TypeScript, React, Node.js, OpenAI API, WordPress WXR]
     links:
       code: "https://github.com/YuriySobakar/SEO-Beast-beta"
 
   - kind: pet
     name: Google Indexing API tool
     role: Author
-    result: Bulk-submits URLs to the Google Indexing API through Google Cloud to speed up indexing
+    result: "Node.js bot that submits URLs to the Google Indexing API: service-account auth, batch submission within the 200 URLs/day quota, request/response logging, URL list from a text file"
     stack: [JavaScript, Node.js, Google Cloud]
     links:
       code: "https://github.com/YuriySobakar/Google-indexing-seo-tool"
@@ -169,8 +183,41 @@ projects:
   - kind: pet
     name: This resume site
     role: Author
-    result: Eleventy site generated from one YAML file with a publish gate; built spec-driven with AI agents (SDD)
-    stack: [Eleventy, JavaScript, JSON Schema, vanilla CSS, Netlify]
+    result: "Eleventy site from one YAML file with a JSON Schema + rules publish gate (blocks confidential leaks and code links of commercial projects), self-hosted font, print-to-PDF, node tests in GitHub Actions, Netlify; built spec-driven with Claude Code (spec → architecture + ADRs → screens → tasks → TDD → review → ship)"
+    stack: [Eleventy, JavaScript, JSON Schema, vanilla CSS, Playwright, GitHub Actions, Netlify]
     links:
       live: "https://yuriy-sobakar.netlify.app/"
       code: "https://github.com/YuriySobakar/yuriy-sobakar-site"
+
+# Dates from the 2024 resume site. TODO owner: confirm whether the Mate Academy DevOps course is finished
+# (add `end`), and the month precision of the 2002–2006 degree (years only on the old site).
+education:
+  - school: Mate Academy
+    program: DevOps Engineer course
+    location: Ukraine
+    start: "2025-07"
+  - school: Hillel IT School
+    program: PHP Pro course
+    location: Ukraine
+    start: "2024-10"
+    end: "2025-03"
+  - school: Mate Academy (full-time)
+    program: Full-stack Developer course
+    location: Ukraine
+    start: "2023-09"
+    end: "2024-03"
+  - school: uTest Academy
+    program: Software Tester course
+    location: USA, online
+    start: "2023-06"
+    end: "2023-07"
+  - school: SkillUp Academy
+    program: Quality Assurance Engineer course
+    location: Ukraine
+    start: "2023-02"
+    end: "2023-05"
+  - school: Interregional Academy of Personnel Management
+    program: Management, HR and Business Economics
+    location: Ukraine
+    start: "2002-09"
+    end: "2006-06"

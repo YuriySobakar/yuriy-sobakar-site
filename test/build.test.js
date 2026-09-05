@@ -133,6 +133,53 @@ test("the page has exactly one header, main and footer; h2s follow the view mode
   }
 });
 
+test("education section renders newest first with Present, from the view model", async () => {
+  const { html, cleanup } = await buildSite();
+  try {
+    const vm = loadResumeFile();
+    const edu = sectionOf(html, "education");
+    assert.ok(edu, "education section is on the page");
+    assert.deepEqual(headings(edu, 3), vm.education.map((e) => e.program), "one h3 per entry, view-model order");
+    assert.ok(vm.education[0].start > vm.education.at(-1).start, "view model sorts education newest first");
+    if (vm.education.some((e) => e.current)) assert.match(edu, /Present/);
+  } finally {
+    cleanup();
+  }
+});
+
+test("a skill item with a url renders as a linked chip that opens in a new tab", async () => {
+  const { html, cleanup } = await buildSite();
+  try {
+    const vm = loadResumeFile();
+    const linked = vm.skills.flatMap((g) => g.items).filter((i) => i.url);
+    const skills = sectionOf(html, "skills");
+    for (const item of linked) {
+      assert.ok(skills.includes(`<a class="tag tag--link" href="${item.url}" target="_blank" rel="noopener noreferrer">${item.label}</a>`), `linked chip for ${item.label}`);
+    }
+    assert.equal(count(skills, /tag--link/g), linked.length, "one linked chip per item with url");
+  } finally {
+    cleanup();
+  }
+});
+
+test("print + icons: one Download PDF button with the only inline handler; every contact button has an icon; no external font hosts", async () => {
+  const { html, cleanup } = await buildSite();
+  try {
+    assert.equal(count(html, /onclick=/g), 1, "exactly one inline handler on the page");
+    const header = between(html, "<header", "</header>");
+    assert.match(header, /<button type="button" class="button button--ghost no-print" onclick="window\.print\(\)">/);
+    const contactButtons = html.match(/<a class="button" href="[^"]+" data-contact="[^"]+"[^>]*>[\s\S]*?<\/a>/g);
+    assert.ok(contactButtons.length >= 2, "hero + footer contact buttons found");
+    for (const button of contactButtons) assert.match(button, /<svg class="icon" aria-hidden="true"/, "contact button carries an icon");
+    assert.ok(!/fonts\.googleapis|fonts\.gstatic/.test(html), "fonts are self-hosted");
+    const printCss = readFileSync(path.join(root, "src", "styles", "print.css"), "utf8");
+    assert.match(printCss, /\.no-print[^{]*\{\s*display:\s*none;/, "print.css hides .no-print");
+    assert.match(printCss, /@page\s*\{[^}]*size:\s*A4/, "print.css targets A4");
+  } finally {
+    cleanup();
+  }
+});
+
 // --- Fixture: full resume (SCR-01…SCR-06 default states, AC-01/03/06/08/11) ---
 
 test("without resume.photo the hero has no <img> (the photo is optional)", async () => {

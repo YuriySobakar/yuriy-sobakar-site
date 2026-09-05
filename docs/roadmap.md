@@ -21,17 +21,17 @@ updated_at: "2026-09-05"
 |---|---|---|:---:|---|
 | 1 | Скелет проєкту: Eleventy, `resume.yaml` + схема, чотири CSS-файли, тести на `node --test`, CI, конфіг Netlify — сайт збирається і тести зелені на порожньому змісті | `architecture-map.md` §Stack, `_scaffold/tasks.json` | S | shipped |
 | 2 | Реальний зміст у `resume.yaml`: оновлений досвід і навички за останній рік, проєкти з посиланнями, нерелевантне прибрано | `idea-brief.md` §2 Problem, §8 Open questions | S | idea |
-| 3 | Візуальна концепція «цікавішого» дизайну: палітра, типографіка, макет секцій → see [Not yet specified](#not-yet-specified) | `idea-brief.md` §1 Raw idea, §6 Risks | fog | idea |
+| 3 | Візуальна концепція: «як старий сайт 2024, але краще» — палітра і Montserrat зі старого сайту, білий аркуш на сірому, блакитна смуга hero, іконки контактів → [`design-system.md`](design-system.md) | `idea-brief.md` §1 Raw idea, §6 Risks | S | shipped |
 | 4 | Адаптивна сторінка резюме з даних: hero з позиціюванням, досвід, навички, проєкти, контакти — читається з телефона за 30 секунд → [`features/resume-page/`](features/resume-page/spec.md) | `idea-brief.md` §7 Recommendation, §3 Users | S | shipped |
-| 5 | Друковане подання + кнопка «Download PDF»: та сама сторінка друкується як строге резюме на 1–2 аркуші A4 | `idea-brief.md` §7 Recommendation, `adr/0004-pdf-via-browser-print.md` | XS | idea |
+| 5 | Друковане подання + кнопка «Download PDF»: та сама сторінка друкується як строге резюме на 1–2 аркуші A4 | `idea-brief.md` §7 Recommendation, `adr/0004-pdf-via-browser-print.md` | XS | shipped |
 | 6 | Блок «як зроблено цей сайт» з посиланнями на відкритий репозиторій, бриф, карту архітектури і роадмап | `idea-brief.md` §7 Recommendation | XS | idea |
 | 7 | Публікація: підключити репозиторій до наявного безкоштовного Netlify-сайту, зберегти адресу yuriy-sobakar.netlify.app, старий сайт замінено новим | `idea-brief.md` §8 Open questions, `architecture-map.md` §Stack | XS | idea |
 
 ## Not yet specified
 
 | Area | What we'd have to learn | Blocks | How it gets sharpened |
-|---|---|:---:|---|
-| Візуальна концепція | Що саме означає «цікавіший дизайн» для власника: настрій (стримано-технічний чи яскравий), палітра, шрифти, чи потрібна темна тема, як виглядає hero і картки проєктів — і все це в межах правила «нічого, що не переживає друк» | 3 | Розмова з власником над 2–3 референсами схожих сайтів (або `/sdd:design-system`, tool: code-only); результат — токени в `tokens.css` і опис макета, після чого крок 3 отримує реальний розмір |
+|---|---|---|---|
+| — | Туман розсіяно: візуальну концепцію (крок 3) власник визначив 2026-09-05 як «як старий сайт, але краще»; канон у `design-system.md` | — | — |
 
 ## Out of scope
 
@@ -60,6 +60,8 @@ updated_at: "2026-09-05"
 - PDF через друковані стилі і системний друк браузера → [`adr/0004`](adr/0004-pdf-via-browser-print.md)
 - Тести `node --test`, CI GitHub Actions, деплой Netlify → [`architecture-map.md` §Stack](architecture-map.md)
 - Адреса лишається yuriy-sobakar.netlify.app, безкоштовний план Netlify → рішення власника під час roadmap-сесії (цей файл, §Out of scope)
+- Одна гілка `main`, без feature-гілок і PR → рішення власника 2026-09-05 (`CLAUDE.md` правило 8)
+- Візуальна концепція «як старий сайт 2024, але краще»; фото на hero; секція Education; кроки 3 і 5 зроблено напряму в `main` без окремого SDD-циклу → рішення власника 2026-09-05 → [`design-system.md`](design-system.md)
 
 ## Dependency graph
 
@@ -99,3 +101,5 @@ flowchart LR
 |---|---|---|
 | 1 | 2026-09-05 | `main` `29f50af` (scaffold: materialize skeleton) |
 | 4 | 2026-09-05 | PR `feat/resume-page` → `main`, [changelog](features/resume-page/changelog.md), [review PASS](features/resume-page/_review/review-2026-09-05.md) |
+| 3 | 2026-09-05 | `main` — [design-system.md](design-system.md): токени, Montserrat, іконки, timeline, картки |
+| 5 | 2026-09-05 | `main` — кнопка «Download PDF» (`window.print()`, ADR 0004) + повне друковане подання в `print.css` |

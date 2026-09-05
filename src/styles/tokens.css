@@ -1,25 +1,35 @@
 /* Design tokens — the ONLY place colours, spacing, type and radii are defined.
-   Every other stylesheet references these custom properties. */
+   Every other stylesheet references these custom properties.
+   Visual concept (roadmap step 3, owner decision 2026-09-05): "like the 2024 site, but better" —
+   grey page, white sheet with a soft shadow, light-blue band, blue accents, Montserrat. */
 :root {
   color-scheme: light;
 
-  /* Palette (contrast of text on background ≥ 4.5:1) */
-  --color-bg: #ffffff;
-  --color-surface: #f6f7f9;
-  --color-text: #1b1f24;
-  --color-text-muted: #4b5563;
-  --color-accent: #0b57d0;
+  /* Palette — contrast of text on its background ≥ 4.5:1 (checked 2026-09-05) */
+  --color-page: #e5e5e5;          /* body behind the sheet */
+  --color-bg: #ffffff;            /* the sheet */
+  --color-band: #e0ebfe;          /* hero band, tag fill */
+  --color-surface: #f3f6fb;       /* subtle panels */
+  --color-text: #1a1919;          /* 17.5:1 on white, 14.6:1 on band */
+  --color-text-muted: #474747;    /* 9.3:1 on white, 7.7:1 on band */
+  --color-accent: #005fff;        /* buttons: white text 5.15:1 */
+  --color-accent-strong: #1f4fb3; /* accent TEXT (company, headline): 7.4:1 on white, 6.2:1 on band */
+  --color-accent-soft: #6d9bf5;   /* decorative only (lines, dots, card tops) — never for text */
   --color-accent-text: #ffffff;
   --color-border: #d0d5dd;
+  --shadow-sheet: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
 
-  /* Typography — system stack by default (performance budget, no web fonts in v1) */
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  /* Typography — Montserrat self-hosted (variable weight, latin subset, 37 KB), system fallback */
+  --font-sans: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --text-base: 1rem;      /* 16 px — body text */
-  --text-small: 0.875rem; /* 14 px — periods, captions */
-  --text-lg: 1.25rem;
-  --text-xl: 1.75rem;
-  --text-2xl: 2.25rem;
+  --text-small: 0.875rem; /* 14 px — periods, captions, tags */
+  --text-lg: 1.125rem;
+  --text-xl: 1.5rem;
+  --text-2xl: 2.125rem;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-bold: 700;
   --leading-body: 1.55;
   --leading-tight: 1.2;
 
@@ -36,8 +46,11 @@
   --radius-sm: 0.25rem;
   --radius-md: 0.5rem;
   --radius-pill: 999px;
+  --line-width: 2px;       /* timeline rail */
+  --dot-size: 0.75rem;     /* timeline dot */
 
   /* Layout */
-  --page-max-width: 48rem;
-  --photo-size: 6rem;      /* hero portrait width on mobile; layout.css widens it from 768 px */
+  --page-max-width: 52rem;
+  --photo-size: 6.5rem;    /* hero portrait width on mobile; layout.css widens it from 768 px */
+  --icon-size: 1.125rem;   /* inline icons in buttons */
 }

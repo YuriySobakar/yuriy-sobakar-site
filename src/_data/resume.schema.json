@@ -41,7 +41,7 @@
         "additionalProperties": false,
         "required": ["id", "title"],
         "properties": {
-          "id": { "type": "string", "enum": ["experience", "skills", "projects", "contacts"] },
+          "id": { "type": "string", "enum": ["experience", "skills", "projects", "education", "contacts"] },
           "title": { "type": "string", "minLength": 1 }
         }
       }
@@ -57,6 +57,11 @@
     "projects": {
       "type": "array",
       "items": { "$ref": "#/definitions/project" }
+    },
+    "education": {
+      "type": "array",
+      "description": "Optional; shown newest-first like experience. Omit for no Education section.",
+      "items": { "$ref": "#/definitions/educationEntry" }
     }
   },
   "definitions": {
@@ -84,13 +89,42 @@
         "stack": { "type": "array", "items": { "type": "string", "minLength": 1 } }
       }
     },
+    "educationEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["school", "program", "start"],
+      "properties": {
+        "school": { "type": "string", "minLength": 1 },
+        "program": { "type": "string", "minLength": 1, "description": "Degree, course or certificate name" },
+        "location": { "type": "string" },
+        "start": { "type": "string", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$", "description": "YYYY-MM" },
+        "end": { "type": "string", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$", "description": "YYYY-MM; omit while ongoing" }
+      }
+    },
     "skillGroup": {
       "type": "object",
       "additionalProperties": false,
       "required": ["group", "items"],
       "properties": {
         "group": { "type": "string", "minLength": 1 },
-        "items": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+        "items": {
+          "type": "array",
+          "description": "A skill is a string, or {label, url} when it should link to proof (a certificate, a profile).",
+          "items": {
+            "oneOf": [
+              { "type": "string", "minLength": 1 },
+              {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["label", "url"],
+                "properties": {
+                  "label": { "type": "string", "minLength": 1 },
+                  "url": { "type": "string", "pattern": "^https://" }
+                }
+              }
+            ]
+          }
+        }
       }
     },
     "project": {

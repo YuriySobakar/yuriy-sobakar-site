@@ -5,12 +5,9 @@
   width: 100%;
   max-width: var(--page-max-width);
   margin: 0 auto;
-  padding: var(--space-6) var(--space-4);
+  padding: var(--space-4);
   overflow-wrap: anywhere;
-}
-
-.hero {
-  padding-top: var(--space-4);
+  background: var(--color-bg);
 }
 
 /* Skill groups and project cards: one column on mobile, two from 768 px. */
@@ -22,12 +19,27 @@
 }
 
 @media (min-width: 768px) {
+  /* The white sheet on a grey page — the 2024 site's frame */
+  body {
+    padding: var(--space-8) var(--space-4);
+  }
+
   .page {
-    padding: var(--space-12) var(--space-8);
+    padding: var(--space-8);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sheet);
+  }
+
+  .hero {
+    padding: var(--space-8);
+  }
+
+  .hero__top {
+    gap: var(--space-6);
   }
 
   .hero__photo {
-    width: calc(var(--photo-size) * 1.5);
+    width: calc(var(--photo-size) * 1.6);
   }
 
   .skill-groups,
@@ -37,7 +49,7 @@
 }
 
 @media (min-width: 1280px) {
-  .page {
-    padding-inline: 0;
+  body {
+    padding: var(--space-12) 0;
   }
 }
