@@ -18,6 +18,10 @@ export default function (eleventyConfig) {
   eleventyConfig.addPassthroughCopy({ "src/styles": "styles" });
   eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
 
+  // Dev server: full page reload instead of in-place DOM diffing — the diff left stale styles on the
+  // page after CSS/template edits (skills rendered as a plain list until a manual refresh).
+  eleventyConfig.setServerOptions({ domDiff: false });
+
   eleventyConfig.setNunjucksEnvironmentOptions({
     autoescape: true,
     throwOnUndefined: false,
