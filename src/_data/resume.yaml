@@ -49,6 +49,20 @@ experience:
       - Added Playwright specs to the frontend test suite that runs in CI on every push and after production deploys
     stack: [PHP 8, WordPress, ACF Pro, SCSS, Bootstrap, Composer, Playwright, GitHub Actions]
 
+  - role: Founder, full-stack developer and marketer
+    company: Sun-dried Tomatoes — own B2B import business (sundried-tomatoes.com)
+    location: Ukraine
+    start: "2026-05"
+    results:
+      - "Built and run the whole web presence solo: multi-page WordPress site (landing, pages for bakeries and wholesale buyers, blog with SEO articles) on a custom GeneratePress child theme"
+      - "Lead pipeline: Fluent Forms with conditional logic and Cloudflare Turnstile → Google Sheets via OAuth, Telegram bot alerts, Brevo transactional auto-replies with SPF/DKIM/DMARC"
+      - "Tracking and attribution: Meta Pixel with event_id deduplication against CAPI Gateway, GA4 custom events, dimensions and audiences, lead attribution per button and page"
+      - "Performance: self-hosted variable font subset, WebP/AVIF, lazy hero video with connection guard, Cloudflare cache rules, LiteSpeed Cache; PageSpeed audit with a staged fix plan"
+      - "SEO: keyword research (Ahrefs, Keyword Planner), domain and backlink history audit, 301 redirects, Yoast schema and breadcrumbs, link-building plan"
+      - Run Meta Ads and content (reels, posts) myself with CPL analysis per ad set
+      - "Local Docker environment: PHP-FPM 8.4, MySQL 8.4, Redis, nginx, WP-CLI; production backup import and SSH deploys"
+    stack: [WordPress, PHP 8.4, GeneratePress, GenerateBlocks, ACF Pro, Fluent Forms Pro, Docker, Redis, Cloudflare, Meta Pixel, GA4, LiteSpeed Cache, Brevo]
+
   - role: Full-stack WordPress Developer | Technical SEO Specialist
     company: Bahisbey / Spinmatic (iGaming)
     location: Turkey, remote
@@ -116,9 +130,9 @@ projects:
   - kind: commercial
     name: Sun-dried Tomatoes
     industry: B2B food import (own business)
-    role: Owner-developer
-    result: Landing site with lead forms feeding Google Sheets and a Telegram bot, GA4 custom events, Cloudflare and LiteSpeed caching
-    stack: [WordPress, GeneratePress, GenerateBlocks, ACF Pro, Fluent Forms, Cloudflare, Docker]
+    role: Founder, developer, marketer
+    result: "Multi-page Ukrainian WordPress site built and run solo: lead forms → Google Sheets + Telegram bot, Meta Pixel with CAPI deduplication, GA4 custom events, Cloudflare + LiteSpeed caching, SEO blog, self-managed Meta Ads"
+    stack: [WordPress, PHP 8.4, GeneratePress, GenerateBlocks, ACF Pro, Fluent Forms Pro, Docker, Redis, Cloudflare, Meta Pixel, GA4, LiteSpeed Cache, Brevo]
     links:
       live: "https://sundried-tomatoes.com"
 
