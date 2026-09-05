@@ -1,16 +1,28 @@
 # resume.yaml — the single source of truth for everything shown on the site.
 # Contract: src/_data/resume.schema.json (a new field goes there first).
-# Real content is roadmap step 2; this is the minimal valid skeleton the build and tests run on.
+# Sources: the 2024 resume site (RESUME project/src/Index.html), git history of the MyOr web monorepo,
+# public GitHub repositories of YuriySobakar, sundried-tomatoes.com project docs.
 
 name: Yuriy Sobakar
-headline: Full-Stack WordPress Developer | Tech SEO Specialist
+headline: WordPress and PHP developer, growing into full-stack
 facts:
-  - Placeholder fact — real facts come at roadmap step 2
+  - 150+ WordPress sites launched for an iGaming SEO team
+  - 580+ commits to a multi-site WordPress monorepo in 9 months
+  - Open-source SEO tooling on GitHub (SEO Beast, Indexing API)
 
 contacts:
   - type: email
     label: Email
-    url: "mailto:hello@example.com"
+    url: "mailto:sobakaryuriy@gmail.com"
+  - type: telegram
+    label: Telegram
+    url: "https://t.me/SobakarYuriy"
+  - type: linkedin
+    label: LinkedIn
+    url: "https://www.linkedin.com/in/yuriy-sobakar-304375276/"
+  - type: github
+    label: GitHub
+    url: "https://github.com/YuriySobakar"
 
 # Order + headings of the sections below the hero. Each id → src/_includes/sections/<id>.njk
 sections:
@@ -23,6 +35,123 @@ sections:
   - id: contacts
     title: Contacts
 
-experience: []
-skills: []
-projects: []
+experience:
+  - role: WordPress Developer
+    company: MyOr Care
+    location: Remote
+    start: "2025-12"
+    results:
+      - Develop the shared MyOr parent theme and its child themes for several nutrition-clinic marketing sites (Thrive, McDaniel Nutrition, Nutrition Works!, Nutrition for Living)
+      - Built config-driven layouts — ACF fields with fallbacks and per-theme filters — so a child theme restyles a section without copying templates
+      - Implemented the blog as a custom post type with a category lobby, pretty URLs and paginated filtered archives
+      - Built the dietitian directory (Thrive) and the Google Reviews integration with token refresh covered by unit tests
+      - "Turn Figma designs into WordPress sections: header with mobile collapse, service sections, FAQ, reviews, appointment forms"
+      - Added Playwright specs to the frontend test suite that runs in CI on every push and after production deploys
+    stack: [PHP 8, WordPress, ACF Pro, SCSS, Bootstrap, Composer, Playwright, GitHub Actions]
+
+  - role: Full-stack WordPress Developer | Technical SEO Specialist
+    company: Bahisbey / Spinmatic (iGaming)
+    location: Turkey, remote
+    start: "2024-02"
+    end: "2025-10"
+    results:
+      - Launched 150+ WordPress websites on a custom-developed theme, GeneratePress and other layouts
+      - Kept 90+ PageSpeed Insights mobile scores; managed 200+ domain redirects for SEO consolidation
+      - Administered Ubuntu servers with nginx/Apache and ISP Manager, SSL, security headers, backups; Cloudflare CDN and DNS across registrars
+      - Built "SEO Beast" — content automation with a React/TypeScript frontend that cut a 2,000-word article to $0.13 and bulk-publishes to WordPress with SEO meta
+      - Built a Google Indexing API tool for bulk URL submission; ran technical SEO audits (Screaming Frog, Ahrefs, GSC)
+      - Contributed to 3,074+ organic signups and 450+ first-time deposits (14.6% signup-to-FTD)
+    stack: [WordPress, PHP, JavaScript, React, TypeScript, Linux, nginx, Cloudflare, Google APIs]
+
+  - role: Business owner & project manager
+    company: Outdoor advertising (own company and agency projects)
+    location: Ukraine
+    start: "2009-01"
+    end: "2022-12"
+    results:
+      - Ran design, production and installation of advertising structures; coordinated documentation, contractors and quality control
+
+skills:
+  - group: Backend & CMS
+    items: [PHP 8, "WordPress (themes, plugins, ACF Pro, WP-CLI)", MySQL, REST API, Node.js / Express (basic), Python (basic)]
+  - group: Frontend
+    items: [JavaScript, TypeScript, React, HTML5, CSS3 / SCSS, BEM, Tailwind CSS, Bootstrap, jQuery]
+  - group: Tooling & infrastructure
+    items: [Git, Composer, NPM, Docker, GitHub Actions, Playwright, Linux (Ubuntu), nginx, Cloudflare, ISP Manager]
+  - group: Technical SEO
+    items: [Core Web Vitals, Google Search Console, Google Indexing API, Screaming Frog, Ahrefs, Yoast SEO]
+  - group: AI-assisted development
+    items: [Claude Code, GitHub Copilot, spec-driven development]
+  - group: Languages
+    items: [English — B2 (EF SET certificate), Ukrainian — native]
+
+projects:
+  - kind: commercial
+    name: McDaniel Nutrition
+    industry: Healthcare / nutrition clinic
+    role: WordPress developer
+    result: Child theme on the MyOr parent — header, Figma-based service sections, FAQ, reviews, appointment forms and popup
+    stack: [PHP, WordPress, ACF Pro, SCSS]
+    links:
+      live: "https://mcdanielnutrition.com"
+
+  - kind: commercial
+    name: MyOr Thrive
+    industry: Healthcare / nutrition therapy
+    role: WordPress developer
+    result: Dietitian directory with specialty filters, blog lobby and reusable featured-posts layouts on the Thrive child theme
+    stack: [PHP, WordPress, ACF Pro, SCSS]
+    links:
+      live: "https://myorthrive.com"
+
+  - kind: commercial
+    name: Nutrition for Living
+    industry: Healthcare / nutrition clinic
+    role: WordPress developer
+    result: GeneratePress child theme for the clinic marketing site
+    stack: [PHP, WordPress, GeneratePress]
+    links:
+      live: "https://nutritionforliving.org"
+
+  - kind: commercial
+    name: Sun-dried Tomatoes
+    industry: B2B food import (own business)
+    role: Owner-developer
+    result: Landing site with lead forms feeding Google Sheets and a Telegram bot, GA4 custom events, Cloudflare and LiteSpeed caching
+    stack: [WordPress, GeneratePress, GenerateBlocks, ACF Pro, Fluent Forms, Cloudflare, Docker]
+    links:
+      live: "https://sundried-tomatoes.com"
+
+  - kind: commercial
+    name: Bahisbey
+    industry: iGaming
+    role: Full-stack WordPress developer
+    result: Custom high-performance WordPress theme; 90+ PageSpeed Insights mobile score
+    stack: [WordPress, PHP, JavaScript]
+    links:
+      live: "https://bahisbey.com/"
+
+  - kind: pet
+    name: SEO Beast
+    role: Author
+    result: AI-powered content automation — bulk-generates articles with images and mass-publishes to WordPress with SEO meta
+    stack: [TypeScript, React, Node.js, WordPress REST API]
+    links:
+      code: "https://github.com/YuriySobakar/SEO-Beast-beta"
+
+  - kind: pet
+    name: Google Indexing API tool
+    role: Author
+    result: Bulk-submits URLs to the Google Indexing API through Google Cloud to speed up indexing
+    stack: [JavaScript, Node.js, Google Cloud]
+    links:
+      code: "https://github.com/YuriySobakar/Google-indexing-seo-tool"
+
+  - kind: pet
+    name: This resume site
+    role: Author
+    result: Eleventy site generated from one YAML file with a publish gate; built spec-driven with AI agents (SDD)
+    stack: [Eleventy, JavaScript, JSON Schema, vanilla CSS, Netlify]
+    links:
+      live: "https://yuriy-sobakar.netlify.app/"
+      code: "https://github.com/YuriySobakar/yuriy-sobakar-site"
