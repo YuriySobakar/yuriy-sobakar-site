@@ -8,8 +8,8 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "eleventy",
-    "dev": "eleventy --serve",
+    "build": "eleventy --input=src",
+    "dev": "eleventy --input=src --serve",
     "test": "node --test test/*.test.js",
     "lint": "html-validate \"_site/**/*.html\""
   },

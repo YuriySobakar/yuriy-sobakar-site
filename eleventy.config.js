@@ -1,5 +1,5 @@
 // Eleventy 3 configuration — the single wiring point of the site.
-// Input: src/ (Nunjucks templates + _data), output: _site/.
+// Input: src/ (Nunjucks templates + _data, passed as --input=src by the npm scripts), output: _site/.
 // resume.yaml is parsed AND validated against resume.schema.json here (data extension);
 // an invalid file stops the build with a field-level message instead of publishing an empty section.
 import path from "node:path";
@@ -13,20 +13,22 @@ export default function (eleventyConfig) {
     return parseYaml(contents);
   });
 
-  eleventyConfig.addPassthroughCopy("src/styles");
-  eleventyConfig.addPassthroughCopy("src/assets");
+  // Explicit output names: the input dir may be an absolute path (programmatic builds in tests),
+  // so the copies must not depend on stripping a relative input prefix.
+  eleventyConfig.addPassthroughCopy({ "src/styles": "styles" });
+  eleventyConfig.addPassthroughCopy({ "src/assets": "assets" });
 
   eleventyConfig.setNunjucksEnvironmentOptions({
     autoescape: true,
     throwOnUndefined: false,
   });
 
-  // Output stays Eleventy's default `_site/` (also what netlify.toml publishes). It is NOT set here
-  // on purpose: a `dir.output` returned from the config overrides programmatic callers, and
-  // test/build.test.js needs to render into a temp folder.
+  // Input and output are NOT set here on purpose: `dir.input` / `dir.output` returned from the
+  // config override programmatic callers, and test/build.test.js renders a temp copy of src/
+  // (fixture resume.yaml) into a temp output folder. The npm scripts pass `--input=src`;
+  // output stays Eleventy's default `_site/` (what netlify.toml publishes).
   return {
     dir: {
-      input: "src",
       includes: "_includes",
       data: "_data",
     },

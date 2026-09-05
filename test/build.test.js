@@ -2,7 +2,7 @@
 // Also guards the XSS convention: no `| safe` filter inside section partials.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync, existsSync, readdirSync, rmSync } from "node:fs";
+import { mkdtempSync, readFileSync, existsSync, readdirSync, rmSync, cpSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import path from "node:path";
 import Eleventy from "@11ty/eleventy";
@@ -103,4 +103,104 @@ test("hero.njk renders facts with the fact-list primitive, styled in base.css th
   assert.match(block[1], /font-size:\s*var\(--text-base\)/, "fact-list body text is the 16 px token");
   const literalValues = block[1].match(/:\s*[^;]*\b\d+(\.\d+)?(px|rem|em)\b/g) ?? [];
   assert.deepEqual(literalValues, [], "fact-list uses tokens only, no literal sizes");
+});
+
+// --- Builds from fixture data: copy src/ to a temp folder, swap _data/resume.yaml, render there ---
+
+async function buildWith(resumeYaml, { siteJson } = {}) {
+  const work = mkdtempSync(path.join(tmpdir(), "yuriy-sobakar-site-src-"));
+  const out = mkdtempSync(path.join(tmpdir(), "yuriy-sobakar-site-out-"));
+  const src = path.join(work, "src");
+  cpSync(path.join(root, "src"), src, { recursive: true });
+  writeFileSync(path.join(src, "_data", "resume.yaml"), resumeYaml);
+  if (siteJson !== undefined) writeFileSync(path.join(src, "_data", "site.json"), JSON.stringify(siteJson));
+  const cleanup = () => {
+    rmSync(work, { recursive: true, force: true });
+    rmSync(out, { recursive: true, force: true });
+  };
+  try {
+    const eleventy = new Eleventy(src, out, { configPath: path.join(root, "eleventy.config.js"), quietMode: true });
+    await eleventy.write();
+    const indexPath = path.join(out, "index.html");
+    const html = existsSync(indexPath) ? readFileSync(indexPath, "utf8") : null;
+    return { html, out, cleanup };
+  } catch (error) {
+    error.indexWritten = existsSync(path.join(out, "index.html"));
+    cleanup();
+    throw error;
+  }
+}
+
+const FIXTURE_HEAD = `
+name: Test Person
+headline: Test headline
+facts: ["Fact one", "Fact two", "Fact three"]
+contacts:
+  - type: email
+    label: Email
+    url: "mailto:test@example.com"
+  - type: telegram
+    label: Telegram
+    url: "https://t.me/testperson"
+  - type: linkedin
+    label: LinkedIn
+    url: "https://www.linkedin.com/in/testperson/"
+sections:
+  - id: experience
+    title: Experience
+  - id: skills
+    title: Skills
+  - id: projects
+    title: Projects
+  - id: contacts
+    title: Contacts
+`;
+
+// --- SCR-03 experience (T6): view-model order, Present for the current role ---
+
+test("experience entries render newest first, with Present for the open-ended one", async () => {
+  const yaml = `${FIXTURE_HEAD}
+experience:
+  - role: Mid Developer
+    company: Beta Corp
+    start: "2023-01"
+    end: "2025-02"
+    results: ["Result mid"]
+  - role: Lead Developer
+    company: Gamma LLC
+    start: "2025-03"
+    results: ["Result lead", "Second result lead"]
+  - role: Junior Developer
+    company: Alpha Inc
+    start: "2019-06"
+    end: "2022-12"
+    results: ["Result junior"]
+skills: []
+projects: []
+`;
+  const { html, cleanup } = await buildWith(yaml);
+  try {
+    const section = html.slice(html.indexOf('id="experience"'), html.indexOf("</section>", html.indexOf('id="experience"')));
+    const roles = [...section.matchAll(/<h3[^>]*>([^<]*)<\/h3>/g)].map((m) => m[1].trim());
+    assert.deepEqual(roles, ["Lead Developer", "Mid Developer", "Junior Developer"]);
+    const items = section.split('class="timeline-item"').slice(1);
+    assert.equal(items.length, 3);
+    assert.match(items[0], /Gamma LLC/);
+    assert.match(items[0], /2025-03 – Present/);
+    assert.match(items[1], /2023-01 – 2025-02/);
+    assert.ok(!/Present/.test(items[1]), "closed period has no Present");
+    assert.match(items[0], /Second result lead/);
+    assert.equal(count(items[0], /timeline-item__meta/g), 1, "period line uses the small-text meta class");
+  } finally {
+    cleanup();
+  }
+});
+
+test("experience.njk has no hiding conditions and reads job.current, not job.end, for Present", () => {
+  const source = readFileSync(path.join(root, "src", "_includes", "sections", "experience.njk"), "utf8");
+  assert.ok(!/\{%\s*if\s+resume\.experience/.test(source), "no section-level hiding condition");
+  assert.ok(!/\{%\s*if\s+job\.results/.test(source), "no results hiding condition");
+  assert.ok(!/job\.end\s+else|if\s+job\.end/.test(source), "Present is decided by job.current");
+  assert.match(source, /job\.current/);
+  assert.ok(!/\|\s*sort/.test(source), "no sort filter in the template");
 });
