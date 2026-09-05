@@ -67,6 +67,7 @@ npm run dev        # eleventy --input=src --serve
 7. **Never use the `safe` filter on resume data** — Nunjucks autoescape stays on; the build test
    fails if a section partial contains `| safe`. The build test also searches the whole HTML for the
    confidential fixture's name / URL / stack — the second barrier after the view model.
-8. **Branches and commits:** features in `feat/<slug>`, merged to `main` via pull request with green
-   CI; commit messages `type: summary`.
+8. **Branches and commits:** single `main` branch, no feature branches or pull requests (owner's
+   decision 2026-09-05) — commit straight to `main` with green `npm test` + build + lint; commit
+   messages `type: summary`.
 9. No database, no migrations: persistence is the YAML file in git.
