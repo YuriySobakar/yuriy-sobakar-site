@@ -166,6 +166,15 @@ projects:
       code: "https://github.com/YuriySobakar/bahisbey-theme"
 
   - kind: pet
+    name: Flexible-sections WordPress theme
+    industry: iGaming SEO (freelance for an agency running many casino brands)
+    role: Freelance WordPress developer
+    result: "From-scratch theme on ACF Flexible Content: each section is a registry entry + field file + template part, so editors assemble pages without a developer. Built for speed: Tailwind 4 with purge safelist, preloaded self-hosted font subsets, AVIF, Splide loaded only where a slider is used; production pages under 100 KB of HTML"
+    stack: [WordPress, PHP 8.1, ACF Pro, Tailwind CSS 4, Splide, Docker, Redis]
+    links:
+      code: "https://github.com/YuriySobakar/wp-flexible-sections-theme"
+
+  - kind: pet
     name: SEO Beast
     role: Author
     result: "Bulk article generation from a title + keyword list via the OpenAI API with a five-stage prompt system (skeleton, sections, tables, FAQ, meta), featured images from a categorised library, Yoast / Rank Math meta and WXR export for mass WordPress import — about $0.13 per article"
