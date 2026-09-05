@@ -22,6 +22,8 @@
   justify-content: center;
 }
 
+/* An odd last contact would sit alone at half width — give it the full row, like Print */
+.hero__contacts li:nth-last-child(2):nth-child(odd),
 .hero__print {
   grid-column: 1 / -1;
 }

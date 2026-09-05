@@ -28,6 +28,9 @@ contacts:
   - type: github
     label: GitHub
     url: "https://github.com/YuriySobakar"
+  - type: phone
+    label: Call me
+    url: "tel:+380677387072"
 
 # Order + headings of the sections below the hero. Each id → src/_includes/sections/<id>.njk
 sections:
