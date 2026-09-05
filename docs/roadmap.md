@@ -19,10 +19,10 @@ updated_at: "2026-09-05"
 
 | # | Step | Source | Size | Status |
 |---|---|---|:---:|---|
-| 1 | Скелет проєкту: Eleventy, `resume.yaml` + схема, чотири CSS-файли, тести на `node --test`, CI, конфіг Netlify — сайт збирається і тести зелені на порожньому змісті | `architecture-map.md` §Stack, `_scaffold/tasks.json` | S | idea |
+| 1 | Скелет проєкту: Eleventy, `resume.yaml` + схема, чотири CSS-файли, тести на `node --test`, CI, конфіг Netlify — сайт збирається і тести зелені на порожньому змісті | `architecture-map.md` §Stack, `_scaffold/tasks.json` | S | shipped |
 | 2 | Реальний зміст у `resume.yaml`: оновлений досвід і навички за останній рік, проєкти з посиланнями, нерелевантне прибрано | `idea-brief.md` §2 Problem, §8 Open questions | S | idea |
 | 3 | Візуальна концепція «цікавішого» дизайну: палітра, типографіка, макет секцій → see [Not yet specified](#not-yet-specified) | `idea-brief.md` §1 Raw idea, §6 Risks | fog | idea |
-| 4 | Адаптивна сторінка резюме з даних: hero з позиціюванням, досвід, навички, проєкти, контакти — читається з телефона за 30 секунд → [`features/resume-page/`](features/resume-page/spec.md) | `idea-brief.md` §7 Recommendation, §3 Users | S | spec'd |
+| 4 | Адаптивна сторінка резюме з даних: hero з позиціюванням, досвід, навички, проєкти, контакти — читається з телефона за 30 секунд → [`features/resume-page/`](features/resume-page/spec.md) | `idea-brief.md` §7 Recommendation, §3 Users | S | shipped |
 | 5 | Друковане подання + кнопка «Download PDF»: та сама сторінка друкується як строге резюме на 1–2 аркуші A4 | `idea-brief.md` §7 Recommendation, `adr/0004-pdf-via-browser-print.md` | XS | idea |
 | 6 | Блок «як зроблено цей сайт» з посиланнями на відкритий репозиторій, бриф, карту архітектури і роадмап | `idea-brief.md` §7 Recommendation | XS | idea |
 | 7 | Публікація: підключити репозиторій до наявного безкоштовного Netlify-сайту, зберегти адресу yuriy-sobakar.netlify.app, старий сайт замінено новим | `idea-brief.md` §8 Open questions, `architecture-map.md` §Stack | XS | idea |
@@ -97,3 +97,5 @@ flowchart LR
 
 | Step | Shipped | Link |
 |---|---|---|
+| 1 | 2026-09-05 | `main` `29f50af` (scaffold: materialize skeleton) |
+| 4 | 2026-09-05 | PR `feat/resume-page` → `main`, [changelog](features/resume-page/changelog.md), [review PASS](features/resume-page/_review/review-2026-09-05.md) |
