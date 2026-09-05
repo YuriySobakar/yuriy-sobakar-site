@@ -1,0 +1,35 @@
+/* Print view — everything printable lives ONLY here (linked with media="print").
+   The full printed resume (roadmap step 5) extends this file; the skeleton just keeps print sane:
+   no dark fills, no effects that do not survive paper. */
+@page {
+  margin: 15mm;
+}
+
+@media print {
+  body {
+    color: #000;
+    background: #fff;
+  }
+
+  .page {
+    max-width: none;
+    padding: 0;
+  }
+
+  .button,
+  .tag,
+  .card {
+    color: inherit;
+    background: transparent;
+    border-color: #999;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .section {
+    break-inside: avoid;
+  }
+}

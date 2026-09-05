@@ -1,0 +1,18 @@
+{% if resume.experience and resume.experience.length %}
+<section class="section" id="{{ section.id }}" aria-labelledby="{{ section.id }}-title">
+  <h2 class="section__title" id="{{ section.id }}-title">{{ section.title }}</h2>
+  <ol class="timeline">
+    {% for job in resume.experience %}
+    <li class="timeline-item">
+      <h3 class="timeline-item__role">{{ job.role }}</h3>
+      <p class="timeline-item__meta">{{ job.company }} · {{ job.start }} – {{ job.end if job.end else "Present" }}</p>
+      {% if job.results and job.results.length %}
+      <ul class="timeline-item__results">
+        {% for result in job.results %}<li>{{ result }}</li>{% endfor %}
+      </ul>
+      {% endif %}
+    </li>
+    {% endfor %}
+  </ol>
+</section>
+{% endif %}

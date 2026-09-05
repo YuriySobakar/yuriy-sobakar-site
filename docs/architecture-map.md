@@ -28,7 +28,7 @@ frontend: "eleventy 3 (nunjucks templates) + vanilla css with custom properties"
 - **Дані:** один файл `src/_data/resume.yaml` + JSON Schema `src/_data/resume.schema.json`; YAML підключається до Eleventy через data extension (`eleventy.config.js`). Рішення → `docs/adr/0002-content-single-yaml-with-schema.md`.
 - **Стилі:** чистий CSS з кастомними властивостями (дизайн-токени) та окремим `print.css`; жодного препроцесора чи утилітарного фреймворку. Рішення → `docs/adr/0003-styling-vanilla-css-and-print-view.md`.
 - **PDF:** друковані стилі + кнопка «Download PDF», яка викликає системний друк браузера; файл PDF не генерується і не зберігається. Рішення → `docs/adr/0004-pdf-via-browser-print.md`.
-- **Build / test / lint:** `npm run build` → `npx @11ty/eleventy`; `npm test` → `node --test test/` (вбудований ранер Node, без залежностей); `npm run lint` → `npx html-validate "_site/**/*.html"`. Ці команди читає `implement`.
+- **Build / test / lint:** `npm run build` → `eleventy` (вихід `_site/`, Eleventy-дефолт — у конфігу `dir.output` навмисно не заданий, щоб тест збірки міг рендерити у тимчасову теку); `npm test` → `node --test test/*.test.js` (вбудований ранер Node; директорія як аргумент не працює на Node 20/25, тому glob); `npm run lint` → `html-validate "_site/**/*.html"` (конфіг `.htmlvalidate.json`, SRI лише для crossorigin-ресурсів). Ці команди читає `implement`. Звірено з реальним прогоном на `scaffold` 2026-09-05.
 - **CI / деплой:** GitHub Actions (`.github/workflows/ci.yml`: install → test → build → lint) на кожен push і pull request; Netlify збирає `npm run build` і публікує `_site` (`netlify.toml`), гілка `main` = production, pull request = deploy preview.
 
 ## C4 — system as it is
@@ -65,6 +65,7 @@ C4Container
 | Module | Path | Layers | Wired at | Responsibility |
 |---|---|---|---|---|
 | content | `src/_data/` | data | `eleventy.config.js` (yaml data extension) | `resume.yaml` — весь зміст сайту; `resume.schema.json` — контракт полів, перевіряється тестом і під час збірки |
+| resume loader | `lib/resume/` | data | `eleventy.config.js` (data extension викликає `load.js`) | `load.js` — YAML → JSON Schema (Ajv, `allErrors`) → `ResumeValidationError` з рядками `resume.yaml › <поле>: <правило>`; тут же фіча resume-page додає `rules.js` / `view-model.js` (sad.md §5) |
 | templates | `src/index.njk`, `src/_includes/` | presentation | `eleventy.config.js` (input `src`, includes `_includes`) | `layout.njk` — каркас сторінки; `sections/*.njk` — по одному партіалу на секцію резюме (hero, experience, skills, projects, contacts, built-with) |
 | styles | `src/styles/` | presentation | `layout.njk` (`<link>`), passthrough copy in `eleventy.config.js` | `tokens.css` (кольори, відступи, типографіка), `base.css`, `layout.css` (адаптив), `print.css` (`@media print`) |
 | assets | `src/assets/` | static | passthrough copy in `eleventy.config.js` | зображення, favicon, шрифти (якщо self-hosted) |

@@ -1,0 +1,27 @@
+# resume.yaml — the single source of truth for everything shown on the site.
+# Contract: src/_data/resume.schema.json (a new field goes there first).
+# Real content is roadmap step 2; this is the minimal valid skeleton the build and tests run on.
+
+name: Yuriy Sobakar
+headline: Full-Stack WordPress Developer | Tech SEO Specialist
+facts: []
+
+contacts:
+  - type: email
+    label: Email
+    url: "mailto:hello@example.com"
+
+# Order + headings of the sections below the hero. Each id → src/_includes/sections/<id>.njk
+sections:
+  - id: experience
+    title: Experience
+  - id: skills
+    title: Skills
+  - id: projects
+    title: Projects
+  - id: contacts
+    title: Contacts
+
+experience: []
+skills: []
+projects: []

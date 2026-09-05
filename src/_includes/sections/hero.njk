@@ -1,0 +1,16 @@
+<header class="hero section" id="top">
+  <h1 class="hero__name">{{ resume.name }}</h1>
+  <p class="hero__headline">{{ resume.headline }}</p>
+  {% if resume.facts and resume.facts.length %}
+  <ul class="hero__facts">
+    {% for fact in resume.facts %}
+    <li class="tag">{{ fact }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+  <ul class="hero__contacts">
+    {% for contact in resume.contacts %}
+    <li><a class="button" href="{{ contact.url }}" data-contact="{{ contact.type }}">{{ contact.label }}</a></li>
+    {% endfor %}
+  </ul>
+</header>

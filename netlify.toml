@@ -1,0 +1,8 @@
+# Netlify: builds main on every push, deploy preview for every pull request.
+# A failed build keeps the previous deploy live (publish safety, spec resume-page AC-09).
+[build]
+  command = "npm run build"
+  publish = "_site"
+
+[build.environment]
+  NODE_VERSION = "20"

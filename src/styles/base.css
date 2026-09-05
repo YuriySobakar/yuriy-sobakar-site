@@ -1,0 +1,117 @@
+/* Base styles + shared primitives: section, tag, card, timeline-item, button.
+   A new section is composed from these classes; values come from tokens.css only. */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+}
+
+h1,
+h2,
+h3 {
+  line-height: var(--leading-tight);
+  margin: 0 0 var(--space-3);
+}
+
+h1 {
+  font-size: var(--text-2xl);
+}
+
+h2 {
+  font-size: var(--text-xl);
+}
+
+h3 {
+  font-size: var(--text-lg);
+}
+
+p {
+  margin: 0 0 var(--space-3);
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  color: var(--color-accent);
+}
+
+/* Primitives */
+.section {
+  padding: var(--space-8) 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.section:first-child {
+  border-top: 0;
+}
+
+.tags,
+.hero__facts,
+.hero__contacts,
+.contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.tag {
+  display: inline-block;
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--text-small);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+}
+
+.card {
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.card__meta,
+.timeline-item__meta {
+  font-size: var(--text-small);
+  color: var(--color-text-muted);
+}
+
+.timeline-item {
+  padding: var(--space-4) 0;
+}
+
+.timeline-item + .timeline-item {
+  border-top: 1px solid var(--color-border);
+}
+
+.button {
+  display: inline-block;
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-accent-text);
+  background: var(--color-accent);
+  border-radius: var(--radius-sm);
+  text-decoration: none;
+}
+
+.button:hover,
+.button:focus-visible {
+  text-decoration: underline;
+}

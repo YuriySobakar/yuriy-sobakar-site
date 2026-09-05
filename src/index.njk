@@ -1,0 +1,8 @@
+---
+layout: layout.njk
+permalink: /index.html
+---
+{% include "sections/hero.njk" %}
+{% for section in resume.sections %}
+  {% include "sections/" ~ section.id ~ ".njk" %}
+{% endfor %}

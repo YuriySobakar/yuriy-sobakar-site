@@ -1,0 +1,106 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://yuriy-sobakar.netlify.app/resume.schema.json",
+  "title": "Resume data",
+  "description": "Contract for src/_data/resume.yaml — the single source of every text shown on the site. A new field is added HERE first, then in the YAML.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["name", "headline", "contacts", "sections", "experience", "skills", "projects"],
+  "properties": {
+    "name": { "type": "string", "minLength": 1, "description": "Owner's full name; becomes the page <h1> and <title>." },
+    "headline": { "type": "string", "minLength": 1, "maxLength": 120, "description": "Positioning: one sentence under the name — who the owner is and for whom." },
+    "facts": {
+      "type": "array",
+      "maxItems": 3,
+      "items": { "type": "string", "minLength": 1, "maxLength": 60 },
+      "description": "1–3 short verifiable statements shown on the first screen."
+    },
+    "contacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/contact" }
+    },
+    "sections": {
+      "type": "array",
+      "description": "Order and headings of the page sections below the hero. Each id maps to src/_includes/sections/<id>.njk.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title"],
+        "properties": {
+          "id": { "type": "string", "enum": ["experience", "skills", "projects", "contacts"] },
+          "title": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "experience": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/experienceEntry" }
+    },
+    "skills": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/skillGroup" }
+    },
+    "projects": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/project" }
+    }
+  },
+  "definitions": {
+    "contact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "label", "url"],
+      "properties": {
+        "type": { "type": "string", "enum": ["email", "telegram", "linkedin", "phone", "github", "website"] },
+        "label": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "minLength": 1, "description": "mailto:, tel:, or https:// URL" }
+      }
+    },
+    "experienceEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["role", "company", "start"],
+      "properties": {
+        "role": { "type": "string", "minLength": 1 },
+        "company": { "type": "string", "minLength": 1 },
+        "location": { "type": "string" },
+        "start": { "type": "string", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$", "description": "YYYY-MM" },
+        "end": { "type": "string", "pattern": "^[0-9]{4}-(0[1-9]|1[0-2])$", "description": "YYYY-MM; omit for the current position" },
+        "results": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "stack": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "skillGroup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["group", "items"],
+      "properties": {
+        "group": { "type": "string", "minLength": 1 },
+        "items": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+      }
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "role", "result"],
+      "properties": {
+        "kind": { "type": "string", "enum": ["commercial", "pet"] },
+        "confidential": { "type": "boolean", "default": false },
+        "name": { "type": "string", "minLength": 1 },
+        "industry": { "type": "string", "minLength": 1 },
+        "role": { "type": "string", "minLength": 1 },
+        "result": { "type": "string", "minLength": 1 },
+        "stack": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "links": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "live": { "type": "string", "minLength": 1 },
+            "code": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    }
+  }
+}

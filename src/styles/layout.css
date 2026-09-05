@@ -1,0 +1,35 @@
+/* Layout — mobile-first single column; breakpoints 768 / 1280.
+   No horizontal scrolling at 360 px: everything wraps inside .page. */
+.page {
+  width: 100%;
+  max-width: var(--page-max-width);
+  margin: 0 auto;
+  padding: var(--space-6) var(--space-4);
+  overflow-wrap: anywhere;
+}
+
+.hero {
+  padding-top: var(--space-4);
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  .page {
+    padding: var(--space-12) var(--space-8);
+  }
+
+  .cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1280px) {
+  .page {
+    padding-inline: 0;
+  }
+}

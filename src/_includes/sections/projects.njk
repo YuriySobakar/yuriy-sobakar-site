@@ -1,0 +1,15 @@
+{% if resume.projects and resume.projects.length %}
+<section class="section" id="{{ section.id }}" aria-labelledby="{{ section.id }}-title">
+  <h2 class="section__title" id="{{ section.id }}-title">{{ section.title }}</h2>
+  <ul class="cards">
+    {% for project in resume.projects %}
+    <li class="card">
+      {% if project.name %}<h3 class="card__title">{{ project.name }}</h3>{% endif %}
+      {% if project.industry %}<p class="card__meta">{{ project.industry }}</p>{% endif %}
+      <p class="card__role">{{ project.role }}</p>
+      <p class="card__result">{{ project.result }}</p>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}

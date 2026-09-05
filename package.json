@@ -1,0 +1,22 @@
+{
+  "name": "yuriy-sobakar-site",
+  "version": "0.1.0",
+  "private": true,
+  "description": "One-page resume site of Yuriy Sobakar — Eleventy, single resume.yaml, vanilla CSS",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "eleventy",
+    "dev": "eleventy --serve",
+    "test": "node --test test/*.test.js",
+    "lint": "html-validate \"_site/**/*.html\""
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^3.1.6",
+    "ajv": "^8.17.1",
+    "html-validate": "^11.13.0",
+    "js-yaml": "^4.1.0"
+  }
+}

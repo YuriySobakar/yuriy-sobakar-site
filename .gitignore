@@ -9,6 +9,7 @@ Thumbs.db
 
 # Dependencies and build output
 node_modules/
+_site/
 dist/
 build/
 .env
