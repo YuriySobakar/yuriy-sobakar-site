@@ -1,7 +1,8 @@
 {#- SCR-05 projects: one card per project. The view model already removed name / links / stack from a
     confidential project (and links.code from any commercial one) — this template never hides a secret,
     it only picks the heading variant. `{% if project.stack %}` etc. check field presence, not secrecy.
-    Labels Live / Code / Confidential are template text (spec §3). -#}
+    Labels Live / Code / Confidential / Pet project / Open source are template text (spec §3); the meta row
+    is always rendered so every card has the same block order: title, meta, stack, role, result, links. -#}
 <section class="section" id="{{ section.id }}" aria-labelledby="{{ section.id }}-title">
   <h2 class="section__title" id="{{ section.id }}-title">{{ section.title }}</h2>
   <ul class="cards">
@@ -11,7 +12,7 @@
       <h3 class="card__title">{{ project.industry }} <span class="tag">Confidential</span></h3>
       {%- else %}
       <h3 class="card__title">{{ project.name }}</h3>
-      {%- if project.industry %}<p class="card__meta">{{ project.industry }}</p>{% endif %}
+      <p class="card__meta">{{ project.industry if project.industry else ("Open source" if project.kind == "open-source" else "Pet project") }}</p>
       {%- endif %}
       {%- if project.stack %}
       <ul class="tags card__stack">
