@@ -21,11 +21,11 @@ Mobile-first, одна колонка від 360 px; від 768 px — біли�
 
 | Група | Токени | Джерело / правило |
 |---|---|---|
-| Кольори | `--color-page #e5e5e5`, `--color-bg #fff`, `--color-band #e0ebfe`, `--color-text #1a1919`, `--color-text-muted #474747`, `--color-accent #005fff`, `--color-accent-strong #1f4fb3`, `--color-accent-soft #6d9bf5` | палітра сайту 2024; текст лише кольорами з контрастом ≥ 4.5:1 (`accent-strong` для тексту, `accent-soft` тільки декор) |
+| Кольори | `--color-page #e5e5e5`, `--color-bg #fff`, `--color-band #e0ebfe`, `--color-text #1a1919`, `--color-text-muted #474747`, `--color-accent #005fff` (лише крапки таймлайну), `--color-accent-strong #1f4fb3`, `--color-accent-soft #6d9bf5`, кнопки пастельні `--color-button #cfdffa` / `--color-button-hover #b9cff5` з текстом accent-strong | палітра сайту 2024; текст лише кольорами з контрастом ≥ 4.5:1 (`accent-strong` для тексту, `accent-soft` тільки декор) |
 | Шрифт | `--font-sans` Montserrat (self-hosted variable, latin, 37 КБ) + системний fallback; ваги 400/500/700 | `src/assets/fonts/montserrat-latin.woff2`, `@font-face` у `base.css`, `font-display: swap` |
 | Розміри тексту | `--text-base 16px`, `--text-small 14px`, `--text-lg`, `--text-xl`, `--text-2xl` | spec resume-page §6: основний ≥ 16, допоміжний ≥ 14 |
 | Відступи | `--space-1 … --space-12` | єдина шкала; `print.css` перевизначає значення для паперу |
-| Форма | `--radius-sm/md/pill`, `--line-width`, `--dot-size`, `--shadow-sheet` | |
+| Форма | `--radius-sm/md/pill`, `--line-width`, `--dot-size`, `--shadow-sheet`, `--transition 0.3s ease` (усі hover/focus) | |
 | Розкладка | `--page-max-width 52rem`, `--photo-size`, `--icon-size` | |
 
 ## Component inventory (`base.css`)
@@ -38,7 +38,7 @@ Mobile-first, одна колонка від 360 px; від 768 px — біли�
 | Timeline (рейка + крапка) | `.timeline`, `.timeline-item`, `__role`, `__company`, `__meta`, `__results`, `__stack` | досвід, освіта |
 | Tag chip | `.tag`, `.tags` | навички, стек |
 | Card | `.card`, `__title`, `__meta`, `__role`, `__result`, `__links`, `__stack` | проєкти |
-| Button (filled / ghost) | `.button`, `.button--ghost` | контакти, Live/Code, Download PDF |
+| Button (pastel / ghost) | `.button`, `.button--ghost` | контакти, Live/Code, Download PDF |
 | Icon | `.icon` + партіали `src/_includes/icons/<type>.njk` | один файл на кожне значення `contact.type` зі схеми + `print` |
 | Contact button | `src/_includes/contact-button.njk` | hero і footer |
 

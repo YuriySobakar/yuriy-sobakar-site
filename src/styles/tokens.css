@@ -16,8 +16,12 @@
   --color-accent-strong: #1f4fb3; /* accent TEXT (company, headline): 7.4:1 on white, 6.2:1 on band */
   --color-accent-soft: #6d9bf5;   /* decorative only (lines, dots, card tops) — never for text */
   --color-accent-text: #ffffff;
+  --color-button: #cfdffa;        /* pastel button fill: accent-strong text 5.5:1 */
+  --color-button-hover: #b9cff5;  /* hover fill: accent-strong text 4.7:1 */
+  --color-button-border: #b9cff5;
   --color-border: #d0d5dd;
   --shadow-sheet: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
+  --transition: 0.3s ease;        /* every hover / focus change */
 
   /* Typography — Montserrat self-hosted (variable weight, latin subset, 37 KB), system fallback */
   --font-sans: "Montserrat", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;

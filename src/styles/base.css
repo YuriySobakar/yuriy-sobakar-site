@@ -61,6 +61,7 @@ ol {
 
 a {
   color: var(--color-accent-strong);
+  transition: color var(--transition), background-color var(--transition), border-color var(--transition);
 }
 
 /* Primitives */
@@ -163,8 +164,7 @@ a {
 
 .tag--link:hover,
 .tag--link:focus-visible {
-  color: var(--color-accent-text);
-  background: var(--color-accent);
+  background: var(--color-button-hover);
 }
 
 .card {
@@ -266,7 +266,7 @@ a {
   margin-bottom: var(--space-2);
 }
 
-/* Buttons — filled (contacts, links) and ghost (Download PDF) */
+/* Buttons — pastel fill (contacts, Live / Code) and ghost (Download PDF); dark-blue text on both */
 .button {
   display: inline-flex;
   align-items: center;
@@ -275,29 +275,29 @@ a {
   font: inherit;
   font-weight: var(--weight-medium);
   line-height: var(--leading-tight);
-  color: var(--color-accent-text);
-  background: var(--color-accent);
-  border: 1px solid var(--color-accent);
+  color: var(--color-accent-strong);
+  background: var(--color-button);
+  border: 1px solid var(--color-button-border);
   border-radius: var(--radius-sm);
   text-decoration: none;
   cursor: pointer;
+  transition: color var(--transition), background-color var(--transition), border-color var(--transition), box-shadow var(--transition);
 }
 
 .button:hover,
 .button:focus-visible {
-  background: var(--color-accent-strong);
-  border-color: var(--color-accent-strong);
-  text-decoration: underline;
+  background: var(--color-button-hover);
+  border-color: var(--color-accent-soft);
+  text-decoration: none;
 }
 
 .button--ghost {
-  color: var(--color-accent-strong);
   background: var(--color-bg);
 }
 
 .button--ghost:hover,
 .button--ghost:focus-visible {
-  color: var(--color-accent-text);
+  background: var(--color-button);
 }
 
 .icon {
