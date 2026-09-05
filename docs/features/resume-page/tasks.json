@@ -1,0 +1,140 @@
+{
+  "slug": "resume-page",
+  "tasks": [
+    {
+      "id": "T1",
+      "title": "Publish gate: модуль правил rules.js + список code-хостів + схема (1–3 факти обов'язкові)",
+      "layer": "domain",
+      "deps": [],
+      "acs": ["AC-03b", "AC-05", "AC-07"],
+      "dod": "test/resume-rules.test.js зелений: запис досвіду без результату, commercial project без галузі, з links.code або з посиланням на code-хост (включно з піддоменом) дають по одному рядку `resume.yaml › <шлях> \"<назва>\": <правило словами>`; *.github.io / *.gitlab.io / *.pages.dev не спрацьовують; схема відхиляє 0 і 4 факти; resume.yaml лишається валідним",
+      "files_hint": [
+        "lib/resume/rules.js",
+        "lib/resume/code-hosts.js",
+        "src/_data/resume.schema.json",
+        "src/_data/resume.yaml",
+        "test/resume-rules.test.js"
+      ]
+    },
+    {
+      "id": "T2",
+      "title": "View model: сортування досвіду, стрип confidential project, прибирання порожніх section і груп",
+      "layer": "domain",
+      "deps": [],
+      "acs": ["AC-03", "AC-04", "AC-06", "AC-08"],
+      "dod": "test/view-model.test.js зелений: досвід за start спадно з current: true без end; порядок груп навичок і проєктів збережено; у confidential project відсутні ключі name, links, stack і є confidential: true; порожні групи прибрані, а section без записів (або з усіма порожніми групами) відсутня в sections",
+      "files_hint": [
+        "lib/resume/view-model.js",
+        "test/view-model.test.js"
+      ]
+    },
+    {
+      "id": "T3",
+      "title": "Зшити конвеєр у load.js: схема → правила → view model, помилки з назвою запису",
+      "layer": "wiring",
+      "deps": ["T1", "T2"],
+      "acs": ["AC-03b", "AC-05", "AC-07", "AC-09", "AC-11"],
+      "dod": "loadResume повертає view model; порушення правил кидає ResumeValidationError з усіма рядками за один прохід; помилка схеми всередині елемента масиву додає його підпис (role / name / group / label); npm run build з навмисно зламаним resume.yaml завершується ненульовим кодом і не пише index.html; npm test і npm run build зелені на чинному resume.yaml",
+      "files_hint": [
+        "lib/resume/load.js",
+        "test/resume-schema.test.js"
+      ]
+    },
+    {
+      "id": "T4",
+      "title": "SCR-01 каркас сторінки: landmarks header / main / footer, порядок section з view model, адаптив 360 / 768 / 1280",
+      "layer": "ui",
+      "deps": ["T3"],
+      "acs": ["AC-08", "AC-10"],
+      "dod": "зібраний index.html має рівно один header, main і footer; h1 = ім'я, по одному h2 на кожну section з view model у її порядку; жодного `| safe` на даних; .page обмежений --page-max-width, сітка .skill-groups / .cards стає 2 колонки від 768 px; ручна перевірка на 360 / 768 / 1280 без горизонтальної прокрутки; npm run lint зелений",
+      "files_hint": [
+        "src/_includes/layout.njk",
+        "src/index.njk",
+        "src/styles/layout.css"
+      ]
+    },
+    {
+      "id": "T5",
+      "title": "SCR-02 hero: ім'я, позиціювання, fact-list, контакти до лінії згортки 360×640",
+      "layer": "ui",
+      "deps": ["T3"],
+      "acs": ["AC-01", "AC-02"],
+      "dod": "hero.njk виводить h1, позиціювання, факти списком з класом fact-list (16 px, не tag) і по одному <a class=\"button\" data-contact=\"<type>\"> на контакт без target=_blank; fact-list описаний у base.css лише через токени; на 360×640 у deploy preview або dev-сервері все видно без прокрутки; тест збірки бачить h1, факти і data-contact",
+      "files_hint": [
+        "src/_includes/sections/hero.njk",
+        "src/styles/base.css"
+      ]
+    },
+    {
+      "id": "T6",
+      "title": "SCR-03 experience: записи з view model, період з підписом Present",
+      "layer": "ui",
+      "deps": ["T3"],
+      "acs": ["AC-03"],
+      "dod": "experience.njk без умов приховування: цикл по view model у його порядку; кожен timeline-item показує роль, компанію, період `<start> – <end>` або `<start> – Present` при current, і список результатів; період має клас з --text-small (14 px); тест збірки на фікстурі бачить записи у порядку від найновішого",
+      "files_hint": [
+        "src/_includes/sections/experience.njk"
+      ]
+    },
+    {
+      "id": "T7",
+      "title": "SCR-04 skills: групи у порядку view model, чипи без шкал, сітка 2 колонки від 768 px",
+      "layer": "ui",
+      "deps": ["T3", "T4"],
+      "acs": ["AC-04", "AC-08"],
+      "dod": "skills.njk без умов приховування: обгортка .skill-groups (сітка з T4), h3 на групу, tag на навичку, жодних рівнів чи відсотків; тест збірки на фікстурі бачить групи у порядку YAML і не бачить h3 порожньої групи",
+      "files_hint": [
+        "src/_includes/sections/skills.njk"
+      ]
+    },
+    {
+      "id": "T8",
+      "title": "SCR-05 projects: три варіанти картки — commercial, pet, confidential",
+      "layer": "ui",
+      "deps": ["T3"],
+      "acs": ["AC-05", "AC-06"],
+      "dod": "projects.njk виводить commercial з назвою, галуззю, стеком (tag), роллю, результатом і кнопкою Live; pet додатково з кнопкою Code; confidential — заголовок = галузь, чип Confidential, роль, результат, без name / links / stack у розмітці; зовнішні посилання з target=\"_blank\" rel=\"noopener noreferrer\"; тест збірки на фікстурі не знаходить назву confidential project у HTML",
+      "files_hint": [
+        "src/_includes/sections/projects.njk",
+        "src/styles/base.css"
+      ]
+    },
+    {
+      "id": "T9",
+      "title": "SCR-06 contacts + лічильник кліків без cookie (adr/0003)",
+      "layer": "ui",
+      "deps": ["T4"],
+      "acs": ["AC-02"],
+      "dod": "contacts.njk у footer виводить по одній кнопці-посиланню на наявний тип (mailto:, https://t.me/, LinkedIn) з data-contact і без target=_blank; layout.njk містить один асинхронний тег лічильника з адресою із src/_data/site.json і один обробник кліків по [data-contact], що шле подію contact:<type>; без site.json або з порожньою адресою тег не рендериться; тест збірки перевіряє рівно один <script> при заданій адресі і нуль без неї; npm run lint зелений",
+      "files_hint": [
+        "src/_includes/sections/contacts.njk",
+        "src/_includes/layout.njk",
+        "src/_data/site.json"
+      ]
+    },
+    {
+      "id": "T10",
+      "title": "Тест збірки на фікстурах: confidential відсутній у HTML, порожня section відсутня, порядок досвіду, landmarks",
+      "layer": "tests",
+      "deps": ["T4", "T5", "T6", "T7", "T8", "T9"],
+      "acs": ["AC-01", "AC-03", "AC-06", "AC-08", "AC-11"],
+      "dod": "test/build.test.js збирає сайт із фікстурного resume.yaml у тимчасову теку і перевіряє: назва і посилання confidential project відсутні у всьому index.html; section із порожнім масивом не має h2; записи досвіду йдуть від найновішого; є header / main / footer, h1, факти, data-contact; довільний рядок результату з фікстури присутній дослівно; фікстура з порушенням правила падає з ResumeValidationError і не створює index.html; npm test зелений",
+      "files_hint": [
+        "test/build.test.js",
+        "test/fixtures/"
+      ]
+    },
+    {
+      "id": "T11",
+      "title": "Оновити конвенції: CLAUDE.md і architecture-map під rules / view-model / site.json / fact-list",
+      "layer": "docs",
+      "deps": ["T10"],
+      "acs": ["AC-11"],
+      "dod": "CLAUDE.md описує конвеєр схема → правила → view model, правило «нове перехресне правило = функція в rules.js + тест», site.json як службові налаштування, fact-list у списку примітивів; architecture-map.md §Module inventory і §Frontend містять нові файли; жодного дубляжу spec / sad — лише посилання",
+      "files_hint": [
+        "CLAUDE.md",
+        "docs/architecture-map.md"
+      ]
+    }
+  ]
+}
