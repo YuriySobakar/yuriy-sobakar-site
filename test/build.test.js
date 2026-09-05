@@ -240,3 +240,83 @@ test("skills.njk has no hiding conditions", () => {
   assert.ok(!/\{%\s*if\s+group\.items/.test(source), "no group-level hiding condition");
   assert.match(source, /class="skill-groups"/);
 });
+
+// --- SCR-05 projects (T8): commercial / pet / confidential cards ---
+
+const PROJECTS_YAML = `${FIXTURE_HEAD}
+experience: []
+skills: []
+projects:
+  - kind: commercial
+    name: Acme Storefront
+    industry: Retail
+    role: Full-stack developer
+    result: Commercial result marker
+    stack: ["WordPress", "PHP"]
+    links:
+      live: "https://acme-storefront.example.com"
+  - kind: pet
+    name: Toy Tracker
+    role: Author
+    result: Pet result marker
+    stack: ["Eleventy"]
+    links:
+      live: "https://toy-tracker.example.com"
+      code: "https://github.com/testperson/toy-tracker"
+  - kind: commercial
+    confidential: true
+    name: SecretClientCo
+    industry: Healthcare
+    role: WordPress developer
+    result: Confidential result marker
+    stack: ["SecretStackTech"]
+    links:
+      live: "https://secretclientco.example.com"
+`;
+
+test("project cards: commercial has Live only, pet has Live + Code, confidential shows industry + Confidential", async () => {
+  const { html, cleanup } = await buildWith(PROJECTS_YAML);
+  try {
+    const start = html.indexOf('id="projects"');
+    const section = html.slice(start, html.indexOf("</section>", start));
+    const cards = section.split('class="card"').slice(1);
+    assert.equal(cards.length, 3);
+    const [commercial, pet, confidential] = cards;
+
+    assert.match(commercial, /Acme Storefront/);
+    assert.match(commercial, /Retail/);
+    assert.match(commercial, /Full-stack developer/);
+    assert.match(commercial, /Commercial result marker/);
+    assert.equal(count(commercial, /class="tag"/g), 2, "stack chips");
+    assert.match(commercial, /href="https:\/\/acme-storefront\.example\.com"[^>]*>\s*Live/);
+    assert.ok(!/>\s*Code\s*</.test(commercial), "commercial card has no Code button");
+
+    assert.match(pet, /Toy Tracker/);
+    assert.match(pet, /href="https:\/\/toy-tracker\.example\.com"[^>]*>\s*Live/);
+    assert.match(pet, /href="https:\/\/github\.com\/testperson\/toy-tracker"[^>]*>\s*Code/);
+
+    assert.match(confidential, /<h3[^>]*>\s*Healthcare/);
+    assert.match(confidential, /Confidential/);
+    assert.match(confidential, /WordPress developer/);
+    assert.match(confidential, /Confidential result marker/);
+    assert.ok(!/href=/.test(confidential), "confidential card has no links");
+
+    for (const link of section.matchAll(/<a [^>]*>/g)) {
+      assert.match(link[0], /target="_blank"/, `${link[0]} opens in a new tab`);
+      assert.match(link[0], /rel="noopener noreferrer"/, `${link[0]} has rel`);
+    }
+
+    for (const secret of ["SecretClientCo", "secretclientco.example.com", "SecretStackTech"]) {
+      assert.ok(!html.includes(secret), `${secret} leaked into the HTML`);
+    }
+  } finally {
+    cleanup();
+  }
+});
+
+test("projects.njk hides nothing by confidential flag except the heading/chip variant", () => {
+  const source = readFileSync(path.join(root, "src", "_includes", "sections", "projects.njk"), "utf8");
+  assert.ok(!/\{%\s*if\s+resume\.projects/.test(source), "no section-level hiding condition");
+  assert.ok(!/if\s+not\s+project\.confidential|confidential\s*==\s*false|not\s+project\.confidential/.test(source), "no 'hide when confidential' logic");
+  assert.match(source, /rel="noopener noreferrer"/);
+});

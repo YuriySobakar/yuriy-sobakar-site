@@ -1,15 +1,38 @@
-{% if resume.projects and resume.projects.length %}
+{#- SCR-05 projects: one card per project. The view model already removed name / links / stack from a
+    confidential project (and links.code from any commercial one) — this template never hides a secret,
+    it only picks the heading variant. `{% if project.stack %}` etc. check field presence, not secrecy.
+    Labels Live / Code / Confidential are template text (spec §3). -#}
 <section class="section" id="{{ section.id }}" aria-labelledby="{{ section.id }}-title">
   <h2 class="section__title" id="{{ section.id }}-title">{{ section.title }}</h2>
   <ul class="cards">
-    {% for project in resume.projects %}
+    {%- for project in resume.projects %}
     <li class="card">
-      {% if project.name %}<h3 class="card__title">{{ project.name }}</h3>{% endif %}
-      {% if project.industry %}<p class="card__meta">{{ project.industry }}</p>{% endif %}
+      {%- if project.confidential %}
+      <h3 class="card__title">{{ project.industry }} <span class="tag">Confidential</span></h3>
+      {%- else %}
+      <h3 class="card__title">{{ project.name }}</h3>
+      {%- if project.industry %}<p class="card__meta">{{ project.industry }}</p>{% endif %}
+      {%- endif %}
+      {%- if project.stack %}
+      <ul class="tags card__stack">
+        {%- for item in project.stack %}
+        <li class="tag">{{ item }}</li>
+        {%- endfor %}
+      </ul>
+      {%- endif %}
       <p class="card__role">{{ project.role }}</p>
       <p class="card__result">{{ project.result }}</p>
+      {%- if project.links %}
+      <p class="card__links">
+        {%- if project.links.live %}
+        <a class="button" href="{{ project.links.live }}" target="_blank" rel="noopener noreferrer">Live</a>
+        {%- endif %}
+        {%- if project.links.code %}
+        <a class="button" href="{{ project.links.code }}" target="_blank" rel="noopener noreferrer">Code</a>
+        {%- endif %}
+      </p>
+      {%- endif %}
     </li>
-    {% endfor %}
+    {%- endfor %}
   </ul>
 </section>
-{% endif %}

@@ -65,7 +65,8 @@ a {
 
 .tags,
 .hero__contacts,
-.contacts {
+.contacts,
+.card__links {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
@@ -97,6 +98,17 @@ a {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
+}
+
+.card__title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.card__links {
+  margin: 0;
 }
 
 .card__meta,
