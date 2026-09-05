@@ -1,0 +1,61 @@
+{
+  "slug": "_scaffold",
+  "source": "docs/architecture-map.md (mode: greenfield-bootstrap, reflects 484a1b7)",
+  "smoke_test": "npm ci && npm test && npm run build && npm run lint all succeed on a fresh checkout; _site/index.html exists and contains the sections declared in resume.yaml",
+  "tasks": [
+    {
+      "id": "S1",
+      "title": "Ініціалізувати npm-проєкт і Eleventy: структура папок, конфіг, вхідна сторінка",
+      "layer": "scaffold",
+      "deps": [],
+      "acs": [],
+      "dod": "`npm run build` збирає `_site/index.html` з `src/index.njk` через `src/_includes/layout.njk`; `eleventy.config.js` задає input `src`, output `_site`, passthrough для `src/styles` і `src/assets`; `package.json` має скрипти build / dev / test / lint; `.gitignore` виключає `node_modules/` і `_site/`",
+      "files_hint": ["package.json", "eleventy.config.js", "src/index.njk", "src/_includes/layout.njk", "src/_includes/sections/", "src/styles/", "src/assets/", ".gitignore"]
+    },
+    {
+      "id": "S2",
+      "title": "Файл даних resume.yaml + JSON Schema + валідація під час збірки",
+      "layer": "scaffold",
+      "deps": ["S1"],
+      "acs": [],
+      "dod": "`src/_data/resume.yaml` містить мінімальний валідний скелет (name, headline, contacts, порожні масиви experience/skills/projects); `src/_data/resume.schema.json` описує поля; YAML підключено через data extension в `eleventy.config.js`; невалідний YAML зупиняє збірку з повідомленням про поле",
+      "files_hint": ["src/_data/resume.yaml", "src/_data/resume.schema.json", "eleventy.config.js"]
+    },
+    {
+      "id": "S3",
+      "title": "Тестовий стенд на node --test: тест схеми і smoke-тест збірки",
+      "layer": "scaffold",
+      "deps": ["S2"],
+      "acs": [],
+      "dod": "`npm test` зелений: `test/resume-schema.test.js` валідує YAML за схемою; `test/build.test.js` збирає сайт у тимчасову папку і перевіряє, що `index.html` існує і містить `resume.name`; тести не потребують браузера",
+      "files_hint": ["test/resume-schema.test.js", "test/build.test.js", "package.json"]
+    },
+    {
+      "id": "S4",
+      "title": "Базові стилі: tokens.css, base.css, layout.css, print.css і підключення в layout",
+      "layer": "scaffold",
+      "deps": ["S1"],
+      "acs": [],
+      "dod": "чотири файли CSS існують і підключені в `layout.njk` (print.css — з `media=\"print\"`); токени задані як кастомні властивості; сторінка валідна за `npm run lint` (html-validate по `_site/**/*.html`)",
+      "files_hint": ["src/styles/tokens.css", "src/styles/base.css", "src/styles/layout.css", "src/styles/print.css", "src/_includes/layout.njk", ".htmlvalidate.json"]
+    },
+    {
+      "id": "S5",
+      "title": "CI (GitHub Actions) і конфіг Netlify",
+      "layer": "scaffold",
+      "deps": ["S3", "S4"],
+      "acs": [],
+      "dod": "`.github/workflows/ci.yml` запускає `npm ci`, `npm test`, `npm run build`, `npm run lint` на push і pull_request (Node 20); `netlify.toml` задає `command = \"npm run build\"`, `publish = \"_site\"`; конфіги валідні за синтаксисом",
+      "files_hint": [".github/workflows/ci.yml", "netlify.toml"]
+    },
+    {
+      "id": "S6",
+      "title": "CLAUDE.md з конвенціями фундаменту",
+      "layer": "scaffold",
+      "deps": ["S1"],
+      "acs": [],
+      "dod": "`CLAUDE.md` у корені описує стек, команди build/test/lint, правило «весь текст з resume.yaml», правило про print.css і заборону клієнтського JS, посилання на `docs/architecture-map.md` та `docs/adr/`",
+      "files_hint": ["CLAUDE.md"]
+    }
+  ]
+}
