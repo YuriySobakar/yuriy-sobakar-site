@@ -49,3 +49,102 @@ experiense: []
     (error) => error instanceof ResumeValidationError && /unknown field "experiense"/.test(error.message),
   );
 });
+
+// --- Pipeline wiring (T3): schema → rules → view model ---
+
+const validYaml = `
+name: Someone
+headline: Developer
+facts: ["10 years"]
+contacts:
+  - type: email
+    label: Email
+    url: "mailto:a@b.c"
+sections:
+  - id: experience
+    title: Experience
+  - id: skills
+    title: Skills
+  - id: projects
+    title: Projects
+  - id: contacts
+    title: Contacts
+experience:
+  - role: Developer
+    company: Acme
+    start: "2024-01"
+    results: ["Shipped"]
+skills: []
+projects: []
+`;
+
+test("loadResume returns the view model, not the raw object", () => {
+  const vm = loadResume(validYaml);
+  assert.equal(vm.experience[0].current, true, "open-ended entry is marked current by the view model");
+  assert.deepEqual(
+    vm.sections.map((s) => s.id),
+    ["experience", "contacts"],
+    "empty sections are filtered out",
+  );
+});
+
+test("loadResumeFile returns filtered sections for the real resume.yaml", () => {
+  const vm = loadResumeFile();
+  assert.ok(Array.isArray(vm.sections));
+  assert.ok(vm.sections.every((s) => s.id === "contacts" || vm[s.id].length > 0));
+});
+
+test("a rule violation with a valid schema throws ResumeValidationError naming the entry", () => {
+  const withCode = validYaml.replace(
+    "projects: []",
+    `projects:
+  - kind: commercial
+    name: Acme Shop
+    industry: Retail
+    role: Dev
+    result: Done
+    links:
+      live: "https://acme.example.com"
+      code: "https://example.org/repo"`,
+  );
+  assert.throws(
+    () => loadResume(withCode, { source: "resume.yaml" }),
+    (error) =>
+      error instanceof ResumeValidationError &&
+      error.problems.length === 1 &&
+      error.problems[0].startsWith('resume.yaml › projects.0 "Acme Shop": the code of a commercial project is not published'),
+  );
+});
+
+test("a schema error inside an array element carries the entry label", () => {
+  const noRole = validYaml.replace("  - role: Developer\n    company: Acme", "  - company: Acme");
+  assert.notEqual(noRole, validYaml, "fixture edit must apply");
+  assert.throws(
+    () => loadResume(noRole, { source: "resume.yaml" }),
+    (error) =>
+      error instanceof ResumeValidationError &&
+      error.problems.some((line) => line.includes('experience.0 "@ Acme": required field "role" is missing')),
+  );
+
+  const noItems = validYaml.replace("skills: []", "skills:\n  - group: Backend");
+  assert.throws(
+    () => loadResume(noItems),
+    (error) => error.problems.some((line) => line.includes('skills.0 "Backend": required field "items" is missing')),
+  );
+
+  const noUrl = validYaml.replace('    url: "mailto:a@b.c"\n', "");
+  assert.throws(
+    () => loadResume(noUrl),
+    (error) => error.problems.some((line) => line.includes('contacts.0 "Email": required field "url" is missing')),
+  );
+});
+
+test("schema errors and rule errors are not mixed: rules run only on a schema-valid object", () => {
+  const broken = validYaml.replace("    results: [\"Shipped\"]\n", "").replace("name: Someone\n", "");
+  assert.throws(
+    () => loadResume(broken),
+    (error) =>
+      error.problems.some((line) => line.includes('required field "name" is missing')) &&
+      !error.problems.some((line) => line.includes("has no result")),
+  );
+});
