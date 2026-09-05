@@ -73,3 +73,34 @@ test("the page has exactly one header, main and footer; h2s follow the view mode
     rmSync(out, { recursive: true, force: true });
   }
 });
+
+// --- SCR-02 hero (T5): name, headline, fact-list, contact buttons above the fold ---
+
+test("the hero shows the name, headline, a fact-list and one contact button per contact", async () => {
+  const { out, html } = await buildSite();
+  try {
+    const resume = loadResumeFile();
+    const header = html.slice(html.indexOf("<header"), html.indexOf("</header>"));
+    assert.ok(header.includes(resume.headline), "headline is in the hero");
+    const factList = header.match(/<ul class="fact-list">([\s\S]*?)<\/ul>/);
+    assert.ok(factList, "hero has a <ul class=\"fact-list\">");
+    assert.equal(count(factList[1], /<li[\s>]/g), resume.facts.length, "one <li> per fact");
+    assert.ok(!/class="tag"/.test(factList[0]), "facts are not rendered as tags");
+    assert.equal(count(header, /data-contact="/g), resume.contacts.length, "one data-contact per contact in the hero");
+    assert.ok(!/target=/.test(header), "contact links open in the same tab");
+  } finally {
+    rmSync(out, { recursive: true, force: true });
+  }
+});
+
+test("hero.njk renders facts with the fact-list primitive, styled in base.css through tokens only", () => {
+  const hero = readFileSync(path.join(root, "src", "_includes", "sections", "hero.njk"), "utf8");
+  assert.ok(hero.includes('class="fact-list"'), "hero.njk uses fact-list");
+  assert.ok(!/class="tag"/.test(hero), "hero.njk has no tag chips");
+  const base = readFileSync(path.join(root, "src", "styles", "base.css"), "utf8");
+  const block = base.match(/\.fact-list\s*\{([^}]*)\}/);
+  assert.ok(block, "base.css defines .fact-list");
+  assert.match(block[1], /font-size:\s*var\(--text-base\)/, "fact-list body text is the 16 px token");
+  const literalValues = block[1].match(/:\s*[^;]*\b\d+(\.\d+)?(px|rem|em)\b/g) ?? [];
+  assert.deepEqual(literalValues, [], "fact-list uses tokens only, no literal sizes");
+});

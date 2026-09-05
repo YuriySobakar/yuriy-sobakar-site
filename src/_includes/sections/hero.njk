@@ -1,16 +1,16 @@
+{#- SCR-02 hero: name, positioning, 1–3 facts (fact-list), contact buttons — all above the fold at 360×640.
+    Facts (≥1) and contacts (≥1) are guaranteed by the schema; nothing is hidden here. -#}
 <header class="hero section" id="top">
   <h1 class="hero__name">{{ resume.name }}</h1>
   <p class="hero__headline">{{ resume.headline }}</p>
-  {% if resume.facts and resume.facts.length %}
-  <ul class="hero__facts">
-    {% for fact in resume.facts %}
-    <li class="tag">{{ fact }}</li>
-    {% endfor %}
+  <ul class="fact-list">
+    {%- for fact in resume.facts %}
+    <li>{{ fact }}</li>
+    {%- endfor %}
   </ul>
-  {% endif %}
   <ul class="hero__contacts">
-    {% for contact in resume.contacts %}
+    {%- for contact in resume.contacts %}
     <li><a class="button" href="{{ contact.url }}" data-contact="{{ contact.type }}">{{ contact.label }}</a></li>
-    {% endfor %}
+    {%- endfor %}
   </ul>
 </header>
