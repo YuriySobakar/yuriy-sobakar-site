@@ -266,7 +266,7 @@ a {
   margin-bottom: var(--space-2);
 }
 
-/* Buttons — pastel fill (contacts, Live / Code) and ghost (Download PDF); dark-blue text on both */
+/* Buttons — pastel fill (contacts, Live / Code) and ghost (Print); dark-blue text on both */
 .button {
   display: inline-flex;
   align-items: center;

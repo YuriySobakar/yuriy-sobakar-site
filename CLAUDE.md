@@ -42,7 +42,7 @@ npm run dev        # eleventy --input=src --serve
 ## Rules
 
 1. **Every text on the page comes from `src/_data/resume.yaml`.** No hardcoded content in templates,
-   except UI labels (link captions, "Present", "Download PDF", screen-reader text). Section headings and
+   except UI labels (link captions, "Present", "Print", screen-reader text). Section headings and
    order are in the YAML `sections` array (`experience`, `skills`, `projects`, `education`, `contacts`).
 2. **Schema first.** A new field is added to `resume.schema.json` before `resume.yaml`;
    `additionalProperties: false` makes the schema test fail until both are updated.
@@ -63,7 +63,7 @@ npm run dev        # eleventy --input=src --serve
 5. **Everything printable lives only in `src/styles/print.css`** (linked with `media="print"`).
    No effects that don't survive paper: no animations, no dark fills.
 6. **No client-side JavaScript**, except the single `window.print()` handler on the hero's
-   "Download PDF" button (roadmap step 5, ADR 0004; the build test allows exactly one `onclick`) and
+   "Print" button (roadmap step 5, ADR 0004; the build test allows exactly one `onclick`) and
    the contact click counter from `docs/features/resume-page/adr/0003`: exactly one async tag + one
    delegated click handler in `layout.njk`, rendered only when `site.json` has a counter address;
    no cookies, no visitor ids. Anything else needs an ADR.

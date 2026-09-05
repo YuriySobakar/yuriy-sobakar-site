@@ -162,7 +162,7 @@ test("a skill item with a url renders as a linked chip that opens in a new tab",
   }
 });
 
-test("print + icons: one Download PDF button with the only inline handler; every contact button has an icon; no external font hosts", async () => {
+test("print + icons: one Print button with the only inline handler; every contact button has an icon; no external font hosts", async () => {
   const { html, cleanup } = await buildSite();
   try {
     assert.equal(count(html, /onclick=/g), 1, "exactly one inline handler on the page");

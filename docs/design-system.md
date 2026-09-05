@@ -38,7 +38,7 @@ Mobile-first, одна колонка від 360 px; від 768 px — біли�
 | Timeline (рейка + крапка) | `.timeline`, `.timeline-item`, `__role`, `__company`, `__meta`, `__results`, `__stack` | досвід, освіта |
 | Tag chip | `.tag`, `.tags` | навички, стек |
 | Card | `.card`, `__title`, `__meta`, `__role`, `__result`, `__links`, `__stack` | проєкти |
-| Button (pastel / ghost) | `.button`, `.button--ghost` | контакти, Live/Code, Download PDF |
+| Button (pastel / ghost) | `.button`, `.button--ghost` | контакти, Live/Code, Print |
 | Icon | `.icon` + партіали `src/_includes/icons/<type>.njk` | один файл на кожне значення `contact.type` зі схеми + `print` |
 | Contact button | `src/_includes/contact-button.njk` | hero і footer |
 

@@ -1,5 +1,5 @@
 /* Print view — everything printable lives ONLY here (linked with media="print").
-   Roadmap step 5 / ADR 0004: the same page prints as a strict resume; "Download PDF" is the browser's
+   Roadmap step 5 / ADR 0004: the same page prints as a strict resume; "Print" is the browser's
    own print dialog (window.print()). No dark fills, no effects that do not survive paper. */
 @page {
   size: A4;
@@ -77,7 +77,7 @@
     text-decoration: none;
   }
 
-  /* After .button so the ghost "Download PDF" button really disappears on paper */
+  /* After .button so the ghost "Print" button really disappears on paper */
   .no-print,
   .button.no-print {
     display: none;
