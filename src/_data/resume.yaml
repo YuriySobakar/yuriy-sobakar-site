@@ -184,7 +184,7 @@ projects:
     name: This resume site
     role: Author
     result: "Eleventy site from one YAML file with a JSON Schema + rules publish gate (blocks confidential leaks and code links of commercial projects), self-hosted font, print-to-PDF, node tests in GitHub Actions, Netlify; built spec-driven with Claude Code (spec → architecture + ADRs → screens → tasks → TDD → review → ship)"
-    stack: [Eleventy, JavaScript, JSON Schema, vanilla CSS, Playwright, GitHub Actions, Netlify]
+    stack: [Eleventy, Nunjucks, JavaScript, JSON Schema, CSS custom properties, node:test, GitHub Actions, Netlify]
     links:
       live: "https://yuriy-sobakar.netlify.app/"
       code: "https://github.com/YuriySobakar/yuriy-sobakar-site"
