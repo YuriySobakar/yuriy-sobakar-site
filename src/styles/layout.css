@@ -1,5 +1,6 @@
-/* Layout — mobile-first single column; breakpoints 768 / 1280.
-   No horizontal scrolling at 360 px: everything wraps inside .page. */
+/* Layout — mobile-first single column; breakpoints 768 / 1280 (SCR-01, spec AC-10).
+   No horizontal scrolling at 360 px: everything wraps inside .page.
+   Text sizes are NOT set here — they live in tokens.css / base.css. */
 .page {
   width: 100%;
   max-width: var(--page-max-width);
@@ -12,6 +13,8 @@
   padding-top: var(--space-4);
 }
 
+/* Skill groups and project cards: one column on mobile, two from 768 px. */
+.skill-groups,
 .cards {
   display: grid;
   grid-template-columns: 1fr;
@@ -23,6 +26,7 @@
     padding: var(--space-12) var(--space-8);
   }
 
+  .skill-groups,
   .cards {
     grid-template-columns: repeat(2, 1fr);
   }

@@ -2,7 +2,20 @@
 layout: layout.njk
 permalink: /index.html
 ---
+{#- SCR-01 page shell: landmarks header (hero) / main (sections) / footer (contacts).
+    `resume` is the view model: empty sections are already gone, order and titles come from YAML. -#}
 {% include "sections/hero.njk" %}
-{% for section in resume.sections %}
+<main>
+  {%- for section in resume.sections %}
+  {%- if section.id != "contacts" %}
   {% include "sections/" ~ section.id ~ ".njk" %}
-{% endfor %}
+  {%- endif %}
+  {%- endfor %}
+</main>
+<footer>
+  {%- for section in resume.sections %}
+  {%- if section.id == "contacts" %}
+  {% include "sections/contacts.njk" %}
+  {%- endif %}
+  {%- endfor %}
+</footer>

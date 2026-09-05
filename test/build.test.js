@@ -38,3 +38,38 @@ test("section partials never use the `safe` filter on resume data", () => {
     assert.ok(!/\|\s*safe\b/.test(source), `${file} uses the safe filter — resume text must stay text`);
   }
 });
+
+// --- SCR-01 page shell (T4): landmarks + section order from the view model ---
+
+async function buildSite() {
+  const out = mkdtempSync(path.join(tmpdir(), "yuriy-sobakar-site-"));
+  const eleventy = new Eleventy(path.join(root, "src"), out, {
+    configPath: path.join(root, "eleventy.config.js"),
+    quietMode: true,
+  });
+  await eleventy.write();
+  return { out, html: readFileSync(path.join(out, "index.html"), "utf8") };
+}
+
+const count = (html, re) => (html.match(re) ?? []).length;
+
+test("the page has exactly one header, main and footer; h2s follow the view model sections", async () => {
+  const { out, html } = await buildSite();
+  try {
+    assert.equal(count(html, /<header[\s>]/g), 1, "exactly one <header>");
+    assert.equal(count(html, /<main[\s>]/g), 1, "exactly one <main>");
+    assert.equal(count(html, /<footer[\s>]/g), 1, "exactly one <footer>");
+
+    const resume = loadResumeFile();
+    assert.match(html, new RegExp(`<h1[^>]*>\\s*${resume.name}\\s*</h1>`));
+    const h2s = [...html.matchAll(/<h2[^>]*>([^<]*)<\/h2>/g)].map((m) => m[1].trim());
+    assert.deepEqual(h2s, resume.sections.map((s) => s.title), "one h2 per section, in view-model order");
+
+    const footer = html.slice(html.indexOf("<footer"), html.indexOf("</footer>"));
+    assert.ok(/id="contacts"/.test(footer), "contacts section lives in the footer");
+    const main = html.slice(html.indexOf("<main"), html.indexOf("</main>"));
+    assert.ok(!/<header[\s>]/.test(main), "hero header is not nested inside main");
+  } finally {
+    rmSync(out, { recursive: true, force: true });
+  }
+});
