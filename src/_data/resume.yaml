@@ -11,7 +11,7 @@ photo:
   width: 300
   height: 395
 facts:
-  - "Business owner since 2009: I think in processes and ROI"
+  - "I fit the stack to the business process, never the reverse"
   - "Ships with AI agents daily: spec → plan → TDD, all in repos"
   - "Performance + SEO: 150+ WP sites, 90+ mobile PageSpeed"
 
@@ -46,7 +46,7 @@ sections:
     title: Contacts
 
 experience:
-  - role: WordPress Developer
+  - role: Full-stack WordPress Developer
     company: MyOr Care
     location: Austin, USA · Remote
     start: "2025-12"
