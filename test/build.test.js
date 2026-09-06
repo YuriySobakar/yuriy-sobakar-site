@@ -315,13 +315,13 @@ test("with a counter address the page has exactly one async script tag and one d
   const { html, cleanup } = await buildWith(fixture("resume.full.yaml"), { siteJson: site });
   try {
     const scripts = [...html.matchAll(/<script\b[^>]*>[\s\S]*?<\/script>/g)].map((m) => m[0]);
-    assert.equal(scripts.length, 2, "exactly two <script> elements: the async tag and the inline handler");
+    assert.equal(scripts.length, 3, "exactly three <script> elements: the async tag, the counter handler and the share handler (ADR 0005)");
     const asyncTags = scripts.filter((s) => /<script[^>]*\basync\b/.test(s));
     assert.equal(asyncTags.length, 1, "exactly one async script tag");
     assert.match(asyncTags[0], /src="https:\/\/counter\.example\.com\/count\.js"/);
     assert.match(asyncTags[0], /https:\/\/test\.counter\.example\.com\/count/, "endpoint is passed to the counter");
-    const inline = scripts.find((s) => !/\bsrc=/.test(s));
-    assert.ok(inline, "one inline handler");
+    const inline = scripts.find((s) => !/\bsrc=/.test(s) && /data-contact/.test(s));
+    assert.ok(inline, "one inline counter handler");
     assert.match(inline, /data-contact/);
     assert.match(inline, /contact:/);
     assert.ok(!/preventDefault/.test(inline), "the handler never blocks the navigation");
@@ -331,11 +331,19 @@ test("with a counter address the page has exactly one async script tag and one d
   }
 });
 
-test("without a counter address the page has no <script> at all", async () => {
+test("without a counter address the only <script> is the share handler (ADR 0005): no network, no cookies, no storage", async () => {
   for (const siteJson of [{ counter: { script: "", endpoint: "" } }, {}]) {
     const { html, cleanup } = await buildWith(fixture("resume.full.yaml"), { siteJson });
     try {
-      assert.equal(count(html, /<script\b/g), 0, `no script for site.json ${JSON.stringify(siteJson)}`);
+      const scripts = [...html.matchAll(/<script\b[^>]*>[\s\S]*?<\/script>/g)].map((m) => m[0]);
+      assert.equal(scripts.length, 1, `one script for site.json ${JSON.stringify(siteJson)}`);
+      assert.ok(!/\bsrc=/.test(scripts[0]), "the share handler is inline, no external script");
+      assert.match(scripts[0], /navigator\.share/);
+      assert.match(scripts[0], /navigator\.clipboard/);
+      assert.ok(!/fetch\(|XMLHttpRequest|document\.cookie|localStorage|sessionStorage/.test(scripts[0]), "share handler talks to no server and stores nothing");
+      const header = between(html, "<header", "</header>");
+      assert.match(header, /<button type="button" class="button button--ghost hero__share no-print" data-share aria-label="Share this resume">/, "share button in the hero");
+      assert.equal(count(html, /<button[^>]*\bdata-share\b/g), 1, "one share button");
     } finally {
       cleanup();
     }

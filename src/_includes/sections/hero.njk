@@ -3,6 +3,9 @@
     "Print" (roadmap step 5, ADR 0004; the browser dialog also saves a PDF) is the single window.print() handler allowed by the conventions;
     it is template UI, hidden on paper via .no-print. -#}
 <header class="hero section" id="top">
+  {#- Share (ADR 0005): Web Share API on phones, copy-link fallback on desktop; handler in layout.njk.
+      Icon-only on mobile (label is visually hidden), icon + label from 768 px. Hidden on paper. -#}
+  <button type="button" class="button button--ghost hero__share no-print" data-share aria-label="Share this resume">{% include "icons/share.njk" %}<span class="hero__share-label">Share</span></button>
   <div class="hero__top">
     {%- if resume.photo %}
     <img class="hero__photo" src="{{ resume.photo.src }}" alt="{{ resume.photo.alt }}" width="{{ resume.photo.width }}" height="{{ resume.photo.height }}" fetchpriority="high" decoding="async">

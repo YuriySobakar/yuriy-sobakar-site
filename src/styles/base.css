@@ -113,9 +113,32 @@ a {
 
 /* Hero — the light-blue band of the 2024 sidebar, now the first screen */
 .hero {
+  position: relative;
   padding: var(--space-6) var(--space-4);
   background: var(--color-band);
   border-radius: var(--radius-md);
+}
+
+/* Share — pinned to the hero's top-right corner (ADR 0005). Icon-only on mobile: the label is
+   visually hidden until 768 px (layout.css). `is-copied` shows the clipboard confirmation. */
+.hero__share {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  padding: var(--space-2);
+}
+
+.hero__share.is-copied {
+  background: var(--color-button-hover);
+}
+
+.hero__share-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
 }
 
 /* hero__top — portrait beside name + headline; the photo is a fixed-width column so the intro wraps

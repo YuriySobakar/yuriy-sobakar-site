@@ -62,11 +62,13 @@ npm run dev        # eleventy --input=src --serve
    icons are inline SVG partials `src/_includes/icons/<contact.type>.njk` — one per schema enum value.
 5. **Everything printable lives only in `src/styles/print.css`** (linked with `media="print"`).
    No effects that don't survive paper: no animations, no dark fills.
-6. **No client-side JavaScript**, except the single `window.print()` handler on the hero's
-   "Print" button (roadmap step 5, ADR 0004; the build test allows exactly one `onclick`) and
-   the contact click counter from `docs/features/resume-page/adr/0003`: exactly one async tag + one
-   delegated click handler in `layout.njk`, rendered only when `site.json` has a counter address;
-   no cookies, no visitor ids. Anything else needs an ADR.
+6. **No client-side JavaScript**, except three ADR-approved pieces: the single `window.print()`
+   handler on the hero's "Print" button (roadmap step 5, ADR 0004; the build test allows exactly one
+   `onclick`); the contact click counter from `docs/features/resume-page/adr/0003` (exactly one async
+   tag + one delegated click handler in `layout.njk`, rendered only when `site.json` has a counter
+   address; no cookies, no visitor ids); and the "Share" handler (`docs/adr/0005`: Web Share API with a
+   clipboard fallback, one delegated handler in `layout.njk`, no network, no storage). The build test
+   fixes the exact `<script>` count. Anything else needs an ADR.
 7. **Never use the `safe` filter on resume data** — Nunjucks autoescape stays on; the build test
    fails if a section partial contains `| safe`. The build test also searches the whole HTML for the
    confidential fixture's name / URL / stack — the second barrier after the view model.

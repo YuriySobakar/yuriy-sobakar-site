@@ -39,7 +39,8 @@ Mobile-first, одна колонка від 360 px; від 768 px — біли�
 | Tag chip | `.tag`, `.tags` | навички, стек |
 | Card | `.card`, `__title`, `__meta`, `__role`, `__result`, `__links`, `__stack` | проєкти |
 | Button (pastel / ghost) | `.button`, `.button--ghost` | контакти, Live/Code, Print |
-| Icon | `.icon` + партіали `src/_includes/icons/<type>.njk` | один файл на кожне значення `contact.type` зі схеми + `print` |
+| Icon | `.icon` + партіали `src/_includes/icons/<type>.njk` | один файл на кожне значення `contact.type` зі схеми + `print`, `share` |
+| Share button | `.hero__share`, `.hero__share-label`, `.is-copied` | правий верхній кут hero; лише іконка до 768 px, іконка + підпис від 768 px (ADR 0005) |
 | Contact button | `src/_includes/contact-button.njk` | hero і footer |
 
 ## Rules
@@ -47,4 +48,4 @@ Mobile-first, одна колонка від 360 px; від 768 px — біли�
 1. Нові кольори/розміри — лише як токен у `tokens.css`; текст тільки кольорами з перевіреним контрастом.
 2. Новий примітив — клас у `base.css` + рядок у таблиці вище; новий тип контакту — іконка в `icons/`.
 3. Друковане — лише в `print.css`; кнопки/іконки на папері ховаються (`.no-print`, `.icon`).
-4. Без клієнтського JS, окрім `window.print()` і лічильника кліків (ADR 0003).
+4. Без клієнтського JS, окрім `window.print()` (ADR 0004), лічильника кліків (ADR 0003) і кнопки Share (ADR 0005).

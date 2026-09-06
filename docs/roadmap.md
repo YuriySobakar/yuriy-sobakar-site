@@ -58,6 +58,7 @@ updated_at: "2026-09-05"
 - Весь зміст в одному YAML з JSON Schema → [`adr/0002`](adr/0002-content-single-yaml-with-schema.md)
 - Стилі — чистий CSS з кастомними властивостями і окремим `print.css` → [`adr/0003`](adr/0003-styling-vanilla-css-and-print-view.md)
 - PDF через друковані стилі і системний друк браузера → [`adr/0004`](adr/0004-pdf-via-browser-print.md)
+- Кнопка «Share»: Web Share API з копіюванням посилання як fallback, третій дозволений клієнтський скрипт → [`adr/0005`](adr/0005-share-button-web-share-api.md)
 - Тести `node --test`, CI GitHub Actions, деплой Netlify → [`architecture-map.md` §Stack](architecture-map.md)
 - Адреса лишається yuriy-sobakar.netlify.app, безкоштовний план Netlify → рішення власника під час roadmap-сесії (цей файл, §Out of scope)
 - Одна гілка `main`, без feature-гілок і PR → рішення власника 2026-09-05 (`CLAUDE.md` правило 8)
