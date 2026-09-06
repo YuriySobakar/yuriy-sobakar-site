@@ -1,11 +1,24 @@
 /* Base styles + shared primitives: section, tag, card, timeline-item, button, fact-list, icon.
    A new section is composed from these classes; values come from tokens.css only. */
+/* Montserrat — variable weight, subset to English glyphs + the punctuation the page uses (· – — →),
+   preloaded from layout.njk. */
 @font-face {
   font-family: "Montserrat";
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
-  src: url("/assets/fonts/montserrat-latin.woff2") format("woff2");
+  src: url("/assets/fonts/montserrat-en.woff2") format("woff2");
+}
+
+/* Metric-compatible fallback: Arial stretched to Montserrat's proportions so the layout does not
+   jump when the web font swaps in (no CLS while the font loads). */
+@font-face {
+  font-family: "Montserrat Fallback";
+  src: local("Arial"), local("Liberation Sans"), local("Helvetica");
+  size-adjust: 112.83%;
+  ascent-override: 85.79%;
+  descent-override: 22.25%;
+  line-gap-override: 0%;
 }
 
 *,

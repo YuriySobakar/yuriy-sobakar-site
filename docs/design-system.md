@@ -22,7 +22,7 @@ Mobile-first, одна колонка від 360 px; від 768 px — біли�
 | Група | Токени | Джерело / правило |
 |---|---|---|
 | Кольори | `--color-page #e5e5e5`, `--color-bg #fff`, `--color-band #e0ebfe`, `--color-text #1a1919`, `--color-text-muted #474747`, `--color-accent #005fff` (лише крапки таймлайну), `--color-accent-strong #1f4fb3`, `--color-accent-soft #6d9bf5`, кнопки пастельні `--color-button #cfdffa` / `--color-button-hover #b9cff5` з текстом accent-strong | палітра сайту 2024; текст лише кольорами з контрастом ≥ 4.5:1 (`accent-strong` для тексту, `accent-soft` тільки декор) |
-| Шрифт | `--font-sans` Montserrat (self-hosted variable, latin, 37 КБ) + системний fallback; ваги 400/500/700 | `src/assets/fonts/montserrat-latin.woff2`, `@font-face` у `base.css`, `font-display: swap` |
+| Шрифт | `--font-sans` Montserrat (self-hosted variable, підмножина: ASCII + · – — →) → «Montserrat Fallback» (Arial з підігнаними метриками, без стрибка при підміні) → Arial; ваги 400/500/700 | `src/assets/fonts/montserrat-en.woff2`, `@font-face` у `base.css`, `font-display: swap`, preload у `layout.njk`; підмножина робиться `fontTools.subset` з файлу Google Fonts (latin) — новий символ на сторінці → додати його в `--unicodes` і перегенерувати |
 | Розміри тексту | `--text-base 16px`, `--text-small 14px`, `--text-lg`, `--text-xl`, `--text-2xl` | spec resume-page §6: основний ≥ 16, допоміжний ≥ 14 |
 | Відступи | `--space-1 … --space-12` | єдина шкала; `print.css` перевизначає значення для паперу |
 | Форма | `--radius-sm/md/pill`, `--line-width`, `--dot-size`, `--shadow-sheet`, `--transition 0.3s ease` (усі hover/focus) | |

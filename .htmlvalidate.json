@@ -9,7 +9,8 @@
     "require-sri": [
       "error",
       {
-        "target": "crossorigin"
+        "target": "crossorigin",
+        "exclude": ["link[rel=preload]"]
       }
     ],
     "tel-non-breaking": "off"

@@ -5,7 +5,7 @@
 <header class="hero section" id="top">
   <div class="hero__top">
     {%- if resume.photo %}
-    <img class="hero__photo" src="{{ resume.photo.src }}" alt="{{ resume.photo.alt }}" width="{{ resume.photo.width }}" height="{{ resume.photo.height }}">
+    <img class="hero__photo" src="{{ resume.photo.src }}" alt="{{ resume.photo.alt }}" width="{{ resume.photo.width }}" height="{{ resume.photo.height }}" fetchpriority="high" decoding="async">
     {%- endif %}
     <div class="hero__intro">
       <h1 class="hero__name">{{ resume.name }}</h1>

@@ -172,6 +172,9 @@ test("print + icons: one Print button with the only inline handler; every contac
     assert.ok(contactButtons.length >= 2, "hero + footer contact buttons found");
     for (const button of contactButtons) assert.match(button, /<svg class="icon" aria-hidden="true"/, "contact button carries an icon");
     assert.ok(!/fonts\.googleapis|fonts\.gstatic/.test(html), "fonts are self-hosted");
+    assert.match(html, /<link rel="preload" href="\/assets\/fonts\/[^"]+\.woff2" as="font" type="font\/woff2" crossorigin>/, "the font is preloaded");
+    const vm = loadResumeFile();
+    if (vm.photo) assert.ok(html.includes(`<link rel="preload" href="${vm.photo.src}" as="image">`), "the portrait is preloaded");
     const printCss = readFileSync(path.join(root, "src", "styles", "print.css"), "utf8");
     assert.match(printCss, /\.no-print[^{]*\{\s*display:\s*none;/, "print.css hides .no-print");
     assert.match(printCss, /@page\s*\{[^}]*size:\s*A4/, "print.css targets A4");

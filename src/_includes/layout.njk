@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ resume.name }} — {{ resume.headline }}</title>
   <meta name="description" content="{{ resume.headline }}">
+  {#- Preloads: the font and the portrait are the two above-the-fold resources that would otherwise
+      arrive after CSS and shift the hero (spec AC-01 / NFR performance). -#}
+  <link rel="preload" href="/assets/fonts/montserrat-en.woff2" as="font" type="font/woff2" crossorigin>
+  {%- if resume.photo %}
+  <link rel="preload" href="{{ resume.photo.src }}" as="image">
+  {%- endif %}
   <link rel="stylesheet" href="/styles/tokens.css">
   <link rel="stylesheet" href="/styles/base.css">
   <link rel="stylesheet" href="/styles/layout.css">
