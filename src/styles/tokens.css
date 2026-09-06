@@ -20,6 +20,8 @@
   --color-button-hover: #b9cff5;  /* hover fill: accent-strong text 4.7:1 */
   --color-button-border: #b9cff5;
   --color-border: #d0d5dd;
+  --color-overlay: rgba(26, 25, 25, 0.72);       /* to-top button: translucent dark fill, white icon */
+  --color-overlay-strong: rgba(26, 25, 25, 0.9); /* to-top button hover / focus */
   --shadow-sheet: 0 4px 4px 0 rgba(0, 0, 0, 0.25);
   --transition: 0.3s ease;        /* every hover / focus change */
 
@@ -60,6 +62,7 @@
      + 10.5rem. Floor 4.5rem at 320 px. layout.css widens it from 768 px. */
   --photo-size: clamp(4.5rem, 100vw - 15.5rem, 6.5rem);
   --icon-size: 1.125rem;   /* inline icons in buttons */
+  --fab-size: 2.75rem;     /* to-top button: 44 px tap target */
   --contact-min-width: 8.75rem; /* a contact button column on mobile: two per row from ~352 px, one below (no mid-word breaks) */
 }
 

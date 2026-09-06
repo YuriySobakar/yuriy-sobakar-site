@@ -69,6 +69,11 @@
     margin-top: 0;
   }
 
+  /* Back-to-top is a phone affordance; on wider screens the page is short enough */
+  .to-top {
+    display: none;
+  }
+
   .hero__photo {
     width: calc(var(--photo-size) * 1.6);
   }

@@ -367,3 +367,67 @@ a {
   height: var(--icon-size);
   flex-shrink: 0;
 }
+
+/* Back to top — a round translucent button in the bottom-right corner, mobile only (layout.css hides
+   it from 768 px). No JavaScript: a CSS view timeline on .hero__actions drives the fade-in, so the
+   button appears exactly when the hero buttons have scrolled past the top edge (`exit` range) and
+   stays until they come back. Browsers without scroll-driven animations never show it (display:none
+   outside @supports). Smooth scrolling comes from scroll-behavior on <html>, motion preference
+   respected. */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  timeline-scope: --hero-actions;
+}
+
+.hero__actions {
+  view-timeline: --hero-actions block;
+}
+
+.to-top {
+  position: fixed;
+  right: var(--space-4);
+  bottom: var(--space-4);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: var(--fab-size);
+  height: var(--fab-size);
+  color: var(--color-accent-text);
+  background: var(--color-overlay);
+  border-radius: 50%;
+  box-shadow: var(--shadow-sheet);
+  transition: background-color var(--transition);
+}
+
+.to-top:hover,
+.to-top:focus-visible {
+  background: var(--color-overlay-strong);
+}
+
+@supports (animation-timeline: view()) {
+  .to-top {
+    display: flex;
+    opacity: 0;
+    visibility: hidden;
+    animation: to-top-reveal linear both;
+    animation-timeline: --hero-actions;
+    animation-range: exit 0% exit 100%;
+  }
+
+  @keyframes to-top-reveal {
+    from {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    to {
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}

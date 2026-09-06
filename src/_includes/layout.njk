@@ -20,6 +20,9 @@
   <div class="page">
     {{ content | safe }}
   </div>
+  {#- Back to top (mobile): a plain anchor to the document top (href="#"); visibility and smooth scroll are pure CSS
+      (base.css .to-top — scroll-driven animation on the hero__actions view timeline). Hidden on paper. -#}
+  <a class="to-top no-print" href="#" aria-label="Back to top">{% include "icons/arrow-up.njk" %}</a>
   {%- if site.counter.script %}
   {#- Contact click counter (ADR 0003): the ONLY client-side JavaScript besides window.print().
       One async tag + one delegated click handler; no cookies, no visitor ids, never blocks navigation.

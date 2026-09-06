@@ -42,6 +42,7 @@ Mobile-first, одна колонка від 360 px; від 768 px — біли�
 | Icon | `.icon` + партіали `src/_includes/icons/<type>.njk` | один файл на кожне значення `contact.type` зі схеми + `print`, `share` |
 | Hero actions (Share + Print) | `.hero__actions`, `.hero__share`, `.is-copied` | один grid-елемент `.hero` (grid-template-areas): до 768 px — два рядки на всю ширину під контактами, від 768 px — стовпчик кнопок однакової ширини праворуч від `hero__top`; іконка + підпис завжди (ADR 0004 / 0005) |
 | Contact button | `src/_includes/contact-button.njk` | hero і footer |
+| To-top button | `.to-top` + `icons/arrow-up.njk`; токени `--color-overlay`, `--color-overlay-strong`, `--fab-size` | лише до 768 px: кругла напівпрозора темна кнопка внизу праворуч, `<a href="#top">`; з'являється без JS — CSS view timeline на `.hero__actions` (`animation-range: exit`), плавний скрол через `scroll-behavior: smooth` з повагою до `prefers-reduced-motion`; браузери без scroll-driven animations її не показують |
 
 ## Rules
 
