@@ -48,7 +48,7 @@ sections:
 experience:
   - role: Full-stack WordPress Developer
     company: MyOr Care
-    location: Austin, USA · Remote
+    location: Texas, USA · Remote
     start: "2025-12"
     results:
       - Develop the shared MyOr parent theme and its child themes for several nutrition-clinic marketing sites (Thrive, McDaniel Nutrition, Nutrition Works!, Nutrition for Living)
@@ -56,8 +56,9 @@ experience:
       - Implemented the blog as a custom post type with a category lobby, pretty URLs and paginated filtered archives
       - Built the dietitian directory (Thrive) and the Google Reviews integration with token refresh covered by unit tests
       - "Turn Figma designs into WordPress sections: header with mobile collapse, service sections, FAQ, reviews, appointment forms"
+      - "Set up the Figma MCP for AI agents: a design registry that maps every clinic's Figma file and frame (headers, sections, tokens) to node ids, so agents read the exact frame instead of whole canvases"
       - Added Playwright specs to the frontend test suite that runs in CI on every push and after production deploys
-    stack: [PHP 8, WordPress, ACF Pro, SCSS, Bootstrap, Composer, Playwright, GitHub Actions]
+    stack: [PHP 8, WordPress, ACF Pro, SCSS, Bootstrap, Composer, Playwright, GitHub Actions, Figma MCP, Claude Code]
 
   - role: Founder, full-stack developer and marketer
     company: Sun-dried Tomatoes — own B2B import business (sundried-tomatoes.com)
@@ -99,7 +100,7 @@ skills:
   - group: Backend & CMS
     items: [PHP 8, "WordPress (themes, plugins, ACF Pro, WP-CLI)", MySQL, REST API, Node.js / Express (basic), Python (basic)]
   - group: Frontend
-    items: [JavaScript, TypeScript, React, HTML5, CSS3 / SCSS, BEM, Tailwind CSS, Bootstrap, jQuery]
+    items: [JavaScript, TypeScript, React, HTML5, CSS3 / SCSS, BEM, Tailwind CSS, Bootstrap, jQuery, Figma (design → code)]
   - group: Tooling & infrastructure
     items: [Git, Composer, NPM, Docker, GitHub Actions, Playwright, Linux (Ubuntu), nginx, Cloudflare, ISP Manager]
   - group: Technical SEO
@@ -116,9 +117,9 @@ projects:
   - kind: commercial
     name: MyOr Care
     industry: Healthcare / nutrition counseling network
-    role: WordPress developer (parent theme)
-    result: "The company site and the MyOr parent theme behind every MyOr brand: config-driven layouts (header walker with mobile collapse, hero numbers, reviews, FAQ, locations, modal and HubSpot form styling via *_conf filters), blog CPT with category lobby and featured posts, Google Reviews sync plugin (OAuth, daily cron, WP-CLI command, PHPUnit), Playwright specs in CI"
-    stack: [PHP 8, WordPress, ACF Pro, SCSS, Bootstrap, Composer, PHPUnit, Playwright, GitHub Actions]
+    role: Full-stack WordPress developer (parent theme)
+    result: "The company site and the MyOr parent theme behind every MyOr brand: config-driven layouts (header walker with mobile collapse, hero numbers, reviews, FAQ, locations, modal and HubSpot form styling via *_conf filters), blog CPT with category lobby and featured posts, Google Reviews sync plugin (OAuth, daily cron, WP-CLI command, PHPUnit), Figma MCP design registry for AI agents, Playwright specs in CI"
+    stack: [PHP 8, WordPress, ACF Pro, SCSS, Bootstrap, Composer, PHPUnit, Playwright, GitHub Actions, Figma MCP]
     links:
       live: "https://myorcare.com"
 
@@ -139,6 +140,15 @@ projects:
     stack: [PHP 8, WordPress, ACF Pro, SCSS, Figma]
     links:
       live: "https://mcdanielnutrition.com"
+
+  - kind: commercial
+    name: Nutrition Works!
+    industry: Healthcare / nutrition clinic (New Hampshire)
+    role: WordPress developer
+    result: "Brand child theme on the MyOr parent: brand palette and body-class theming, header and mobile toggle styling, footer, Google Business API constants in the site config; every parent-theme layout (hero, services, insurance, locations, dietitians, blog) ships to this site through the shared code"
+    stack: [PHP 8, WordPress, ACF Pro, SCSS]
+    links:
+      live: "https://nutritionworksnh.com"
 
   - kind: commercial
     name: Nutrition for Living
