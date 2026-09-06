@@ -85,6 +85,11 @@
   .cards {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  /* An odd last project card would sit alone at half width — give it the full row */
+  .cards > li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (min-width: 1280px) {

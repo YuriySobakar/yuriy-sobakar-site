@@ -120,34 +120,34 @@ projects:
     industry: Healthcare / nutrition counseling network
     role: Full-stack WP dev (parent theme)
     result: "The company site and the MyOr parent theme behind every MyOr brand: config-driven layouts (header walker with mobile collapse, hero numbers, reviews, FAQ, locations, modal and HubSpot form styling via *_conf filters), blog CPT with category lobby and featured posts, Google Reviews sync plugin (OAuth, daily cron, WP-CLI command, PHPUnit), Figma MCP design registry for AI agents, Playwright specs in CI"
-    stack: [PHP 8, WordPress, ACF Pro, SCSS, Bootstrap, Composer, PHPUnit, Playwright, GitHub Actions, Figma MCP]
+    stack: [PHP 8.4, WordPress, ACF Pro, SCSS, Bootstrap, Composer, PHPUnit, Playwright, GitHub Actions, Figma MCP, Claude Code]
     links:
       live: "https://myorcare.com"
 
   - kind: commercial
     name: MyOr Thrive
     industry: Healthcare / nutrition therapy (US + Australia)
-    role: Full-stack WP dev (brand child theme)
+    role: Full-stack WP dev (MyOr brand child theme)
     result: "Dietitian directory: filter comboboxes with keyboard navigation, specialty chips, saved favorites in localStorage, pagination and Load more, JSON-driven cards with clinic names; blog lobby with pretty URLs and paginated filtered archives; service sections aligned to Figma"
-    stack: [PHP 8, WordPress, ACF Pro, JavaScript, SCSS]
+    stack: [PHP 8.4, WordPress, ACF Pro, SCSS, Bootstrap, Composer, PHPUnit, Playwright, GitHub Actions, Figma MCP, Claude Code]
     links:
       live: "https://myorthrive.com"
 
   - kind: commercial
     name: McDaniel Nutrition
     industry: Healthcare / nutrition clinic
-    role: Full-stack WP dev (brand child theme)
+    role: Full-stack WP dev (MyOr brand child theme)
     result: "Brand child theme configured through the parent's filters instead of copied templates: palette tokens, header walker, hero numbers, Figma-based service sections, FAQ, reviews slider, appointment options, forms popup with thank-you modal, featured posts and blog cards"
-    stack: [PHP 8, WordPress, ACF Pro, SCSS, Figma]
+    stack: [PHP 8.4, WordPress, ACF Pro, SCSS, Bootstrap, Composer, PHPUnit, Playwright, GitHub Actions, Figma MCP, Claude Code]
     links:
       live: "https://mcdanielnutrition.com"
 
   - kind: commercial
     name: Nutrition Works!
     industry: Healthcare / nutrition clinic (New Hampshire)
-    role: Full-stack WP dev (brand child theme)
+    role: Full-stack WP dev (MyOr brand child theme)
     result: "Brand child theme on the MyOr parent: brand palette and body-class theming, header and mobile toggle styling, footer, Google Business API constants in the site config; every parent-theme layout (hero, services, insurance, locations, dietitians, blog) ships to this site through the shared code"
-    stack: [PHP 8, WordPress, ACF Pro, SCSS]
+    stack: [PHP 8.4, WordPress, ACF Pro, SCSS, Bootstrap, Composer, PHPUnit, Playwright, GitHub Actions, Figma MCP, Claude Code]
     links:
       live: "https://nutritionworksnh.com"
 
@@ -156,7 +156,7 @@ projects:
     industry: Healthcare / nutrition clinic
     role: Full-stack WP dev (GeneratePress child theme)
     result: "GeneratePress child theme: header and footer navigation with three-level submenus and a dynamic parent-header shortcode, HubSpot form popup with spam protection and focus management, Customizer color variables, unified paddings and breakpoints"
-    stack: [PHP, WordPress, GeneratePress, HubSpot, JavaScript]
+    stack: [PHP 7.4, WordPress, GeneratePress, GenerateBlocks Pro, HubSpot, JavaScript, ACF Pro, Redis, WP Rocket]
     links:
       live: "https://nutritionforliving.org"
 
