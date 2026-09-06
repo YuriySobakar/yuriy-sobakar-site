@@ -12,7 +12,7 @@ photo:
   height: 395
 facts:
   - "I fit the stack to the business process, never the reverse"
-  - "Ships with AI agents daily: spec → plan → TDD, all in repos"
+  - "I ship with AI agents daily: spec → plan → TDD, all in repos"
   - "Performance + SEO: 150+ WP sites, 90+ mobile PageSpeed"
 
 contacts:
@@ -54,9 +54,9 @@ experience:
       - Develop the shared MyOr parent theme and its child themes for several nutrition-clinic marketing sites (Thrive, McDaniel Nutrition, Nutrition Works!, Nutrition for Living)
       - Built config-driven layouts — ACF fields with fallbacks and per-theme filters — so a child theme restyles a section without copying templates
       - Implemented the blog as a custom post type with a category lobby, pretty URLs and paginated filtered archives
-      - Built the dietitian directory (Thrive) and the Google Reviews integration with token refresh covered by unit tests
+      - Built the dietitian directory (Thrive) and the Google Reviews integration with token refresh, covered by unit tests
       - "Turn Figma designs into WordPress sections: header with mobile collapse, service sections, FAQ, reviews, appointment forms"
-      - "Set up the Figma MCP for AI agents: a design registry that maps every clinic's Figma file and frame (headers, sections, tokens) to node ids, so agents read the exact frame instead of whole canvases"
+      - "Set up the Figma MCP for AI agents: a design registry that maps every clinic's Figma file and frame (headers, sections, tokens) to node IDs, so agents read the exact frame instead of whole canvases"
       - Added Playwright specs to the frontend test suite that runs in CI on every push and after production deploys
     stack: [PHP 8, WordPress, ACF Pro, SCSS, Bootstrap, Composer, Playwright, GitHub Actions, Figma MCP, Claude Code]
 
@@ -76,15 +76,15 @@ experience:
 
   - role: Full-stack WordPress Developer | DevOps | Technical SEO
     company: Bahisbey / Spinmatic (iGaming)
-    location: Turkey, remote
+    location: Turkey · Remote
     start: "2024-02"
     end: "2025-10"
     results:
-      - Launched 150+ WordPress websites on a custom-developed theme, GeneratePress and other layouts; kept 90+ PageSpeed Insights mobile scores
+      - Launched 150+ WordPress websites on a custom-developed theme, GeneratePress and other layouts; kept mobile PageSpeed Insights scores at 90+
       - "DevOps for the whole network: Ubuntu servers with nginx/Apache and ISP Manager, SSL, backups; the entire domain portfolio at the registrar — DNS, renewals, 200+ redirects for SEO consolidation"
       - "Security: constant brute-force attacks stopped with Cloudflare WAF and rate limiting, Fail2Ban on the servers and an extra WordPress firewall layer"
       - Deployed and fully configured Horilla, an open-source HR system (Python/Django), on its own subdomain for the company's HR team
-      - Built "SEO Beast" — content automation with a React/TypeScript frontend that cut a 2,000-word article to $0.13 and bulk-publishes to WordPress with SEO meta
+      - Built "SEO Beast" — content automation with a React/TypeScript frontend that cut the cost of a 2,000-word article to $0.13 and bulk-publishes to WordPress with SEO meta
       - Built a Google Indexing API tool for bulk URL submission; ran technical SEO audits (Screaming Frog, Ahrefs, GSC)
       - Contributed to 3,074+ organic signups and 450+ first-time deposits (14.6% signup-to-FTD)
     stack: [WordPress, PHP, JavaScript, React, TypeScript, Linux, nginx, Cloudflare, Fail2Ban, Horilla HRMS, Google APIs]
@@ -128,7 +128,7 @@ projects:
     name: MyOr Thrive
     industry: Healthcare / nutrition therapy (US + Australia)
     role: Full-stack WP dev (brand child theme)
-    result: "Dietitian directory: filter comboboxes with keyboard navigation, specialty chips, saved favourites in localStorage, pagination and Load more, JSON-driven cards with clinic names; blog lobby with pretty URLs and paginated filtered archives; service sections aligned to Figma"
+    result: "Dietitian directory: filter comboboxes with keyboard navigation, specialty chips, saved favorites in localStorage, pagination and Load more, JSON-driven cards with clinic names; blog lobby with pretty URLs and paginated filtered archives; service sections aligned to Figma"
     stack: [PHP 8, WordPress, ACF Pro, JavaScript, SCSS]
     links:
       live: "https://myorthrive.com"
@@ -155,7 +155,7 @@ projects:
     name: Nutrition for Living
     industry: Healthcare / nutrition clinic
     role: Full-stack WP dev (GeneratePress child theme)
-    result: "GeneratePress child theme: header and footer navigation with three-level submenus and a dynamic parent-header shortcode, HubSpot form popup with spam protection and focus management, Customizer colour variables, unified paddings and breakpoints"
+    result: "GeneratePress child theme: header and footer navigation with three-level submenus and a dynamic parent-header shortcode, HubSpot form popup with spam protection and focus management, Customizer color variables, unified paddings and breakpoints"
     stack: [PHP, WordPress, GeneratePress, HubSpot, JavaScript]
     links:
       live: "https://nutritionforliving.org"
@@ -173,7 +173,7 @@ projects:
     name: Bahisbey theme
     industry: iGaming (former client; theme published with permission)
     role: Full-stack WP dev (custom theme from scratch)
-    result: "Custom theme from scratch: Gulp + SCSS + BrowserSync workflow, Bootstrap grid, ACF-driven page templates, custom post types (casino, live posts), image optimisation in the build; 90+ PageSpeed Insights mobile; the base for a network of 150+ SEO sites"
+    result: "Custom theme from scratch: Gulp + SCSS + BrowserSync workflow, Bootstrap grid, ACF-driven page templates, custom post types (casino, live posts), image optimization in the build; 90+ PageSpeed Insights mobile score; the base for a network of 150+ SEO sites"
     stack: [WordPress, PHP, SCSS, Gulp, Bootstrap, ACF]
     links:
       live: "https://bahisbey.com/"
@@ -191,7 +191,7 @@ projects:
   - kind: pet
     name: SEO Beast
     role: Author (React + Node.js tool)
-    result: "Bulk article generation from a title + keyword list via the OpenAI API with a five-stage prompt system (skeleton, sections, tables, FAQ, meta), featured images from a categorised library, Yoast / Rank Math meta and WXR export for mass WordPress import — about $0.13 per article"
+    result: "Bulk article generation from a title + keyword list via the OpenAI API with a five-stage prompt system (skeleton, sections, tables, FAQ, meta), featured images from a categorized library, Yoast / Rank Math meta and WXR export for mass WordPress import — about $0.13 per article"
     stack: [TypeScript, React, Node.js, OpenAI API, WordPress WXR, SQLite, Bootstrap, xmlbuilder2]
     links:
       code: "https://github.com/YuriySobakar/SEO-Beast-beta"
@@ -207,7 +207,7 @@ projects:
   - kind: pet
     name: This resume site
     role: Author (Eleventy + AI-agent workflow)
-    result: "Eleventy site from one YAML file with a JSON Schema + rules publish gate (blocks confidential leaks and code links of commercial projects), self-hosted font, print-to-PDF, node tests in GitHub Actions, Netlify; built spec-driven with Claude Code (spec → architecture + ADRs → screens → tasks → TDD → review → ship)"
+    result: "Eleventy site from one YAML file with a JSON Schema + rules publish gate (blocks confidential leaks and code links of commercial projects), self-hosted font, print-to-PDF, Node.js tests in GitHub Actions, Netlify; built spec-driven with Claude Code (spec → architecture + ADRs → screens → tasks → TDD → review → ship)"
     stack: [Eleventy, Nunjucks, JavaScript, JSON Schema, CSS custom properties, node:test, GitHub Actions, Netlify]
     links:
       live: "https://yuriy-sobakar.netlify.app/"
@@ -216,7 +216,7 @@ projects:
 # Dates from the 2024 resume site. TODO owner: month precision of the 2002–2006 degree (years only on the old site).
 education:
   - school: Mate Academy
-    program: DevOps Engineer course (basic knowledge)
+    program: DevOps Engineer course (fundamentals)
     location: Ukraine
     start: "2025"
     end: "2025"
