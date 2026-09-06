@@ -40,7 +40,7 @@ Mobile-first, одна колонка від 360 px; від 768 px — біли�
 | Card | `.card`, `__title`, `__meta`, `__role`, `__result`, `__links`, `__stack` | проєкти |
 | Button (pastel / ghost) | `.button`, `.button--ghost` | контакти, Live/Code, Print |
 | Icon | `.icon` + партіали `src/_includes/icons/<type>.njk` | один файл на кожне значення `contact.type` зі схеми + `print`, `share` |
-| Share button | `.hero__share`, `.hero__share-label`, `.is-copied` | правий верхній кут hero; лише іконка до 768 px, іконка + підпис від 768 px (ADR 0005) |
+| Hero actions (Share + Print) | `.hero__actions`, `.hero__share`, `.is-copied` | один grid-елемент `.hero` (grid-template-areas): до 768 px — два рядки на всю ширину під контактами, від 768 px — стовпчик кнопок однакової ширини праворуч від `hero__top`; іконка + підпис завжди (ADR 0004 / 0005) |
 | Contact button | `src/_includes/contact-button.njk` | hero і footer |
 
 ## Rules

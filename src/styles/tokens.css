@@ -30,7 +30,7 @@
   --text-small: 0.875rem; /* 14 px — periods, captions, tags */
   --text-lg: 1.125rem;
   --text-xl: 1.5rem;
-  --text-2xl: 1.4rem;     /* name on mobile — leaves room for the Share button beside it; 1.7rem from 768 px */
+  --text-2xl: 1.4rem;     /* name on mobile — fits beside the portrait at 360 px; 1.7rem from 768 px */
   --weight-regular: 400;
   --weight-medium: 500;
   --weight-bold: 700;
@@ -55,8 +55,12 @@
 
   /* Layout */
   --page-max-width: 52rem;
-  --photo-size: 6.5rem;    /* hero portrait width on mobile; layout.css widens it from 768 px */
+  /* Hero portrait width on mobile: 6.5rem from 360 px; below that it gives way so the intro column
+     keeps ≥ 10.5rem (name on one line, headline parts unbroken) — 15.5rem = page + hero padding + gap
+     + 10.5rem. Floor 4.5rem at 320 px. layout.css widens it from 768 px. */
+  --photo-size: clamp(4.5rem, 100vw - 15.5rem, 6.5rem);
   --icon-size: 1.125rem;   /* inline icons in buttons */
+  --contact-min-width: 8.75rem; /* a contact button column on mobile: two per row from ~352 px, one below (no mid-word breaks) */
 }
 
 @media (min-width: 768px) {

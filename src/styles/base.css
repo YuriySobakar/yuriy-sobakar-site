@@ -112,20 +112,42 @@ a {
 }
 
 /* Hero — the light-blue band of the 2024 sidebar, now the first screen */
+/* .hero is a grid of four named areas so the action buttons (Share, Print) can change place without
+   a second DOM node: mobile = one column, actions are the last rows under the contacts; layout.css
+   moves them to the top-right cell beside hero__top from 768 px (ADR 0004 / 0005). Row spacing
+   comes from the items' own margins (hero__top, fact-list), not from a grid gap. */
 .hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-areas:
+    "top"
+    "facts"
+    "contacts"
+    "actions";
   padding: var(--space-6) var(--space-4);
   background: var(--color-band);
   border-radius: var(--radius-md);
 }
 
-/* Share — last flex item of hero__top, pushed to the top-right (ADR 0005); the intro column shrinks
-   to make room, so the name never runs under the button. Icon-only on mobile: the label is visually
-   hidden until 768 px (layout.css). `is-copied` shows the clipboard confirmation. */
-.hero__share {
-  align-self: flex-start;
-  flex-shrink: 0;
-  margin-left: auto;
-  padding: var(--space-2);
+.hero .fact-list {
+  grid-area: facts;
+}
+
+.hero__contacts {
+  grid-area: contacts;
+}
+
+/* Actions — Share + Print as full-width ghost buttons stacked under the contacts (same gap as the
+   contacts grid); `is-copied` shows the clipboard confirmation on Share. */
+.hero__actions {
+  grid-area: actions;
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.hero__actions .button {
+  justify-content: center;
 }
 
 .hero__intro {
@@ -136,18 +158,10 @@ a {
   background: var(--color-button-hover);
 }
 
-.hero__share-label {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
 /* hero__top — portrait beside name + headline; the photo is a fixed-width column so the intro wraps
    next to it at 360 px and the hero still fits above the fold (AC-01). */
 .hero__top {
+  grid-area: top;
   display: flex;
   align-items: center;
   gap: var(--space-4);

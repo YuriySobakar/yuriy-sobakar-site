@@ -10,11 +10,12 @@
   background: var(--color-bg);
 }
 
-/* Hero buttons on mobile: contacts two per row, centred; Print alone on a full-width third row.
-   From 768 px they flow inline again (base.css flex). */
+/* Hero buttons on mobile: contacts two per row (one per row below ~352 px, so a label like
+   "Telegram" never breaks mid-word), centred; Share and Print follow as full-width rows
+   (.hero__actions, base.css). From 768 px the contacts flow inline again (base.css flex). */
 .hero__contacts {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(var(--contact-min-width), 1fr));
 }
 
 .hero__contacts .button {
@@ -22,9 +23,8 @@
   justify-content: center;
 }
 
-/* An odd last contact would sit alone at half width — give it the full row, like Print */
-.hero__contacts li:nth-last-child(2):nth-child(odd),
-.hero__print {
+/* An odd last contact would sit alone at half width — give it the full row, like the actions */
+.hero__contacts li:last-child:nth-child(odd) {
   grid-column: 1 / -1;
 }
 
@@ -48,7 +48,15 @@
     box-shadow: var(--shadow-sheet);
   }
 
+  /* Share + Print move to the top-right cell beside hero__top as a column of equal-width buttons;
+     facts and contacts span both columns */
   .hero {
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "top actions"
+      "facts facts"
+      "contacts contacts";
+    column-gap: var(--space-6);
     padding: var(--space-8);
   }
 
@@ -56,16 +64,9 @@
     gap: var(--space-6);
   }
 
-  .hero__share {
-    padding: var(--space-2) var(--space-4);
-  }
-
-  .hero__share-label {
-    position: static;
-    width: auto;
-    height: auto;
-    overflow: visible;
-    clip-path: none;
+  .hero__actions {
+    align-self: start;
+    margin-top: 0;
   }
 
   .hero__photo {

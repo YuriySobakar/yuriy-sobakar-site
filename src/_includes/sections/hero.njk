@@ -1,11 +1,7 @@
 {#- SCR-02 hero: name, positioning, 1–3 facts (fact-list), contact buttons — all above the fold at 360×640.
     Facts (≥1) and contacts (≥1) are guaranteed by the schema; the photo is the one optional field (schema `photo`).
-    "Print" (roadmap step 5, ADR 0004; the browser dialog also saves a PDF) is the single window.print() handler allowed by the conventions;
-    it is template UI, hidden on paper via .no-print. -#}
+    "Print" and "Share" are template UI in .hero__actions (see below), hidden on paper via .no-print. -#}
 <header class="hero section" id="top">
-  {#- Share (ADR 0005): Web Share API on phones, copy-link fallback on desktop; handler in layout.njk.
-      Third flex item of hero__top (top-right), so the name column shrinks instead of running under it.
-      Icon-only on mobile (label is visually hidden), icon + label from 768 px. Hidden on paper. -#}
   <div class="hero__top">
     {%- if resume.photo %}
     <img class="hero__photo" src="{{ resume.photo.src }}" alt="{{ resume.photo.alt }}" width="{{ resume.photo.width }}" height="{{ resume.photo.height }}" fetchpriority="high" decoding="async">
@@ -18,7 +14,6 @@
         {%- endfor %}
       </ul>
     </div>
-    <button type="button" class="button button--ghost hero__share no-print" data-share aria-label="Share this resume">{% include "icons/share.njk" %}<span class="hero__share-label">Share</span></button>
   </div>
   <ul class="fact-list">
     {%- for fact in resume.facts %}
@@ -29,6 +24,14 @@
     {%- for contact in resume.contacts %}
     <li>{% include "contact-button.njk" %}</li>
     {%- endfor %}
-    <li class="hero__print"><button type="button" class="button button--ghost no-print" onclick="window.print()">{% include "icons/print.njk" %}<span>Print</span></button></li>
   </ul>
+  {#- Actions (Share — ADR 0005, Web Share API with a clipboard fallback, handler in layout.njk;
+      Print — ADR 0004, the single window.print() handler allowed by the conventions).
+      One grid item of .hero (grid-template-areas in base.css / layout.css): on mobile two full-width
+      rows under the contacts, from 768 px a column in the top-right cell beside hero__top.
+      One DOM node per button for both layouts, no absolute positioning. Hidden on paper. -#}
+  <div class="hero__actions no-print">
+    <button type="button" class="button button--ghost hero__share no-print" data-share aria-label="Share this resume">{% include "icons/share.njk" %}<span class="hero__share-label">Share</span></button>
+    <button type="button" class="button button--ghost no-print" onclick="window.print()">{% include "icons/print.njk" %}<span>Print</span></button>
+  </div>
 </header>

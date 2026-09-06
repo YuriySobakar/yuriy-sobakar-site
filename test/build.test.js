@@ -96,7 +96,7 @@ test("partials hide and sort nothing — that is the view model's job (ADR 0002)
 
 test("the fact-list primitive is defined in base.css through tokens only", () => {
   const base = readFileSync(path.join(root, "src", "styles", "base.css"), "utf8");
-  const block = base.match(/\.fact-list\s*\{([^}]*)\}/);
+  const block = base.match(/^\.fact-list\s*\{([^}]*)\}/m); // the primitive itself, not `.hero .fact-list` (grid area)
   assert.ok(block, "base.css defines .fact-list");
   assert.match(block[1], /font-size:\s*var\(--text-base\)/, "fact-list body text is the 16 px token");
   assert.deepEqual(block[1].match(/:\s*[^;]*\b\d+(\.\d+)?(px|rem|em)\b/g) ?? [], [], "fact-list uses tokens only");
