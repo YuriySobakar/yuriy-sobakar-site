@@ -74,19 +74,20 @@ experience:
       - "Local Docker environment: PHP-FPM 8.4, MySQL 8.4, Redis, nginx, WP-CLI; production backup import and SSH deploys"
     stack: [WordPress, PHP 8.4, GeneratePress, GenerateBlocks, ACF Pro, Fluent Forms Pro, Docker, Redis, Cloudflare, Meta Pixel, GA4, LiteSpeed Cache, Brevo]
 
-  - role: Full-stack WordPress Developer | Technical SEO Specialist
+  - role: Full-stack WordPress Developer | DevOps | Technical SEO
     company: Bahisbey / Spinmatic (iGaming)
     location: Turkey, remote
     start: "2024-02"
     end: "2025-10"
     results:
-      - Launched 150+ WordPress websites on a custom-developed theme, GeneratePress and other layouts
-      - Kept 90+ PageSpeed Insights mobile scores; managed 200+ domain redirects for SEO consolidation
-      - Administered Ubuntu servers with nginx/Apache and ISP Manager, SSL, security headers, backups; Cloudflare CDN and DNS across registrars
+      - Launched 150+ WordPress websites on a custom-developed theme, GeneratePress and other layouts; kept 90+ PageSpeed Insights mobile scores
+      - "DevOps for the whole network: Ubuntu servers with nginx/Apache and ISP Manager, SSL, backups; the entire domain portfolio at the registrar — DNS, renewals, 200+ redirects for SEO consolidation"
+      - "Security: constant brute-force attacks stopped with Cloudflare WAF and rate limiting, Fail2Ban on the servers and an extra WordPress firewall layer"
+      - Deployed and fully configured Horilla, an open-source HR system (Python/Django), on its own subdomain for the company's HR team
       - Built "SEO Beast" — content automation with a React/TypeScript frontend that cut a 2,000-word article to $0.13 and bulk-publishes to WordPress with SEO meta
       - Built a Google Indexing API tool for bulk URL submission; ran technical SEO audits (Screaming Frog, Ahrefs, GSC)
       - Contributed to 3,074+ organic signups and 450+ first-time deposits (14.6% signup-to-FTD)
-    stack: [WordPress, PHP, JavaScript, React, TypeScript, Linux, nginx, Cloudflare, Google APIs]
+    stack: [WordPress, PHP, JavaScript, React, TypeScript, Linux, nginx, Cloudflare, Fail2Ban, Horilla HRMS, Google APIs]
 
   - role: Business owner & project manager
     company: Outdoor advertising (own company and agency projects)
