@@ -4,8 +4,8 @@
     it is template UI, hidden on paper via .no-print. -#}
 <header class="hero section" id="top">
   {#- Share (ADR 0005): Web Share API on phones, copy-link fallback on desktop; handler in layout.njk.
+      Third flex item of hero__top (top-right), so the name column shrinks instead of running under it.
       Icon-only on mobile (label is visually hidden), icon + label from 768 px. Hidden on paper. -#}
-  <button type="button" class="button button--ghost hero__share no-print" data-share aria-label="Share this resume">{% include "icons/share.njk" %}<span class="hero__share-label">Share</span></button>
   <div class="hero__top">
     {%- if resume.photo %}
     <img class="hero__photo" src="{{ resume.photo.src }}" alt="{{ resume.photo.alt }}" width="{{ resume.photo.width }}" height="{{ resume.photo.height }}" fetchpriority="high" decoding="async">
@@ -14,6 +14,7 @@
       <h1 class="hero__name">{{ resume.name }}</h1>
       <p class="hero__headline">{{ resume.headline }}</p>
     </div>
+    <button type="button" class="button button--ghost hero__share no-print" data-share aria-label="Share this resume">{% include "icons/share.njk" %}<span class="hero__share-label">Share</span></button>
   </div>
   <ul class="fact-list">
     {%- for fact in resume.facts %}

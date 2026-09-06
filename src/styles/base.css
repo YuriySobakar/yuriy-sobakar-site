@@ -113,19 +113,23 @@ a {
 
 /* Hero — the light-blue band of the 2024 sidebar, now the first screen */
 .hero {
-  position: relative;
   padding: var(--space-6) var(--space-4);
   background: var(--color-band);
   border-radius: var(--radius-md);
 }
 
-/* Share — pinned to the hero's top-right corner (ADR 0005). Icon-only on mobile: the label is
-   visually hidden until 768 px (layout.css). `is-copied` shows the clipboard confirmation. */
+/* Share — last flex item of hero__top, pushed to the top-right (ADR 0005); the intro column shrinks
+   to make room, so the name never runs under the button. Icon-only on mobile: the label is visually
+   hidden until 768 px (layout.css). `is-copied` shows the clipboard confirmation. */
 .hero__share {
-  position: absolute;
-  top: var(--space-4);
-  right: var(--space-4);
+  align-self: flex-start;
+  flex-shrink: 0;
+  margin-left: auto;
   padding: var(--space-2);
+}
+
+.hero__intro {
+  min-width: 0;
 }
 
 .hero__share.is-copied {

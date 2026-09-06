@@ -10,11 +10,6 @@
   background: var(--color-bg);
 }
 
-/* Room for the icon-only Share button in the hero's top-right corner on mobile */
-.hero__intro {
-  padding-right: var(--space-8);
-}
-
 /* Hero buttons on mobile: contacts two per row, centred; Print alone on a full-width third row.
    From 768 px they flow inline again (base.css flex). */
 .hero__contacts {
@@ -62,8 +57,6 @@
   }
 
   .hero__share {
-    top: var(--space-6);
-    right: var(--space-6);
     padding: var(--space-2) var(--space-4);
   }
 
@@ -77,10 +70,6 @@
 
   .hero__photo {
     width: calc(var(--photo-size) * 1.6);
-  }
-
-  .hero__intro {
-    padding-right: 0;
   }
 
   .hero__contacts {
