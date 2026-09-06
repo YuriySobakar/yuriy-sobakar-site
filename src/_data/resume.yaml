@@ -117,7 +117,7 @@ projects:
   - kind: commercial
     name: MyOr Care
     industry: Healthcare / nutrition counseling network
-    role: Full-stack WordPress developer (parent theme)
+    role: Full-stack WP dev (parent theme)
     result: "The company site and the MyOr parent theme behind every MyOr brand: config-driven layouts (header walker with mobile collapse, hero numbers, reviews, FAQ, locations, modal and HubSpot form styling via *_conf filters), blog CPT with category lobby and featured posts, Google Reviews sync plugin (OAuth, daily cron, WP-CLI command, PHPUnit), Figma MCP design registry for AI agents, Playwright specs in CI"
     stack: [PHP 8, WordPress, ACF Pro, SCSS, Bootstrap, Composer, PHPUnit, Playwright, GitHub Actions, Figma MCP]
     links:
@@ -126,7 +126,7 @@ projects:
   - kind: commercial
     name: MyOr Thrive
     industry: Healthcare / nutrition therapy (US + Australia)
-    role: WordPress developer
+    role: Full-stack WP dev (brand child theme)
     result: "Dietitian directory: filter comboboxes with keyboard navigation, specialty chips, saved favourites in localStorage, pagination and Load more, JSON-driven cards with clinic names; blog lobby with pretty URLs and paginated filtered archives; service sections aligned to Figma"
     stack: [PHP 8, WordPress, ACF Pro, JavaScript, SCSS]
     links:
@@ -135,7 +135,7 @@ projects:
   - kind: commercial
     name: McDaniel Nutrition
     industry: Healthcare / nutrition clinic
-    role: WordPress developer
+    role: Full-stack WP dev (brand child theme)
     result: "Brand child theme configured through the parent's filters instead of copied templates: palette tokens, header walker, hero numbers, Figma-based service sections, FAQ, reviews slider, appointment options, forms popup with thank-you modal, featured posts and blog cards"
     stack: [PHP 8, WordPress, ACF Pro, SCSS, Figma]
     links:
@@ -144,7 +144,7 @@ projects:
   - kind: commercial
     name: Nutrition Works!
     industry: Healthcare / nutrition clinic (New Hampshire)
-    role: WordPress developer
+    role: Full-stack WP dev (brand child theme)
     result: "Brand child theme on the MyOr parent: brand palette and body-class theming, header and mobile toggle styling, footer, Google Business API constants in the site config; every parent-theme layout (hero, services, insurance, locations, dietitians, blog) ships to this site through the shared code"
     stack: [PHP 8, WordPress, ACF Pro, SCSS]
     links:
@@ -153,7 +153,7 @@ projects:
   - kind: commercial
     name: Nutrition for Living
     industry: Healthcare / nutrition clinic
-    role: WordPress developer
+    role: Full-stack WP dev (GeneratePress child theme)
     result: "GeneratePress child theme: header and footer navigation with three-level submenus and a dynamic parent-header shortcode, HubSpot form popup with spam protection and focus management, Customizer colour variables, unified paddings and breakpoints"
     stack: [PHP, WordPress, GeneratePress, HubSpot, JavaScript]
     links:
@@ -162,7 +162,7 @@ projects:
   - kind: commercial
     name: Sun-dried Tomatoes
     industry: B2B food import (own business)
-    role: Founder, developer, marketer
+    role: Founder + full-stack WP dev (site, tracking, ads)
     result: "Multi-page Ukrainian WordPress site built and run solo: lead forms → Google Sheets + Telegram bot, Meta Pixel with CAPI deduplication, GA4 custom events, Cloudflare + LiteSpeed caching, SEO blog, self-managed Meta Ads"
     stack: [WordPress, PHP 8.4, GeneratePress, GenerateBlocks, ACF Pro, Fluent Forms Pro, Docker, Redis, Cloudflare, Meta Pixel, GA4, LiteSpeed Cache, Brevo]
     links:
@@ -171,7 +171,7 @@ projects:
   - kind: open-source
     name: Bahisbey theme
     industry: iGaming (former client; theme published with permission)
-    role: Full-stack WordPress developer
+    role: Full-stack WP dev (custom theme from scratch)
     result: "Custom theme from scratch: Gulp + SCSS + BrowserSync workflow, Bootstrap grid, ACF-driven page templates, custom post types (casino, live posts), image optimisation in the build; 90+ PageSpeed Insights mobile; the base for a network of 150+ SEO sites"
     stack: [WordPress, PHP, SCSS, Gulp, Bootstrap, ACF]
     links:
@@ -181,7 +181,7 @@ projects:
   - kind: pet
     name: Flexible-sections WordPress theme
     industry: iGaming SEO (freelance for an agency running many casino brands)
-    role: Freelance WordPress developer
+    role: Freelance WP dev (flexible-content theme from scratch)
     result: "From-scratch theme on ACF Flexible Content: each section is a registry entry + field file + template part, so editors assemble pages without a developer. Built for speed: Tailwind 4 with purge safelist, preloaded self-hosted font subsets, AVIF, Splide loaded only where a slider is used; production pages under 100 KB of HTML"
     stack: [WordPress, PHP 8.1, ACF Pro, Tailwind CSS 4, Splide, Docker, Redis]
     links:
@@ -189,15 +189,15 @@ projects:
 
   - kind: pet
     name: SEO Beast
-    role: Author
+    role: Author (React + Node.js tool)
     result: "Bulk article generation from a title + keyword list via the OpenAI API with a five-stage prompt system (skeleton, sections, tables, FAQ, meta), featured images from a categorised library, Yoast / Rank Math meta and WXR export for mass WordPress import — about $0.13 per article"
-    stack: [TypeScript, React, Node.js, OpenAI API, WordPress WXR]
+    stack: [TypeScript, React, Node.js, OpenAI API, WordPress WXR, SQLite, Bootstrap, xmlbuilder2]
     links:
       code: "https://github.com/YuriySobakar/SEO-Beast-beta"
 
   - kind: pet
     name: Google Indexing API tool
-    role: Author
+    role: Author (Node.js bot)
     result: "Node.js bot that submits URLs to the Google Indexing API: service-account auth, batch submission within the 200 URLs/day quota, request/response logging, URL list from a text file"
     stack: [JavaScript, Node.js, Google Cloud]
     links:
@@ -205,7 +205,7 @@ projects:
 
   - kind: pet
     name: This resume site
-    role: Author
+    role: Author (Eleventy + AI-agent workflow)
     result: "Eleventy site from one YAML file with a JSON Schema + rules publish gate (blocks confidential leaks and code links of commercial projects), self-hosted font, print-to-PDF, node tests in GitHub Actions, Netlify; built spec-driven with Claude Code (spec → architecture + ADRs → screens → tasks → TDD → review → ship)"
     stack: [Eleventy, Nunjucks, JavaScript, JSON Schema, CSS custom properties, node:test, GitHub Actions, Netlify]
     links:

@@ -196,6 +196,11 @@ a {
   color: var(--color-accent-strong);
 }
 
+.card__label {
+  font-weight: var(--weight-regular);
+  color: var(--color-text-muted);
+}
+
 /* Buttons always at the bottom: grid rows stretch cards to equal height, the links block takes the
    remaining space (specificity above `.card > p` so the auto margin wins). */
 .card > .card__links {
