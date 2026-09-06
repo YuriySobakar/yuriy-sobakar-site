@@ -12,7 +12,11 @@
     {%- endif %}
     <div class="hero__intro">
       <h1 class="hero__name">{{ resume.name }}</h1>
-      <p class="hero__headline">{{ resume.headline }}</p>
+      <ul class="hero__headline">
+        {%- for line in resume.headlineLines %}
+        <li>{{ line }}</li>
+        {%- endfor %}
+      </ul>
     </div>
     <button type="button" class="button button--ghost hero__share no-print" data-share aria-label="Share this resume">{% include "icons/share.njk" %}<span class="hero__share-label">Share</span></button>
   </div>

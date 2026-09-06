@@ -170,7 +170,10 @@ a {
   margin-bottom: 0;
 }
 
+/* Headline as a plain column: one <li> per " | "-separated part, no markers (ul reset above) */
 .hero__headline {
+  display: grid;
+  gap: var(--space-1);
   font-weight: var(--weight-medium);
   color: var(--color-accent-strong);
 }

@@ -116,7 +116,11 @@ test("the page has exactly one header, main and footer; h2s follow the view mode
     assert.ok(/id="contacts"/.test(between(html, "<footer", "</footer>")), "contacts section lives in the footer");
     assert.ok(!/<header[\s>]/.test(between(html, "<main", "</main>")), "hero header is not nested inside main");
     const header = between(html, "<header", "</header>");
-    assert.ok(header.includes(resume.headline), "headline is in the hero");
+    const headline = header.match(/<ul class="hero__headline">([\s\S]*?)<\/ul>/);
+    assert.ok(headline, 'hero has a <ul class="hero__headline">');
+    const lines = [...headline[1].matchAll(/<li>([^<]*)<\/li>/g)].map((m) => m[1].trim());
+    assert.deepEqual(lines, resume.headlineLines, "one plain line per ' | '-separated headline part");
+    assert.ok(html.includes(`<title>${resume.name} — ${resume.headline}</title>`), "the full headline stays in <title>");
     const factList = header.match(/<ul class="fact-list">([\s\S]*?)<\/ul>/);
     assert.ok(factList, 'hero has a <ul class="fact-list">');
     assert.equal(count(factList[1], /<li[\s>]/g), resume.facts.length, "one <li> per fact");

@@ -126,6 +126,11 @@ test("sections whose content is empty are removed, others keep the YAML order an
   );
 });
 
+test("headlineLines splits the headline on ' | ' and keeps a single headline as one line", () => {
+  assert.deepEqual(buildViewModel(data({ headline: "WP full-stack | Technical SEO | AI dev" })).headlineLines, ["WP full-stack", "Technical SEO", "AI dev"]);
+  assert.deepEqual(buildViewModel(data()).headlineLines, ["Developer"]);
+});
+
 test("name, headline, facts and contacts pass through unchanged", () => {
   const input = data();
   const vm = buildViewModel(input);
